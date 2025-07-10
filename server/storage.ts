@@ -7,6 +7,44 @@ import {
   facilities,
   competitions,
   competitionEntries,
+  dailyCare,
+  vetRecords,
+  achievements,
+  userAchievements,
+  quests,
+  userQuests,
+  friendships,
+  guilds,
+  guildMembers,
+  equipment,
+  userEquipment,
+  auctions,
+  auctionBids,
+  staff,
+  userStaff,
+  gameEvents,
+  notifications,
+  research,
+  userResearch,
+  insurancePolicies,
+  weather,
+  biomes,
+  wildCaptures,
+  careers,
+  userCareers,
+  playerSkills,
+  breedingLab,
+  geneticTests,
+  medicalProcedures,
+  craftingRecipes,
+  userCrafting,
+  resources,
+  userInventory,
+  seasonalEvents,
+  facilityLayouts,
+  tournaments,
+  designShares,
+  reputationHistory,
   type User,
   type UpsertUser,
   type Animal,
@@ -23,6 +61,46 @@ import {
   type InsertCompetition,
   type CompetitionEntry,
   type InsertCompetitionEntry,
+  type DailyCare,
+  type InsertDailyCare,
+  type VetRecord,
+  type InsertVetRecord,
+  type Achievement,
+  type UserAchievement,
+  type Quest,
+  type UserQuest,
+  type Friendship,
+  type Guild,
+  type GuildMember,
+  type Equipment,
+  type UserEquipment,
+  type Auction,
+  type AuctionBid,
+  type Staff,
+  type UserStaff,
+  type GameEvent,
+  type Notification,
+  type Research,
+  type UserResearch,
+  type InsurancePolicy,
+  type Weather,
+  type Biome,
+  type WildCapture,
+  type Career,
+  type UserCareer,
+  type PlayerSkill,
+  type BreedingLab,
+  type GeneticTest,
+  type MedicalProcedure,
+  type CraftingRecipe,
+  type UserCrafting,
+  type Resource,
+  type UserInventory,
+  type SeasonalEvent,
+  type FacilityLayout,
+  type Tournament,
+  type DesignShare,
+  type ReputationHistory,
 } from "@shared/schema";
 import { db } from "./db";
 import { eq, and, desc, asc, or, gte, lte, count } from "drizzle-orm";
@@ -72,6 +150,140 @@ export interface IStorage {
   getActiveCompetitions(): Promise<Competition[]>;
   getCompetitionEntries(competitionId: number): Promise<CompetitionEntry[]>;
   createCompetitionEntry(entry: InsertCompetitionEntry): Promise<CompetitionEntry>;
+  
+  // Daily Care operations
+  getDailyCareByAnimal(animalId: number): Promise<DailyCare[]>;
+  createDailyCare(care: InsertDailyCare): Promise<DailyCare>;
+  getDailyCareByOwner(ownerId: string, date?: Date): Promise<DailyCare[]>;
+  
+  // Veterinary operations
+  getVetRecordsByAnimal(animalId: number): Promise<VetRecord[]>;
+  createVetRecord(record: InsertVetRecord): Promise<VetRecord>;
+  updateVetRecord(id: number, updates: Partial<VetRecord>): Promise<VetRecord>;
+  
+  // Achievement operations
+  getAllAchievements(): Promise<Achievement[]>;
+  getUserAchievements(userId: string): Promise<UserAchievement[]>;
+  updateUserAchievement(userId: string, achievementId: number, progress: number): Promise<UserAchievement>;
+  
+  // Quest operations
+  getActiveQuests(): Promise<Quest[]>;
+  getUserQuests(userId: string): Promise<UserQuest[]>;
+  createUserQuest(userQuest: any): Promise<UserQuest>;
+  updateUserQuest(id: number, updates: Partial<UserQuest>): Promise<UserQuest>;
+  
+  // Social operations
+  getFriendships(userId: string): Promise<Friendship[]>;
+  createFriendship(friendship: any): Promise<Friendship>;
+  updateFriendship(id: number, status: string): Promise<Friendship>;
+  
+  // Guild operations
+  getGuilds(): Promise<Guild[]>;
+  getGuild(id: number): Promise<Guild | undefined>;
+  createGuild(guild: any): Promise<Guild>;
+  joinGuild(userId: string, guildId: number): Promise<GuildMember>;
+  getGuildMembers(guildId: number): Promise<GuildMember[]>;
+  
+  // Equipment operations
+  getEquipment(): Promise<Equipment[]>;
+  getUserEquipment(userId: string): Promise<UserEquipment[]>;
+  createUserEquipment(userEquipment: any): Promise<UserEquipment>;
+  updateUserEquipment(id: number, updates: Partial<UserEquipment>): Promise<UserEquipment>;
+  
+  // Auction operations
+  getActiveAuctions(): Promise<Auction[]>;
+  createAuction(auction: any): Promise<Auction>;
+  createAuctionBid(bid: any): Promise<AuctionBid>;
+  getAuctionBids(auctionId: number): Promise<AuctionBid[]>;
+  
+  // Staff operations
+  getAvailableStaff(): Promise<Staff[]>;
+  getUserStaff(userId: string): Promise<UserStaff[]>;
+  hireStaff(userStaff: any): Promise<UserStaff>;
+  updateUserStaff(id: number, updates: Partial<UserStaff>): Promise<UserStaff>;
+  
+  // Notification operations
+  getNotifications(userId: string): Promise<Notification[]>;
+  createNotification(notification: any): Promise<Notification>;
+  markNotificationRead(id: number): Promise<Notification>;
+  
+  // Research operations
+  getAvailableResearch(): Promise<Research[]>;
+  getUserResearch(userId: string): Promise<UserResearch[]>;
+  startResearch(userResearch: any): Promise<UserResearch>;
+  completeResearch(id: number): Promise<UserResearch>;
+  
+  // Insurance operations
+  getInsurancePolicies(userId: string): Promise<InsurancePolicy[]>;
+  createInsurancePolicy(policy: any): Promise<InsurancePolicy>;
+  updateInsurancePolicy(id: number, updates: Partial<InsurancePolicy>): Promise<InsurancePolicy>;
+  
+  // Weather operations
+  getCurrentWeather(): Promise<Weather | undefined>;
+  getWeatherHistory(days: number): Promise<Weather[]>;
+  createWeather(weather: any): Promise<Weather>;
+  
+  // Wilderness operations
+  getBiomes(): Promise<Biome[]>;
+  getWildCaptures(userId: string): Promise<WildCapture[]>;
+  createWildCapture(capture: any): Promise<WildCapture>;
+  updateWildCapture(id: number, updates: Partial<WildCapture>): Promise<WildCapture>;
+  
+  // Career operations
+  getCareers(): Promise<Career[]>;
+  getUserCareers(userId: string): Promise<UserCareer[]>;
+  updateUserCareer(id: number, updates: Partial<UserCareer>): Promise<UserCareer>;
+  
+  // Skill operations
+  getPlayerSkills(userId: string): Promise<PlayerSkill[]>;
+  updatePlayerSkill(userId: string, skillType: string, experience: number): Promise<PlayerSkill>;
+  
+  // Breeding Lab operations
+  getBreedingLab(userId: string): Promise<BreedingLab | undefined>;
+  updateBreedingLab(userId: string, updates: Partial<BreedingLab>): Promise<BreedingLab>;
+  
+  // Genetic Testing operations
+  getGeneticTests(animalId: number): Promise<GeneticTest[]>;
+  createGeneticTest(test: any): Promise<GeneticTest>;
+  completeGeneticTest(id: number, results: any): Promise<GeneticTest>;
+  
+  // Medical Procedures operations
+  getMedicalProcedures(animalId: number): Promise<MedicalProcedure[]>;
+  createMedicalProcedure(procedure: any): Promise<MedicalProcedure>;
+  updateMedicalProcedure(id: number, updates: Partial<MedicalProcedure>): Promise<MedicalProcedure>;
+  
+  // Crafting operations
+  getCraftingRecipes(): Promise<CraftingRecipe[]>;
+  getUserCrafting(userId: string): Promise<UserCrafting[]>;
+  startCrafting(userCrafting: any): Promise<UserCrafting>;
+  completeCrafting(id: number): Promise<UserCrafting>;
+  
+  // Inventory operations
+  getResources(): Promise<Resource[]>;
+  getUserInventory(userId: string): Promise<UserInventory[]>;
+  updateUserInventory(userId: string, resourceId: number, quantity: number): Promise<UserInventory>;
+  
+  // Seasonal operations
+  getActiveSeasonalEvents(): Promise<SeasonalEvent[]>;
+  createSeasonalEvent(event: any): Promise<SeasonalEvent>;
+  
+  // Facility Layout operations
+  getFacilityLayout(facilityId: number): Promise<FacilityLayout | undefined>;
+  updateFacilityLayout(facilityId: number, layoutData: any): Promise<FacilityLayout>;
+  
+  // Tournament operations
+  getTournaments(): Promise<Tournament[]>;
+  createTournament(tournament: any): Promise<Tournament>;
+  updateTournament(id: number, updates: Partial<Tournament>): Promise<Tournament>;
+  
+  // Community operations
+  getDesignShares(category?: string): Promise<DesignShare[]>;
+  createDesignShare(design: any): Promise<DesignShare>;
+  updateDesignShare(id: number, updates: Partial<DesignShare>): Promise<DesignShare>;
+  
+  // Reputation operations
+  getReputationHistory(userId: string): Promise<ReputationHistory[]>;
+  addReputationPoint(userId: string, fromUserId: string, category: string, points: number, reason: string): Promise<ReputationHistory>;
   
   // Stats operations
   getUserStats(userId: string): Promise<{
@@ -347,6 +559,732 @@ export class DatabaseStorage implements IStorage {
   async createCompetitionEntry(entry: InsertCompetitionEntry): Promise<CompetitionEntry> {
     const [newEntry] = await db.insert(competitionEntries).values(entry).returning();
     return newEntry;
+  }
+
+  // Daily Care operations
+  async getDailyCareByAnimal(animalId: number): Promise<DailyCare[]> {
+    return await db
+      .select()
+      .from(dailyCare)
+      .where(eq(dailyCare.animalId, animalId))
+      .orderBy(desc(dailyCare.completedAt));
+  }
+
+  async createDailyCare(care: InsertDailyCare): Promise<DailyCare> {
+    const [newCare] = await db.insert(dailyCare).values(care).returning();
+    return newCare;
+  }
+
+  async getDailyCareByOwner(ownerId: string, date?: Date): Promise<DailyCare[]> {
+    const conditions = [eq(dailyCare.ownerId, ownerId)];
+    if (date) {
+      const startOfDay = new Date(date);
+      startOfDay.setHours(0, 0, 0, 0);
+      const endOfDay = new Date(date);
+      endOfDay.setHours(23, 59, 59, 999);
+      conditions.push(
+        and(
+          gte(dailyCare.completedAt, startOfDay),
+          lte(dailyCare.completedAt, endOfDay)
+        )!
+      );
+    }
+    return await db
+      .select()
+      .from(dailyCare)
+      .where(and(...conditions))
+      .orderBy(desc(dailyCare.completedAt));
+  }
+
+  // Veterinary operations
+  async getVetRecordsByAnimal(animalId: number): Promise<VetRecord[]> {
+    return await db
+      .select()
+      .from(vetRecords)
+      .where(eq(vetRecords.animalId, animalId))
+      .orderBy(desc(vetRecords.createdAt));
+  }
+
+  async createVetRecord(record: InsertVetRecord): Promise<VetRecord> {
+    const [newRecord] = await db.insert(vetRecords).values(record).returning();
+    return newRecord;
+  }
+
+  async updateVetRecord(id: number, updates: Partial<VetRecord>): Promise<VetRecord> {
+    const [updatedRecord] = await db
+      .update(vetRecords)
+      .set(updates)
+      .where(eq(vetRecords.id, id))
+      .returning();
+    return updatedRecord;
+  }
+
+  // Achievement operations
+  async getAllAchievements(): Promise<Achievement[]> {
+    return await db
+      .select()
+      .from(achievements)
+      .where(eq(achievements.isHidden, false))
+      .orderBy(achievements.category, achievements.rarity);
+  }
+
+  async getUserAchievements(userId: string): Promise<UserAchievement[]> {
+    return await db
+      .select()
+      .from(userAchievements)
+      .where(eq(userAchievements.userId, userId))
+      .orderBy(desc(userAchievements.completedAt));
+  }
+
+  async updateUserAchievement(userId: string, achievementId: number, progress: number): Promise<UserAchievement> {
+    const [existing] = await db
+      .select()
+      .from(userAchievements)
+      .where(and(eq(userAchievements.userId, userId), eq(userAchievements.achievementId, achievementId)));
+
+    if (existing) {
+      const [updated] = await db
+        .update(userAchievements)
+        .set({ 
+          progress, 
+          isCompleted: progress >= existing.maxProgress,
+          completedAt: progress >= existing.maxProgress ? new Date() : null 
+        })
+        .where(eq(userAchievements.id, existing.id))
+        .returning();
+      return updated;
+    } else {
+      const [newAchievement] = await db
+        .insert(userAchievements)
+        .values({ userId, achievementId, progress, maxProgress: 1 })
+        .returning();
+      return newAchievement;
+    }
+  }
+
+  // Quest operations
+  async getActiveQuests(): Promise<Quest[]> {
+    return await db
+      .select()
+      .from(quests)
+      .where(eq(quests.isActive, true))
+      .orderBy(quests.category, quests.difficulty);
+  }
+
+  async getUserQuests(userId: string): Promise<UserQuest[]> {
+    return await db
+      .select()
+      .from(userQuests)
+      .where(eq(userQuests.userId, userId))
+      .orderBy(desc(userQuests.createdAt));
+  }
+
+  async createUserQuest(userQuest: any): Promise<UserQuest> {
+    const [newUserQuest] = await db.insert(userQuests).values(userQuest).returning();
+    return newUserQuest;
+  }
+
+  async updateUserQuest(id: number, updates: Partial<UserQuest>): Promise<UserQuest> {
+    const [updated] = await db
+      .update(userQuests)
+      .set(updates)
+      .where(eq(userQuests.id, id))
+      .returning();
+    return updated;
+  }
+
+  // Social operations
+  async getFriendships(userId: string): Promise<Friendship[]> {
+    return await db
+      .select()
+      .from(friendships)
+      .where(or(eq(friendships.userId, userId), eq(friendships.friendId, userId)))
+      .orderBy(desc(friendships.createdAt));
+  }
+
+  async createFriendship(friendship: any): Promise<Friendship> {
+    const [newFriendship] = await db.insert(friendships).values(friendship).returning();
+    return newFriendship;
+  }
+
+  async updateFriendship(id: number, status: string): Promise<Friendship> {
+    const [updated] = await db
+      .update(friendships)
+      .set({ status, acceptedAt: status === 'accepted' ? new Date() : null })
+      .where(eq(friendships.id, id))
+      .returning();
+    return updated;
+  }
+
+  // Guild operations
+  async getGuilds(): Promise<Guild[]> {
+    return await db
+      .select()
+      .from(guilds)
+      .where(eq(guilds.isPublic, true))
+      .orderBy(desc(guilds.level));
+  }
+
+  async getGuild(id: number): Promise<Guild | undefined> {
+    const [guild] = await db.select().from(guilds).where(eq(guilds.id, id));
+    return guild;
+  }
+
+  async createGuild(guild: any): Promise<Guild> {
+    const [newGuild] = await db.insert(guilds).values(guild).returning();
+    return newGuild;
+  }
+
+  async joinGuild(userId: string, guildId: number): Promise<GuildMember> {
+    const [member] = await db
+      .insert(guildMembers)
+      .values({ userId, guildId, role: 'member' })
+      .returning();
+    return member;
+  }
+
+  async getGuildMembers(guildId: number): Promise<GuildMember[]> {
+    return await db
+      .select()
+      .from(guildMembers)
+      .where(eq(guildMembers.guildId, guildId))
+      .orderBy(guildMembers.role, desc(guildMembers.contribution));
+  }
+
+  // Equipment operations
+  async getEquipment(): Promise<Equipment[]> {
+    return await db
+      .select()
+      .from(equipment)
+      .orderBy(equipment.type, equipment.rarity);
+  }
+
+  async getUserEquipment(userId: string): Promise<UserEquipment[]> {
+    return await db
+      .select()
+      .from(userEquipment)
+      .where(eq(userEquipment.userId, userId))
+      .orderBy(desc(userEquipment.purchasedAt));
+  }
+
+  async createUserEquipment(userEquipment: any): Promise<UserEquipment> {
+    const [newEquipment] = await db.insert(userEquipment).values(userEquipment).returning();
+    return newEquipment;
+  }
+
+  async updateUserEquipment(id: number, updates: Partial<UserEquipment>): Promise<UserEquipment> {
+    const [updated] = await db
+      .update(userEquipment)
+      .set(updates)
+      .where(eq(userEquipment.id, id))
+      .returning();
+    return updated;
+  }
+
+  // Auction operations
+  async getActiveAuctions(): Promise<Auction[]> {
+    return await db
+      .select()
+      .from(auctions)
+      .where(and(eq(auctions.isActive, true), gte(auctions.endTime, new Date())))
+      .orderBy(asc(auctions.endTime));
+  }
+
+  async createAuction(auction: any): Promise<Auction> {
+    const [newAuction] = await db.insert(auctions).values(auction).returning();
+    return newAuction;
+  }
+
+  async createAuctionBid(bid: any): Promise<AuctionBid> {
+    const [newBid] = await db.insert(auctionBids).values(bid).returning();
+    return newBid;
+  }
+
+  async getAuctionBids(auctionId: number): Promise<AuctionBid[]> {
+    return await db
+      .select()
+      .from(auctionBids)
+      .where(eq(auctionBids.auctionId, auctionId))
+      .orderBy(desc(auctionBids.bidAmount));
+  }
+
+  // Staff operations
+  async getAvailableStaff(): Promise<Staff[]> {
+    return await db
+      .select()
+      .from(staff)
+      .where(eq(staff.isAvailable, true))
+      .orderBy(desc(staff.skill));
+  }
+
+  async getUserStaff(userId: string): Promise<UserStaff[]> {
+    return await db
+      .select()
+      .from(userStaff)
+      .where(and(eq(userStaff.userId, userId), eq(userStaff.isActive, true)))
+      .orderBy(desc(userStaff.hiredAt));
+  }
+
+  async hireStaff(userStaff: any): Promise<UserStaff> {
+    const [hired] = await db.insert(userStaff).values(userStaff).returning();
+    return hired;
+  }
+
+  async updateUserStaff(id: number, updates: Partial<UserStaff>): Promise<UserStaff> {
+    const [updated] = await db
+      .update(userStaff)
+      .set(updates)
+      .where(eq(userStaff.id, id))
+      .returning();
+    return updated;
+  }
+
+  // Notification operations
+  async getNotifications(userId: string): Promise<Notification[]> {
+    return await db
+      .select()
+      .from(notifications)
+      .where(eq(notifications.userId, userId))
+      .orderBy(desc(notifications.createdAt));
+  }
+
+  async createNotification(notification: any): Promise<Notification> {
+    const [newNotification] = await db.insert(notifications).values(notification).returning();
+    return newNotification;
+  }
+
+  async markNotificationRead(id: number): Promise<Notification> {
+    const [updated] = await db
+      .update(notifications)
+      .set({ isRead: true })
+      .where(eq(notifications.id, id))
+      .returning();
+    return updated;
+  }
+
+  // Research operations
+  async getAvailableResearch(): Promise<Research[]> {
+    return await db
+      .select()
+      .from(research)
+      .where(eq(research.isAvailable, true))
+      .orderBy(research.category, research.cost);
+  }
+
+  async getUserResearch(userId: string): Promise<UserResearch[]> {
+    return await db
+      .select()
+      .from(userResearch)
+      .where(eq(userResearch.userId, userId))
+      .orderBy(desc(userResearch.startedAt));
+  }
+
+  async startResearch(userResearch: any): Promise<UserResearch> {
+    const [started] = await db.insert(userResearch).values(userResearch).returning();
+    return started;
+  }
+
+  async completeResearch(id: number): Promise<UserResearch> {
+    const [completed] = await db
+      .update(userResearch)
+      .set({ isCompleted: true, completedAt: new Date() })
+      .where(eq(userResearch.id, id))
+      .returning();
+    return completed;
+  }
+
+  // Insurance operations
+  async getInsurancePolicies(userId: string): Promise<InsurancePolicy[]> {
+    return await db
+      .select()
+      .from(insurancePolicies)
+      .where(eq(insurancePolicies.userId, userId))
+      .orderBy(desc(insurancePolicies.startDate));
+  }
+
+  async createInsurancePolicy(policy: any): Promise<InsurancePolicy> {
+    const [newPolicy] = await db.insert(insurancePolicies).values(policy).returning();
+    return newPolicy;
+  }
+
+  async updateInsurancePolicy(id: number, updates: Partial<InsurancePolicy>): Promise<InsurancePolicy> {
+    const [updated] = await db
+      .update(insurancePolicies)
+      .set(updates)
+      .where(eq(insurancePolicies.id, id))
+      .returning();
+    return updated;
+  }
+
+  // Weather operations
+  async getCurrentWeather(): Promise<Weather | undefined> {
+    const [currentWeather] = await db
+      .select()
+      .from(weather)
+      .where(eq(weather.isActive, true))
+      .orderBy(desc(weather.date))
+      .limit(1);
+    return currentWeather;
+  }
+
+  async getWeatherHistory(days: number): Promise<Weather[]> {
+    const daysAgo = new Date();
+    daysAgo.setDate(daysAgo.getDate() - days);
+    return await db
+      .select()
+      .from(weather)
+      .where(gte(weather.date, daysAgo))
+      .orderBy(desc(weather.date));
+  }
+
+  async createWeather(weather: any): Promise<Weather> {
+    const [newWeather] = await db.insert(weather).values(weather).returning();
+    return newWeather;
+  }
+
+  // Wilderness operations
+  async getBiomes(): Promise<Biome[]> {
+    return await db
+      .select()
+      .from(biomes)
+      .where(eq(biomes.isActive, true))
+      .orderBy(biomes.unlockLevel);
+  }
+
+  async getWildCaptures(userId: string): Promise<WildCapture[]> {
+    return await db
+      .select()
+      .from(wildCaptures)
+      .where(eq(wildCaptures.userId, userId))
+      .orderBy(desc(wildCaptures.captureDate));
+  }
+
+  async createWildCapture(capture: any): Promise<WildCapture> {
+    const [newCapture] = await db.insert(wildCaptures).values(capture).returning();
+    return newCapture;
+  }
+
+  async updateWildCapture(id: number, updates: Partial<WildCapture>): Promise<WildCapture> {
+    const [updated] = await db
+      .update(wildCaptures)
+      .set(updates)
+      .where(eq(wildCaptures.id, id))
+      .returning();
+    return updated;
+  }
+
+  // Career operations
+  async getCareers(): Promise<Career[]> {
+    return await db.select().from(careers).orderBy(careers.category);
+  }
+
+  async getUserCareers(userId: string): Promise<UserCareer[]> {
+    return await db
+      .select()
+      .from(userCareers)
+      .where(eq(userCareers.userId, userId))
+      .orderBy(desc(userCareers.experience));
+  }
+
+  async updateUserCareer(id: number, updates: Partial<UserCareer>): Promise<UserCareer> {
+    const [updated] = await db
+      .update(userCareers)
+      .set(updates)
+      .where(eq(userCareers.id, id))
+      .returning();
+    return updated;
+  }
+
+  // Skill operations
+  async getPlayerSkills(userId: string): Promise<PlayerSkill[]> {
+    return await db
+      .select()
+      .from(playerSkills)
+      .where(eq(playerSkills.userId, userId))
+      .orderBy(desc(playerSkills.level));
+  }
+
+  async updatePlayerSkill(userId: string, skillType: string, experience: number): Promise<PlayerSkill> {
+    const [existing] = await db
+      .select()
+      .from(playerSkills)
+      .where(and(eq(playerSkills.userId, userId), eq(playerSkills.skillType, skillType)));
+
+    if (existing) {
+      const newExp = existing.experience + experience;
+      const newLevel = Math.floor(newExp / 1000) + 1; // Simple leveling formula
+      const [updated] = await db
+        .update(playerSkills)
+        .set({ experience: newExp, level: newLevel, updatedAt: new Date() })
+        .where(eq(playerSkills.id, existing.id))
+        .returning();
+      return updated;
+    } else {
+      const [newSkill] = await db
+        .insert(playerSkills)
+        .values({ userId, skillType, experience, level: 1 })
+        .returning();
+      return newSkill;
+    }
+  }
+
+  // Breeding Lab operations
+  async getBreedingLab(userId: string): Promise<BreedingLab | undefined> {
+    const [lab] = await db
+      .select()
+      .from(breedingLab)
+      .where(eq(breedingLab.userId, userId));
+    return lab;
+  }
+
+  async updateBreedingLab(userId: string, updates: Partial<BreedingLab>): Promise<BreedingLab> {
+    const [existing] = await db
+      .select()
+      .from(breedingLab)
+      .where(eq(breedingLab.userId, userId));
+
+    if (existing) {
+      const [updated] = await db
+        .update(breedingLab)
+        .set({ ...updates, updatedAt: new Date() })
+        .where(eq(breedingLab.id, existing.id))
+        .returning();
+      return updated;
+    } else {
+      const [newLab] = await db
+        .insert(breedingLab)
+        .values({ userId, ...updates })
+        .returning();
+      return newLab;
+    }
+  }
+
+  // Genetic Testing operations
+  async getGeneticTests(animalId: number): Promise<GeneticTest[]> {
+    return await db
+      .select()
+      .from(geneticTests)
+      .where(eq(geneticTests.animalId, animalId))
+      .orderBy(desc(geneticTests.requestedAt));
+  }
+
+  async createGeneticTest(test: any): Promise<GeneticTest> {
+    const [newTest] = await db.insert(geneticTests).values(test).returning();
+    return newTest;
+  }
+
+  async completeGeneticTest(id: number, results: any): Promise<GeneticTest> {
+    const [completed] = await db
+      .update(geneticTests)
+      .set({ results, isCompleted: true, completedAt: new Date() })
+      .where(eq(geneticTests.id, id))
+      .returning();
+    return completed;
+  }
+
+  // Medical Procedures operations
+  async getMedicalProcedures(animalId: number): Promise<MedicalProcedure[]> {
+    return await db
+      .select()
+      .from(medicalProcedures)
+      .where(eq(medicalProcedures.animalId, animalId))
+      .orderBy(desc(medicalProcedures.createdAt));
+  }
+
+  async createMedicalProcedure(procedure: any): Promise<MedicalProcedure> {
+    const [newProcedure] = await db.insert(medicalProcedures).values(procedure).returning();
+    return newProcedure;
+  }
+
+  async updateMedicalProcedure(id: number, updates: Partial<MedicalProcedure>): Promise<MedicalProcedure> {
+    const [updated] = await db
+      .update(medicalProcedures)
+      .set(updates)
+      .where(eq(medicalProcedures.id, id))
+      .returning();
+    return updated;
+  }
+
+  // Crafting operations
+  async getCraftingRecipes(): Promise<CraftingRecipe[]> {
+    return await db
+      .select()
+      .from(craftingRecipes)
+      .where(eq(craftingRecipes.isHidden, false))
+      .orderBy(craftingRecipes.category, craftingRecipes.unlockLevel);
+  }
+
+  async getUserCrafting(userId: string): Promise<UserCrafting[]> {
+    return await db
+      .select()
+      .from(userCrafting)
+      .where(eq(userCrafting.userId, userId))
+      .orderBy(desc(userCrafting.startedAt));
+  }
+
+  async startCrafting(userCrafting: any): Promise<UserCrafting> {
+    const [started] = await db.insert(userCrafting).values(userCrafting).returning();
+    return started;
+  }
+
+  async completeCrafting(id: number): Promise<UserCrafting> {
+    const [completed] = await db
+      .update(userCrafting)
+      .set({ isCompleted: true, completedAt: new Date() })
+      .where(eq(userCrafting.id, id))
+      .returning();
+    return completed;
+  }
+
+  // Inventory operations
+  async getResources(): Promise<Resource[]> {
+    return await db.select().from(resources).orderBy(resources.type, resources.rarity);
+  }
+
+  async getUserInventory(userId: string): Promise<UserInventory[]> {
+    return await db
+      .select()
+      .from(userInventory)
+      .where(eq(userInventory.userId, userId))
+      .orderBy(desc(userInventory.acquiredAt));
+  }
+
+  async updateUserInventory(userId: string, resourceId: number, quantity: number): Promise<UserInventory> {
+    const [existing] = await db
+      .select()
+      .from(userInventory)
+      .where(and(eq(userInventory.userId, userId), eq(userInventory.resourceId, resourceId)));
+
+    if (existing) {
+      const [updated] = await db
+        .update(userInventory)
+        .set({ quantity: existing.quantity + quantity })
+        .where(eq(userInventory.id, existing.id))
+        .returning();
+      return updated;
+    } else {
+      const [newItem] = await db
+        .insert(userInventory)
+        .values({ userId, resourceId, quantity })
+        .returning();
+      return newItem;
+    }
+  }
+
+  // Seasonal operations
+  async getActiveSeasonalEvents(): Promise<SeasonalEvent[]> {
+    const now = new Date();
+    return await db
+      .select()
+      .from(seasonalEvents)
+      .where(and(
+        eq(seasonalEvents.isActive, true),
+        lte(seasonalEvents.startDate, now),
+        gte(seasonalEvents.endDate, now)
+      ))
+      .orderBy(seasonalEvents.startDate);
+  }
+
+  async createSeasonalEvent(event: any): Promise<SeasonalEvent> {
+    const [newEvent] = await db.insert(seasonalEvents).values(event).returning();
+    return newEvent;
+  }
+
+  // Facility Layout operations
+  async getFacilityLayout(facilityId: number): Promise<FacilityLayout | undefined> {
+    const [layout] = await db
+      .select()
+      .from(facilityLayouts)
+      .where(eq(facilityLayouts.facilityId, facilityId));
+    return layout;
+  }
+
+  async updateFacilityLayout(facilityId: number, layoutData: any): Promise<FacilityLayout> {
+    const [existing] = await db
+      .select()
+      .from(facilityLayouts)
+      .where(eq(facilityLayouts.facilityId, facilityId));
+
+    if (existing) {
+      const [updated] = await db
+        .update(facilityLayouts)
+        .set({ layoutData, updatedAt: new Date() })
+        .where(eq(facilityLayouts.id, existing.id))
+        .returning();
+      return updated;
+    } else {
+      const [newLayout] = await db
+        .insert(facilityLayouts)
+        .values({ facilityId, layoutData })
+        .returning();
+      return newLayout;
+    }
+  }
+
+  // Tournament operations
+  async getTournaments(): Promise<Tournament[]> {
+    return await db
+      .select()
+      .from(tournaments)
+      .orderBy(desc(tournaments.tournamentStart));
+  }
+
+  async createTournament(tournament: any): Promise<Tournament> {
+    const [newTournament] = await db.insert(tournaments).values(tournament).returning();
+    return newTournament;
+  }
+
+  async updateTournament(id: number, updates: Partial<Tournament>): Promise<Tournament> {
+    const [updated] = await db
+      .update(tournaments)
+      .set(updates)
+      .where(eq(tournaments.id, id))
+      .returning();
+    return updated;
+  }
+
+  // Community operations
+  async getDesignShares(category?: string): Promise<DesignShare[]> {
+    const conditions = [eq(designShares.isApproved, true)];
+    if (category) {
+      conditions.push(eq(designShares.category, category));
+    }
+    return await db
+      .select()
+      .from(designShares)
+      .where(and(...conditions))
+      .orderBy(desc(designShares.rating), desc(designShares.downloadCount));
+  }
+
+  async createDesignShare(design: any): Promise<DesignShare> {
+    const [newDesign] = await db.insert(designShares).values(design).returning();
+    return newDesign;
+  }
+
+  async updateDesignShare(id: number, updates: Partial<DesignShare>): Promise<DesignShare> {
+    const [updated] = await db
+      .update(designShares)
+      .set(updates)
+      .where(eq(designShares.id, id))
+      .returning();
+    return updated;
+  }
+
+  // Reputation operations
+  async getReputationHistory(userId: string): Promise<ReputationHistory[]> {
+    return await db
+      .select()
+      .from(reputationHistory)
+      .where(eq(reputationHistory.userId, userId))
+      .orderBy(desc(reputationHistory.createdAt));
+  }
+
+  async addReputationPoint(userId: string, fromUserId: string, category: string, points: number, reason: string): Promise<ReputationHistory> {
+    const [newReputation] = await db
+      .insert(reputationHistory)
+      .values({ userId, fromUserId, category, points, reason })
+      .returning();
+    return newReputation;
   }
 
   // Stats operations
