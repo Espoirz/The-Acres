@@ -1340,6 +1340,376 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Advanced Genetics & Breeding System routes
+  app.post('/api/genetics/breeding-analysis', isAuthenticated, async (req: any, res) => {
+    try {
+      const { motherAnimalId, fatherAnimalId } = req.body;
+      const userId = req.user.claims.sub;
+      
+      const mother = await storage.getAnimal(motherAnimalId);
+      const father = await storage.getAnimal(fatherAnimalId);
+      
+      if (!mother || !father) {
+        return res.status(404).json({ message: "Animals not found" });
+      }
+      
+      // Ensure user has access to at least one animal
+      if (mother.ownerId !== userId && father.ownerId !== userId) {
+        return res.status(403).json({ message: "Access denied" });
+      }
+
+      // Generate genetic strings if missing
+      if (!mother.geneticString) {
+        const { AdvancedGeneticsEngine } = await import('./advancedGenetics');
+        mother.geneticString = AdvancedGeneticsEngine.generateGeneticString(
+          mother.type === 'horse' ? 'horse' : 'dog'
+        );
+        await storage.updateAnimal(mother.id, { geneticString: mother.geneticString });
+      }
+      
+      if (!father.geneticString) {
+        const { AdvancedGeneticsEngine } = await import('./advancedGenetics');
+        father.geneticString = AdvancedGeneticsEngine.generateGeneticString(
+          father.type === 'horse' ? 'horse' : 'dog'
+        );
+        await storage.updateAnimal(father.id, { geneticString: father.geneticString });
+      }
+
+      const { AdvancedGeneticsEngine } = await import('./advancedGenetics');
+      const analysis = AdvancedGeneticsEngine.calculateBreedingCompatibility(mother, father);
+      
+      res.json(analysis);
+    } catch (error) {
+      console.error("Error analyzing breeding compatibility:", error);
+      res.status(500).json({ message: "Failed to analyze breeding compatibility" });
+    }
+  });
+
+  app.post('/api/genetics/color-prediction', isAuthenticated, async (req: any, res) => {
+    try {
+      const { motherAnimalId, fatherAnimalId } = req.body;
+      const userId = req.user.claims.sub;
+      
+      const mother = await storage.getAnimal(motherAnimalId);
+      const father = await storage.getAnimal(fatherAnimalId);
+      
+      if (!mother || !father) {
+        return res.status(404).json({ message: "Animals not found" });
+      }
+      
+      if (mother.ownerId !== userId && father.ownerId !== userId) {
+        return res.status(403).json({ message: "Access denied" });
+      }
+
+      const { AdvancedGeneticsEngine } = await import('./advancedGenetics');
+      
+      // Generate genetic strings if missing
+      if (!mother.geneticString) {
+        mother.geneticString = AdvancedGeneticsEngine.generateGeneticString(
+          mother.type === 'horse' ? 'horse' : 'dog'
+        );
+      }
+      
+      if (!father.geneticString) {
+        father.geneticString = AdvancedGeneticsEngine.generateGeneticString(
+          father.type === 'horse' ? 'horse' : 'dog'
+        );
+      }
+      
+      const colorPredictions = AdvancedGeneticsEngine.predictOffspringColors(mother, father);
+      res.json(colorPredictions);
+    } catch (error) {
+      console.error("Error predicting colors:", error);
+      res.status(500).json({ message: "Failed to predict offspring colors" });
+    }
+  });
+
+  app.get('/api/genetics/animal/:id', isAuthenticated, async (req: any, res) => {
+    try {
+      const animalId = parseInt(req.params.id);
+      const animal = await storage.getAnimal(animalId);
+      
+      if (!animal) {
+        return res.status(404).json({ message: "Animal not found" });
+      }
+
+      // Generate genetic string if missing
+      if (!animal.geneticString) {
+        const { AdvancedGeneticsEngine } = await import('./advancedGenetics');
+        animal.geneticString = AdvancedGeneticsEngine.generateGeneticString(
+          animal.type === 'horse' ? 'horse' : 'dog'
+        );
+        await storage.updateAnimal(animal.id, { geneticString: animal.geneticString });
+      }
+
+      const { AdvancedGeneticsEngine } = await import('./advancedGenetics');
+      const colorInfo = AdvancedGeneticsEngine.calculateCoatColor(
+        animal.geneticString,
+        animal.type === 'horse' ? 'horse' : 'dog'
+      );
+
+      res.json({
+        animal: animal,
+        genetic_string: animal.geneticString,
+        color_info: colorInfo,
+        genetic_tests: await storage.getGeneticTests(animalId)
+      });
+    } catch (error) {
+      console.error("Error fetching genetic data:", error);
+      res.status(500).json({ message: "Failed to fetch genetic data" });
+    }
+  });
+
+  app.post('/api/genetics/test', isAuthenticated, async (req: any, res) => {
+    try {
+      const { animalId, testPanel } = req.body;
+      const userId = req.user.claims.sub;
+      
+      const animal = await storage.getAnimal(animalId);
+      if (!animal || animal.ownerId !== userId) {
+        return res.status(403).json({ message: "Access denied" });
+      }
+
+      const testPanels: any = {
+        'horse_health': { name: 'Horse Health Panel', cost: 150, tests: ['HERDA', 'SCID', 'PSSM1', 'HYPP'] },
+        'horse_color': { name: 'Horse Color Panel', cost: 120, tests: ['EXTENSION', 'AGOUTI', 'CREAM', 'DUN'] },
+        'dog_health': { name: 'Dog Health Panel', cost: 180, tests: ['HIP_DYSPLASIA', 'PRA', 'MDR1', 'EIC'] },
+        'dog_color': { name: 'Dog Color Panel', cost: 100, tests: ['DOG_EXTENSION', 'DOG_K_LOCUS', 'DOG_MERLE'] }
+      };
+
+      const panel = testPanels[testPanel];
+      if (!panel) {
+        return res.status(400).json({ message: "Invalid test panel" });
+      }
+
+      const testData = {
+        animalId,
+        testType: 'DNA',
+        results: {},
+        cost: panel.cost,
+        requestedAt: new Date(),
+        isCompleted: false
+      };
+
+      const test = await storage.createGeneticTest(testData);
+
+      // Simulate test completion (in real app, this would be delayed)
+      setTimeout(async () => {
+        try {
+          const { AdvancedGeneticsEngine, GENETIC_CONDITIONS } = await import('./advancedGenetics');
+          
+          if (!animal.geneticString) {
+            animal.geneticString = AdvancedGeneticsEngine.generateGeneticString(
+              animal.type === 'horse' ? 'horse' : 'dog'
+            );
+            await storage.updateAnimal(animal.id, { geneticString: animal.geneticString });
+          }
+
+          const results = {
+            panel_name: panel.name,
+            completed_at: new Date(),
+            findings: {} as any,
+            summary: {
+              total_tests: panel.tests.length,
+              normal: 0,
+              carriers: 0,
+              affected: 0,
+              high_risk: 0
+            },
+            recommendations: [] as string[]
+          };
+
+          // Generate test results for each condition
+          panel.tests.forEach((conditionName: string) => {
+            const condition = GENETIC_CONDITIONS[conditionName];
+            if (condition) {
+              const status = AdvancedGeneticsEngine.getGeneticStatus(animal, condition);
+              results.findings[conditionName] = {
+                condition: condition.name,
+                status: status,
+                description: condition.description,
+                breeds_affected: condition.breeds || [],
+                risk_level: status === 'affected' ? 'high' : status === 'carrier' ? 'moderate' : 'low'
+              };
+
+              // Update summary
+              if (status === 'normal') results.summary.normal++;
+              else if (status === 'carrier') results.summary.carriers++;
+              else if (status === 'affected') {
+                results.summary.affected++;
+                results.summary.high_risk++;
+              }
+            }
+          });
+
+          // Generate recommendations
+          if (results.summary.affected > 0) {
+            results.recommendations.push('⚠️ Genetic conditions detected - veterinary consultation recommended');
+          }
+          if (results.summary.carriers > 0) {
+            results.recommendations.push('🧬 Carrier status detected - genetic counseling for breeding');
+          }
+          if (results.summary.high_risk === 0) {
+            results.recommendations.push('✅ No high-risk genetic conditions detected');
+          }
+          results.recommendations.push('📋 Share results with veterinarian and breeding advisor');
+
+          await storage.completeGeneticTest(test.id, results);
+
+          // Send notification
+          await storage.createNotification({
+            userId: animal.ownerId,
+            type: 'genetic_test_complete',
+            title: 'Genetic Test Complete',
+            message: `${panel.name} results are available for ${animal.name}`,
+            data: { animalId, testId: test.id }
+          });
+        } catch (error) {
+          console.error("Error completing genetic test:", error);
+        }
+      }, 2000); // 2 second delay for demo
+
+      res.status(201).json(test);
+    } catch (error) {
+      console.error("Error creating genetic test:", error);
+      res.status(500).json({ message: "Failed to create genetic test" });
+    }
+  });
+
+  app.get('/api/breeding/services', isAuthenticated, async (req: any, res) => {
+    try {
+      const { BREEDING_SERVICES } = await import('./advancedGenetics');
+      res.json(BREEDING_SERVICES);
+    } catch (error) {
+      console.error("Error fetching breeding services:", error);
+      res.status(500).json({ message: "Failed to fetch breeding services" });
+    }
+  });
+
+  app.post('/api/breeding/initiate', isAuthenticated, async (req: any, res) => {
+    try {
+      const { motherAnimalId, fatherAnimalId, serviceType, studFee } = req.body;
+      const userId = req.user.claims.sub;
+      
+      const mother = await storage.getAnimal(motherAnimalId);
+      const father = await storage.getAnimal(fatherAnimalId);
+      
+      if (!mother || !father) {
+        return res.status(404).json({ message: "Animals not found" });
+      }
+      
+      if (mother.ownerId !== userId) {
+        return res.status(403).json({ message: "Access denied - you must own the mother" });
+      }
+
+      const { BREEDING_SERVICES, AdvancedGeneticsEngine } = await import('./advancedGenetics');
+      const service = BREEDING_SERVICES[serviceType as keyof typeof BREEDING_SERVICES];
+      
+      if (!service) {
+        return res.status(400).json({ message: "Invalid breeding service" });
+      }
+
+      // Check if it's dog breeding (premium only)
+      if (mother.type === 'dog' && !req.user.premium) {
+        return res.status(403).json({ message: "Dog breeding requires premium membership" });
+      }
+
+      // Calculate compatibility
+      const compatibility = AdvancedGeneticsEngine.calculateBreedingCompatibility(mother, father);
+      
+      // Check for lethal combinations
+      if (compatibility.health_risks.lethal_combinations.length > 0) {
+        return res.status(400).json({ 
+          message: "Breeding not permitted due to lethal genetic combinations",
+          risks: compatibility.health_risks.lethal_combinations
+        });
+      }
+
+      const breedingData = {
+        motherAnimalId,
+        fatherAnimalId,
+        serviceType,
+        cost: service.cost + (studFee || 0),
+        expectedDate: new Date(Date.now() + service.cooldown_hours * 60 * 60 * 1000),
+        status: 'in_progress',
+        compatibility: compatibility,
+        successRate: service.success_rate
+      };
+
+      const breeding = await storage.createBreeding(breedingData);
+
+      // Schedule breeding completion
+      setTimeout(async () => {
+        try {
+          const success = Math.random() < service.success_rate;
+          
+          if (success) {
+            // Generate offspring
+            const species = mother.type === 'horse' ? 'horse' : 'dog';
+            const litterSize = species === 'dog' ? Math.floor(Math.random() * 6) + 1 : 1;
+            
+            for (let i = 0; i < litterSize; i++) {
+              const offspringGenetics = AdvancedGeneticsEngine.generateGeneticString(species, mother, father);
+              const colorInfo = AdvancedGeneticsEngine.calculateCoatColor(offspringGenetics, species);
+              const statPredictions = AdvancedGeneticsEngine.predictOffspringStats(mother, father);
+              
+              const offspring = {
+                name: `${mother.name} x ${father.name} Offspring ${i + 1}`,
+                type: mother.type,
+                breed: mother.breed,
+                gender: Math.random() < 0.5 ? 'male' : 'female',
+                dateOfBirth: new Date(),
+                ownerId: mother.ownerId,
+                motherId: mother.id,
+                fatherId: father.id,
+                geneticString: offspringGenetics,
+                color: colorInfo.description,
+                // Apply predicted stats with some random variation
+                strength: Math.max(0, Math.min(100, statPredictions.predicted_stats.strength + (Math.random() - 0.5) * 10)),
+                speed: Math.max(0, Math.min(100, statPredictions.predicted_stats.speed + (Math.random() - 0.5) * 10)),
+                agility: Math.max(0, Math.min(100, statPredictions.predicted_stats.agility + (Math.random() - 0.5) * 10)),
+                endurance: Math.max(0, Math.min(100, statPredictions.predicted_stats.endurance + (Math.random() - 0.5) * 10)),
+                showAptitude: Math.max(0, Math.min(100, statPredictions.predicted_stats.show_aptitude + (Math.random() - 0.5) * 10)),
+                health: 100,
+                mood: 80,
+                energy: 100
+              };
+              
+              await storage.createAnimal(offspring);
+            }
+            
+            await storage.updateBreeding(breeding.id, { status: 'completed', successful: true });
+            
+            await storage.createNotification({
+              userId: mother.ownerId,
+              type: 'breeding_success',
+              title: 'Breeding Successful!',
+              message: `${mother.name} has given birth to ${litterSize} healthy ${species === 'dog' ? 'puppi' + (litterSize === 1 ? 'y' : 'es') : 'foal' + (litterSize === 1 ? '' : 's')}!`,
+              data: { breedingId: breeding.id, litterSize }
+            });
+          } else {
+            await storage.updateBreeding(breeding.id, { status: 'failed', successful: false });
+            
+            await storage.createNotification({
+              userId: mother.ownerId,
+              type: 'breeding_failed',
+              title: 'Breeding Unsuccessful',
+              message: `The breeding between ${mother.name} and ${father.name} was unsuccessful.`,
+              data: { breedingId: breeding.id }
+            });
+          }
+        } catch (error) {
+          console.error("Error completing breeding:", error);
+        }
+      }, 5000); // 5 second delay for demo
+
+      res.status(201).json(breeding);
+    } catch (error) {
+      console.error("Error initiating breeding:", error);
+      res.status(500).json({ message: "Failed to initiate breeding" });
+    }
+  });
+
   const httpServer = createServer(app);
   return httpServer;
 }
