@@ -734,65 +734,11 @@ export const weatherRelations = relations(weather, ({ many }) => ({
   // No direct relations, but weather affects many things
 }));
 
-// Additional relations for genetics and advanced features
-export const geneticTestsRelations = relations(geneticTests, ({ one }) => ({
-  animal: one(animals, { fields: [geneticTests.animalId], references: [animals.id] }),
-  labTech: one(users, { fields: [geneticTests.labTechId], references: [users.id] }),
-}));
+// Additional relations for genetics and advanced features (moved after table definitions)
 
-export const medicalProceduresRelations = relations(medicalProcedures, ({ one }) => ({
-  animal: one(animals, { fields: [medicalProcedures.animalId], references: [animals.id] }),
-  veterinarian: one(users, { fields: [medicalProcedures.veterinarianId], references: [users.id] }),
-}));
+// medicalProceduresRelations moved after table definition
 
-export const biomesRelations = relations(biomes, ({ many }) => ({
-  wildCaptures: many(wildCaptures),
-}));
-
-export const wildCapturesRelations = relations(wildCaptures, ({ one }) => ({
-  user: one(users, { fields: [wildCaptures.userId], references: [users.id] }),
-  biome: one(biomes, { fields: [wildCaptures.biomeId], references: [biomes.id] }),
-  animal: one(animals, { fields: [wildCaptures.animalId], references: [animals.id] }),
-}));
-
-export const careersRelations = relations(careers, ({ many }) => ({
-  userCareers: many(userCareers),
-}));
-
-export const userCareersRelations = relations(userCareers, ({ one }) => ({
-  user: one(users, { fields: [userCareers.userId], references: [users.id] }),
-  career: one(careers, { fields: [userCareers.careerId], references: [careers.id] }),
-}));
-
-export const playerSkillsRelations = relations(playerSkills, ({ one }) => ({
-  user: one(users, { fields: [playerSkills.userId], references: [users.id] }),
-}));
-
-export const breedingLabRelations = relations(breedingLab, ({ one }) => ({
-  user: one(users, { fields: [breedingLab.userId], references: [users.id] }),
-}));
-
-export const craftingRecipesRelations = relations(craftingRecipes, ({ many }) => ({
-  userCrafting: many(userCrafting),
-}));
-
-export const userCraftingRelations = relations(userCrafting, ({ one }) => ({
-  user: one(users, { fields: [userCrafting.userId], references: [users.id] }),
-  recipe: one(craftingRecipes, { fields: [userCrafting.recipeId], references: [craftingRecipes.id] }),
-}));
-
-export const resourcesRelations = relations(resources, ({ many }) => ({
-  userInventory: many(userInventory),
-}));
-
-export const userInventoryRelations = relations(userInventory, ({ one }) => ({
-  user: one(users, { fields: [userInventory.userId], references: [users.id] }),
-  resource: one(resources, { fields: [userInventory.resourceId], references: [resources.id] }),
-}));
-
-export const facilityLayoutsRelations = relations(facilityLayouts, ({ one }) => ({
-  facility: one(facilities, { fields: [facilityLayouts.facilityId], references: [facilities.id] }),
-}));
+// All relations moved after their respective table definitions to avoid initialization errors
 
 // Insert schemas
 export const insertAnimalSchema = createInsertSchema(animals).omit({
@@ -957,6 +903,11 @@ export const biomes = pgTable("biomes", {
   createdAt: timestamp("created_at").defaultNow(),
 });
 
+// Biomes relations
+export const biomesRelations = relations(biomes, ({ many }) => ({
+  wildCaptures: many(wildCaptures),
+}));
+
 // Wild Animal Captures
 export const wildCaptures = pgTable("wild_captures", {
   id: serial("id").primaryKey(),
@@ -974,6 +925,13 @@ export const wildCaptures = pgTable("wild_captures", {
   createdAt: timestamp("created_at").defaultNow(),
 });
 
+// Wild captures relations
+export const wildCapturesRelations = relations(wildCaptures, ({ one }) => ({
+  user: one(users, { fields: [wildCaptures.userId], references: [users.id] }),
+  biome: one(biomes, { fields: [wildCaptures.biomeId], references: [biomes.id] }),
+  animal: one(animals, { fields: [wildCaptures.animalId], references: [animals.id] }),
+}));
+
 // Career Paths and Specializations
 export const careers = pgTable("careers", {
   id: serial("id").primaryKey(),
@@ -987,6 +945,11 @@ export const careers = pgTable("careers", {
   createdAt: timestamp("created_at").defaultNow(),
 });
 
+// Careers relations
+export const careersRelations = relations(careers, ({ many }) => ({
+  userCareers: many(userCareers),
+}));
+
 // User Career Progress
 export const userCareers = pgTable("user_careers", {
   id: serial("id").primaryKey(),
@@ -999,6 +962,12 @@ export const userCareers = pgTable("user_careers", {
   isActive: boolean("is_active").default(false),
   startedAt: timestamp("started_at").defaultNow(),
 });
+
+// User careers relations
+export const userCareersRelations = relations(userCareers, ({ one }) => ({
+  user: one(users, { fields: [userCareers.userId], references: [users.id] }),
+  career: one(careers, { fields: [userCareers.careerId], references: [careers.id] }),
+}));
 
 // Player Skills System
 export const playerSkills = pgTable("player_skills", {
@@ -1014,6 +983,11 @@ export const playerSkills = pgTable("player_skills", {
   updatedAt: timestamp("updated_at").defaultNow(),
 });
 
+// Player skills relations
+export const playerSkillsRelations = relations(playerSkills, ({ one }) => ({
+  user: one(users, { fields: [playerSkills.userId], references: [users.id] }),
+}));
+
 // Breeding Laboratory Features
 export const breedingLab = pgTable("breeding_lab", {
   id: serial("id").primaryKey(),
@@ -1026,6 +1000,11 @@ export const breedingLab = pgTable("breeding_lab", {
   createdAt: timestamp("created_at").defaultNow(),
   updatedAt: timestamp("updated_at").defaultNow(),
 });
+
+// Breeding lab relations
+export const breedingLabRelations = relations(breedingLab, ({ one }) => ({
+  user: one(users, { fields: [breedingLab.userId], references: [users.id] }),
+}));
 
 // Genetic Testing and Services
 export const geneticTests = pgTable("genetic_tests", {
@@ -1040,6 +1019,12 @@ export const geneticTests = pgTable("genetic_tests", {
   labTechId: varchar("lab_tech_id").references(() => users.id),
   createdAt: timestamp("created_at").defaultNow(),
 });
+
+// Genetic tests relations (moved here after table definition)
+export const geneticTestsRelations = relations(geneticTests, ({ one }) => ({
+  animal: one(animals, { fields: [geneticTests.animalId], references: [animals.id] }),
+  labTech: one(users, { fields: [geneticTests.labTechId], references: [users.id] }),
+}));
 
 // Medical Procedures and Treatments
 export const medicalProcedures = pgTable("medical_procedures", {
@@ -1059,6 +1044,12 @@ export const medicalProcedures = pgTable("medical_procedures", {
   createdAt: timestamp("created_at").defaultNow(),
 });
 
+// Medical procedures relations
+export const medicalProceduresRelations = relations(medicalProcedures, ({ one }) => ({
+  animal: one(animals, { fields: [medicalProcedures.animalId], references: [animals.id] }),
+  veterinarian: one(users, { fields: [medicalProcedures.veterinarianId], references: [users.id] }),
+}));
+
 // Crafting System
 export const craftingRecipes = pgTable("crafting_recipes", {
   id: serial("id").primaryKey(),
@@ -1075,6 +1066,11 @@ export const craftingRecipes = pgTable("crafting_recipes", {
   createdAt: timestamp("created_at").defaultNow(),
 });
 
+// Crafting recipes relations
+export const craftingRecipesRelations = relations(craftingRecipes, ({ many }) => ({
+  userCrafting: many(userCrafting),
+}));
+
 // User Crafting Progress
 export const userCrafting = pgTable("user_crafting", {
   id: serial("id").primaryKey(),
@@ -1086,6 +1082,12 @@ export const userCrafting = pgTable("user_crafting", {
   completedAt: timestamp("completed_at"),
   isCompleted: boolean("is_completed").default(false),
 });
+
+// User crafting relations
+export const userCraftingRelations = relations(userCrafting, ({ one }) => ({
+  user: one(users, { fields: [userCrafting.userId], references: [users.id] }),
+  recipe: one(craftingRecipes, { fields: [userCrafting.recipeId], references: [craftingRecipes.id] }),
+}));
 
 // Resources and Materials
 export const resources = pgTable("resources", {
@@ -1103,6 +1105,11 @@ export const resources = pgTable("resources", {
   createdAt: timestamp("created_at").defaultNow(),
 });
 
+// Resources relations
+export const resourcesRelations = relations(resources, ({ many }) => ({
+  userInventory: many(userInventory),
+}));
+
 // User Inventory
 export const userInventory = pgTable("user_inventory", {
   id: serial("id").primaryKey(),
@@ -1112,6 +1119,12 @@ export const userInventory = pgTable("user_inventory", {
   quality: integer("quality").default(100), // 0-100
   acquiredAt: timestamp("acquired_at").defaultNow(),
 });
+
+// User inventory relations
+export const userInventoryRelations = relations(userInventory, ({ one }) => ({
+  user: one(users, { fields: [userInventory.userId], references: [users.id] }),
+  resource: one(resources, { fields: [userInventory.resourceId], references: [resources.id] }),
+}));
 
 // Seasons and Weather
 export const seasonalEvents = pgTable("seasonal_events", {
@@ -1142,6 +1155,11 @@ export const facilityLayouts = pgTable("facility_layouts", {
   createdAt: timestamp("created_at").defaultNow(),
   updatedAt: timestamp("updated_at").defaultNow(),
 });
+
+// Facility layouts relations
+export const facilityLayoutsRelations = relations(facilityLayouts, ({ one }) => ({
+  facility: one(facilities, { fields: [facilityLayouts.facilityId], references: [facilities.id] }),
+}));
 
 // Tournament and Competition System
 export const tournaments = pgTable("tournaments", {
