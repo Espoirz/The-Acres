@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Navigation } from "@/components/navigation";
 import { AnimalCard } from "@/components/animal-card";
+import { Link } from "wouter";
 import { Rabbit, Dog, Trophy, Dna } from "lucide-react";
 
 export default function Home() {
@@ -125,9 +126,11 @@ export default function Home() {
           <TabsContent value="horses" className="space-y-6">
             <div className="flex justify-between items-center">
               <h2 className="text-2xl font-bold text-[hsl(25,60%,20%)]">Your Horses</h2>
-              <Button className="bg-gradient-to-r from-[hsl(25,60%,35%)] to-[hsl(25,50%,40%)] text-[hsl(45,50%,96%)] hover:from-[hsl(25,50%,40%)] hover:to-[hsl(25,60%,35%)]">
-                Add Rabbit
-              </Button>
+              <Link href="/animals">
+                <Button className="bg-gradient-to-r from-[hsl(25,60%,35%)] to-[hsl(25,50%,40%)] text-[hsl(45,50%,96%)] hover:from-[hsl(25,50%,40%)] hover:to-[hsl(25,60%,35%)]">
+                  Manage Horses
+                </Button>
+              </Link>
             </div>
             
             {horses.length === 0 ? (
@@ -136,9 +139,11 @@ export default function Home() {
                   <Rabbit className="w-16 h-16 text-[hsl(25,40%,60%)] mx-auto mb-4" />
                   <h3 className="text-xl font-bold text-[hsl(25,60%,20%)] mb-2">No horses yet</h3>
                   <p className="text-[hsl(25,45%,35%)] mb-4">Start your breeding program by adding your first horse</p>
-                  <Button className="bg-gradient-to-r from-[hsl(25,60%,35%)] to-[hsl(25,50%,40%)] text-[hsl(45,50%,96%)]">
-                    Get Started
-                  </Button>
+                  <Link href="/animals">
+                    <Button className="bg-gradient-to-r from-[hsl(25,60%,35%)] to-[hsl(25,50%,40%)] text-[hsl(45,50%,96%)]">
+                      Get Started
+                    </Button>
+                  </Link>
                 </CardContent>
               </Card>
             ) : (
@@ -153,9 +158,11 @@ export default function Home() {
           <TabsContent value="dogs" className="space-y-6">
             <div className="flex justify-between items-center">
               <h2 className="text-2xl font-bold text-[hsl(25,60%,20%)]">Your Dogs</h2>
-              <Button className="bg-gradient-to-r from-[hsl(25,60%,35%)] to-[hsl(25,50%,40%)] text-[hsl(45,50%,96%)] hover:from-[hsl(25,50%,40%)] hover:to-[hsl(25,60%,35%)]">
-                Add Dog
-              </Button>
+              <Link href="/animals">
+                <Button className="bg-gradient-to-r from-[hsl(25,60%,35%)] to-[hsl(25,50%,40%)] text-[hsl(45,50%,96%)] hover:from-[hsl(25,50%,40%)] hover:to-[hsl(25,60%,35%)]">
+                  Manage Dogs
+                </Button>
+              </Link>
             </div>
             
             {dogs.length === 0 ? (
@@ -164,9 +171,11 @@ export default function Home() {
                   <Dog className="w-16 h-16 text-[hsl(25,40%,60%)] mx-auto mb-4" />
                   <h3 className="text-xl font-bold text-[hsl(25,60%,20%)] mb-2">No dogs yet</h3>
                   <p className="text-[hsl(25,45%,35%)] mb-4">Expand your kennel by adding your first dog</p>
-                  <Button className="bg-gradient-to-r from-[hsl(25,60%,35%)] to-[hsl(25,50%,40%)] text-[hsl(45,50%,96%)]">
-                    Get Started
-                  </Button>
+                  <Link href="/animals">
+                    <Button className="bg-gradient-to-r from-[hsl(25,60%,35%)] to-[hsl(25,50%,40%)] text-[hsl(45,50%,96%)]">
+                      Get Started
+                    </Button>
+                  </Link>
                 </CardContent>
               </Card>
             ) : (

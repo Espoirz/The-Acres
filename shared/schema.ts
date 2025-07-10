@@ -224,6 +224,9 @@ export const insertAnimalSchema = createInsertSchema(animals).omit({
   id: true,
   createdAt: true,
   updatedAt: true,
+}).extend({
+  type: z.enum(["horse", "dog"]),
+  lifecycleStage: z.enum(["foal", "yearling", "adult", "senior"]).optional(),
 });
 
 export const insertBreedingSchema = createInsertSchema(breedings).omit({
