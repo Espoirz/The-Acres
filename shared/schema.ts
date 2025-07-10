@@ -111,9 +111,23 @@ export const animals = pgTable("animals", {
   markings: varchar("markings").default("none"),
   size: varchar("size").default("medium"), // small, medium, large
   genetics: jsonb("genetics").notNull().default({}),
+  geneticString: varchar("genetic_string", { length: 255 }), // e.g., "Ee Aa CrCr nTO"
   hiddenTraits: jsonb("hidden_traits").notNull().default({}),
   lineage: jsonb("lineage").notNull().default({}),
   geneticTestResults: jsonb("genetic_test_results").default({}),
+  
+  // Parentage and breeding genetics
+  motherId: integer("mother_id").references(() => animals.id),
+  fatherId: integer("father_id").references(() => animals.id),
+  inbreedingCoefficient: decimal("inbreeding_coefficient", { precision: 5, scale: 4 }).default("0.0000"),
+  generationNumber: integer("generation_number").default(1),
+  
+  // Temperament and behavior genetics
+  temperament: varchar("temperament", { length: 50 }),
+  behaviorScore: integer("behavior_score").default(50),
+  
+  // Genetic breeding value and quality
+  geneticRarity: varchar("genetic_rarity").default("common"), // common, uncommon, rare, very_rare, legendary
   
   // Enhanced Health and Care
   health: integer("health").notNull().default(100),
@@ -572,6 +586,9 @@ export const usersRelations = relations(users, ({ many, one }) => ({
 
 export const animalsRelations = relations(animals, ({ one, many }) => ({
   owner: one(users, { fields: [animals.ownerId], references: [users.id] }),
+  mother: one(animals, { fields: [animals.motherId], references: [animals.id], relationName: "parentMother" }),
+  father: one(animals, { fields: [animals.fatherId], references: [animals.id], relationName: "parentFather" }),
+  offspring: many(animals, { relationName: "children" }),
   motherBreedings: many(breedings, { relationName: "mother" }),
   fatherBreedings: many(breedings, { relationName: "father" }),
   offspringBreedings: many(breedings, { relationName: "offspring" }),
@@ -580,6 +597,8 @@ export const animalsRelations = relations(animals, ({ one, many }) => ({
   competitionEntries: many(competitionEntries),
   dailyCare: many(dailyCare),
   vetRecords: many(vetRecords),
+  geneticTests: many(geneticTests),
+  medicalProcedures: many(medicalProcedures),
   currentFacility: one(facilities, { fields: [animals.currentFacilityId], references: [facilities.id] }),
   equippedItems: many(userEquipment),
   insurancePolicies: many(insurancePolicies),
@@ -713,6 +732,66 @@ export const insurancePoliciesRelations = relations(insurancePolicies, ({ one })
 
 export const weatherRelations = relations(weather, ({ many }) => ({
   // No direct relations, but weather affects many things
+}));
+
+// Additional relations for genetics and advanced features
+export const geneticTestsRelations = relations(geneticTests, ({ one }) => ({
+  animal: one(animals, { fields: [geneticTests.animalId], references: [animals.id] }),
+  labTech: one(users, { fields: [geneticTests.labTechId], references: [users.id] }),
+}));
+
+export const medicalProceduresRelations = relations(medicalProcedures, ({ one }) => ({
+  animal: one(animals, { fields: [medicalProcedures.animalId], references: [animals.id] }),
+  veterinarian: one(users, { fields: [medicalProcedures.veterinarianId], references: [users.id] }),
+}));
+
+export const biomesRelations = relations(biomes, ({ many }) => ({
+  wildCaptures: many(wildCaptures),
+}));
+
+export const wildCapturesRelations = relations(wildCaptures, ({ one }) => ({
+  user: one(users, { fields: [wildCaptures.userId], references: [users.id] }),
+  biome: one(biomes, { fields: [wildCaptures.biomeId], references: [biomes.id] }),
+  animal: one(animals, { fields: [wildCaptures.animalId], references: [animals.id] }),
+}));
+
+export const careersRelations = relations(careers, ({ many }) => ({
+  userCareers: many(userCareers),
+}));
+
+export const userCareersRelations = relations(userCareers, ({ one }) => ({
+  user: one(users, { fields: [userCareers.userId], references: [users.id] }),
+  career: one(careers, { fields: [userCareers.careerId], references: [careers.id] }),
+}));
+
+export const playerSkillsRelations = relations(playerSkills, ({ one }) => ({
+  user: one(users, { fields: [playerSkills.userId], references: [users.id] }),
+}));
+
+export const breedingLabRelations = relations(breedingLab, ({ one }) => ({
+  user: one(users, { fields: [breedingLab.userId], references: [users.id] }),
+}));
+
+export const craftingRecipesRelations = relations(craftingRecipes, ({ many }) => ({
+  userCrafting: many(userCrafting),
+}));
+
+export const userCraftingRelations = relations(userCrafting, ({ one }) => ({
+  user: one(users, { fields: [userCrafting.userId], references: [users.id] }),
+  recipe: one(craftingRecipes, { fields: [userCrafting.recipeId], references: [craftingRecipes.id] }),
+}));
+
+export const resourcesRelations = relations(resources, ({ many }) => ({
+  userInventory: many(userInventory),
+}));
+
+export const userInventoryRelations = relations(userInventory, ({ one }) => ({
+  user: one(users, { fields: [userInventory.userId], references: [users.id] }),
+  resource: one(resources, { fields: [userInventory.resourceId], references: [resources.id] }),
+}));
+
+export const facilityLayoutsRelations = relations(facilityLayouts, ({ one }) => ({
+  facility: one(facilities, { fields: [facilityLayouts.facilityId], references: [facilities.id] }),
 }));
 
 // Insert schemas
