@@ -25,14 +25,27 @@ export default function Home() {
 
   if (statsLoading || animalsLoading || trainingLoading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-[hsl(45,50%,96%)] to-[hsl(25,30%,85%)]">
+      <div className="min-h-screen bg-gradient-to-br from-amber-900 via-orange-800 to-red-900 relative">
+        {/* Wooden panel background for loading */}
+        <div className="absolute inset-0 opacity-30">
+          {[...Array(12)].map((_, i) => (
+            <div
+              key={i}
+              className="absolute top-0 bottom-0 bg-gradient-to-b from-amber-800/40 via-amber-700/20 to-amber-900/40"
+              style={{
+                left: `${i * 8.33}%`,
+                width: '6%',
+              }}
+            />
+          ))}
+        </div>
         <Navigation />
-        <div className="max-w-7xl mx-auto p-6">
+        <div className="max-w-7xl mx-auto p-6 relative z-10">
           <div className="animate-pulse">
-            <div className="h-8 bg-[hsl(25,30%,80%)] rounded mb-8"></div>
+            <div className="h-8 bg-orange-200/50 rounded mb-8"></div>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
               {[...Array(4)].map((_, i) => (
-                <div key={i} className="h-24 bg-[hsl(25,30%,80%)] rounded"></div>
+                <div key={i} className="h-24 bg-orange-200/50 rounded"></div>
               ))}
             </div>
           </div>
@@ -42,105 +55,139 @@ export default function Home() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[hsl(45,50%,96%)] to-[hsl(25,30%,85%)]">
+    <div className="min-h-screen bg-gradient-to-br from-amber-900 via-orange-800 to-red-900 relative">
+      {/* Sophisticated wooden panel background */}
+      <div className="absolute inset-0">
+        {/* Vertical wooden slats */}
+        <div className="absolute inset-0 opacity-25">
+          {[...Array(16)].map((_, i) => (
+            <div
+              key={i}
+              className="absolute top-0 bottom-0 bg-gradient-to-b from-amber-800/50 via-amber-700/30 to-amber-900/50 border-r border-amber-600/20"
+              style={{
+                left: `${i * 6.25}%`,
+                width: '4%',
+              }}
+            />
+          ))}
+        </div>
+        
+        {/* Subtle horizontal wooden beams */}
+        <div className="absolute inset-0 opacity-15">
+          <div className="absolute top-0 left-0 right-0 h-2 bg-gradient-to-r from-amber-800 via-amber-700 to-amber-800"></div>
+          <div className="absolute bottom-0 left-0 right-0 h-3 bg-gradient-to-r from-amber-900 via-amber-800 to-amber-900"></div>
+        </div>
+        
+        {/* Metallic accent elements */}
+        <div className="absolute inset-0 opacity-20">
+          <div className="absolute top-0 left-8 w-px h-full bg-gradient-to-b from-zinc-400/50 to-zinc-600/50"></div>
+          <div className="absolute top-0 right-8 w-px h-full bg-gradient-to-b from-zinc-400/50 to-zinc-600/50"></div>
+        </div>
+      </div>
+      
+      {/* Sophisticated lighting overlay */}
+      <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-black/10"></div>
+      
       <Navigation />
       
-      <div className="max-w-7xl mx-auto p-6">
+      <div className="max-w-7xl mx-auto p-6 relative z-10">
         <div className="mb-8">
-          <h1 className="text-3xl font-bold text-[hsl(25,60%,20%)] mb-2">
+          <h1 className="text-4xl font-bold text-orange-50 mb-2 font-serif tracking-tight">
             Welcome to Victory Acres
           </h1>
-          <p className="text-[hsl(25,45%,35%)]">
+          <div className="w-48 h-px bg-gradient-to-r from-orange-400 via-amber-300 to-orange-400 mb-3"></div>
+          <p className="text-orange-100/90 text-lg">
             Manage your ranch, breed champions, and build your legacy
           </p>
         </div>
 
-        {/* Quick Stats */}
+        {/* Sophisticated Stats Cards */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
-          <Card className="bg-[hsl(45,50%,96%)] border-2 border-[hsl(25,30%,70%)] shadow-lg">
-            <CardContent className="p-4 text-center">
-              <Rabbit className="w-8 h-8 text-[hsl(25,60%,35%)] mb-2 mx-auto" />
-              <h3 className="text-2xl font-bold text-[hsl(25,50%,40%)]">
-                {stats?.totalHorses || 0}
-              </h3>
-              <p className="text-sm text-[hsl(25,60%,35%)]">Horses</p>
-            </CardContent>
-          </Card>
-
-          <Card className="bg-[hsl(45,50%,96%)] border-2 border-[hsl(25,30%,70%)] shadow-lg">
-            <CardContent className="p-4 text-center">
-              <Dog className="w-8 h-8 text-[hsl(25,60%,35%)] mb-2 mx-auto" />
-              <h3 className="text-2xl font-bold text-[hsl(25,50%,40%)]">
-                {stats?.totalDogs || 0}
-              </h3>
-              <p className="text-sm text-[hsl(25,60%,35%)]">Dogs</p>
-            </CardContent>
-          </Card>
-
-          <Card className="bg-[hsl(45,50%,96%)] border-2 border-[hsl(25,30%,70%)] shadow-lg">
-            <CardContent className="p-4 text-center">
-              <Trophy className="w-8 h-8 text-[hsl(40,80%,50%)] mb-2 mx-auto" />
-              <h3 className="text-2xl font-bold text-[hsl(25,50%,40%)]">
-                {stats?.competitionsWon || 0}
-              </h3>
-              <p className="text-sm text-[hsl(25,60%,35%)]">Competitions Won</p>
-            </CardContent>
-          </Card>
-
-          <Card className="bg-[hsl(45,50%,96%)] border-2 border-[hsl(25,30%,70%)] shadow-lg">
-            <CardContent className="p-4 text-center">
-              <Dna className="w-8 h-8 text-[hsl(25,60%,35%)] mb-2 mx-auto" />
-              <h3 className="text-2xl font-bold text-[hsl(25,50%,40%)]">
-                {stats?.offspringBred || 0}
-              </h3>
-              <p className="text-sm text-[hsl(25,60%,35%)]">Offspring Bred</p>
-            </CardContent>
-          </Card>
+          {[
+            { icon: Rabbit, value: stats?.totalHorses || 0, label: "Horses", color: "from-amber-600 to-orange-700" },
+            { icon: Dog, value: stats?.totalDogs || 0, label: "Dogs", color: "from-orange-600 to-red-700" },
+            { icon: Trophy, value: stats?.competitionsWon || 0, label: "Competitions Won", color: "from-yellow-500 to-amber-600" },
+            { icon: Dna, value: stats?.offspringBred || 0, label: "Offspring Bred", color: "from-orange-500 to-amber-600" }
+          ].map((stat, i) => (
+            <Card key={i} className="bg-gradient-to-br from-amber-50/95 to-orange-50/90 backdrop-blur-sm border border-orange-200/50 shadow-xl relative overflow-hidden group hover:scale-105 transition-transform duration-300">
+              {/* Wooden panel texture */}
+              <div className="absolute inset-0 opacity-20">
+                <div className="absolute inset-0 bg-gradient-to-r from-amber-800/30 via-transparent to-amber-800/30"></div>
+                <div className="absolute top-0 left-0 right-0 h-px bg-amber-600/40"></div>
+                <div className="absolute bottom-0 left-0 right-0 h-px bg-amber-600/40"></div>
+              </div>
+              
+              {/* Metallic accent */}
+              <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-zinc-400/50 via-zinc-300/70 to-zinc-400/50"></div>
+              
+              <CardContent className="p-4 text-center relative z-10">
+                <div className={`w-10 h-10 bg-gradient-to-br ${stat.color} rounded-full flex items-center justify-center mb-3 mx-auto shadow-lg`}>
+                  <stat.icon className="w-5 h-5 text-white" />
+                </div>
+                <h3 className="text-2xl font-bold text-orange-900 mb-1">
+                  {stat.value}
+                </h3>
+                <p className="text-sm text-orange-800 font-medium">{stat.label}</p>
+              </CardContent>
+            </Card>
+          ))}
         </div>
 
-        {/* Main Content Tabs */}
+        {/* Sophisticated Tabs */}
         <Tabs defaultValue="horses" className="space-y-6">
-          <TabsList className="grid w-full grid-cols-2 md:grid-cols-3 lg:grid-cols-6 bg-[hsl(45,50%,96%)] border-2 border-[hsl(25,30%,70%)]">
-            <TabsTrigger value="horses" className="data-[state=active]:bg-[hsl(25,60%,35%)] data-[state=active]:text-[hsl(45,50%,96%)]">
-              <Rabbit className="w-4 h-4 mr-2" />
-              Horses
-            </TabsTrigger>
-            <TabsTrigger value="dogs" className="data-[state=active]:bg-[hsl(25,60%,35%)] data-[state=active]:text-[hsl(45,50%,96%)]">
-              <Dog className="w-4 h-4 mr-2" />
-              Dogs
-            </TabsTrigger>
-            <TabsTrigger value="training" className="data-[state=active]:bg-[hsl(25,60%,35%)] data-[state=active]:text-[hsl(45,50%,96%)]">
-              Training
-            </TabsTrigger>
-            <TabsTrigger value="breeding" className="data-[state=active]:bg-[hsl(25,60%,35%)] data-[state=active]:text-[hsl(45,50%,96%)]">
-              Breeding
-            </TabsTrigger>
-            <TabsTrigger value="marketplace" className="data-[state=active]:bg-[hsl(25,60%,35%)] data-[state=active]:text-[hsl(45,50%,96%)]">
-              Marketplace
-            </TabsTrigger>
-            <TabsTrigger value="facilities" className="data-[state=active]:bg-[hsl(25,60%,35%)] data-[state=active]:text-[hsl(45,50%,96%)]">
-              Facilities
-            </TabsTrigger>
+          <TabsList className="grid w-full grid-cols-2 md:grid-cols-3 lg:grid-cols-6 bg-gradient-to-r from-amber-50/95 to-orange-50/90 backdrop-blur-sm border border-orange-200/50 rounded-lg p-1 shadow-lg relative overflow-hidden">
+            {/* Wooden panel background for tabs */}
+            <div className="absolute inset-0 opacity-20">
+              <div className="absolute inset-0 bg-gradient-to-r from-amber-800/20 via-transparent to-amber-800/20"></div>
+            </div>
+            
+            {[
+              { value: "horses", icon: Rabbit, label: "Horses" },
+              { value: "dogs", icon: Dog, label: "Dogs" },
+              { value: "training", label: "Training" },
+              { value: "breeding", label: "Breeding" },
+              { value: "marketplace", label: "Marketplace" },
+              { value: "facilities", label: "Facilities" }
+            ].map((tab, i) => (
+              <TabsTrigger 
+                key={tab.value}
+                value={tab.value} 
+                className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-orange-700 data-[state=active]:to-red-800 data-[state=active]:text-orange-50 data-[state=active]:shadow-lg text-orange-800 hover:text-orange-700 transition-all duration-300 relative z-10 rounded"
+              >
+                {tab.icon && <tab.icon className="w-4 h-4 mr-2" />}
+                {tab.label}
+              </TabsTrigger>
+            ))}
           </TabsList>
 
           <TabsContent value="horses" className="space-y-6">
             <div className="flex justify-between items-center">
-              <h2 className="text-2xl font-bold text-[hsl(25,60%,20%)]">Your Horses</h2>
+              <h2 className="text-2xl font-bold text-orange-50">Your Horses</h2>
               <Link href="/animals">
-                <Button className="bg-gradient-to-r from-[hsl(25,60%,35%)] to-[hsl(25,50%,40%)] text-[hsl(45,50%,96%)] hover:from-[hsl(25,50%,40%)] hover:to-[hsl(25,60%,35%)]">
-                  Manage Horses
+                <Button className="bg-gradient-to-r from-orange-700 to-red-800 text-orange-50 hover:from-orange-600 hover:to-red-700 shadow-lg border border-orange-600/50 relative overflow-hidden group">
+                  <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700"></div>
+                  <span className="relative z-10">Manage Horses</span>
                 </Button>
               </Link>
             </div>
             
             {horses.length === 0 ? (
-              <Card className="bg-[hsl(45,50%,96%)] border-2 border-[hsl(25,30%,70%)]">
-                <CardContent className="p-8 text-center">
-                  <Rabbit className="w-16 h-16 text-[hsl(25,40%,60%)] mx-auto mb-4" />
-                  <h3 className="text-xl font-bold text-[hsl(25,60%,20%)] mb-2">No horses yet</h3>
-                  <p className="text-[hsl(25,45%,35%)] mb-4">Start your breeding program by adding your first horse</p>
+              <Card className="bg-gradient-to-br from-amber-50/95 to-orange-50/90 backdrop-blur-sm border border-orange-200/50 shadow-xl relative overflow-hidden">
+                {/* Wooden panel texture */}
+                <div className="absolute inset-0 opacity-15">
+                  <div className="absolute inset-0 bg-gradient-to-r from-amber-800/20 via-transparent to-amber-800/20"></div>
+                  <div className="absolute top-0 left-0 right-0 h-px bg-amber-600/30"></div>
+                  <div className="absolute bottom-0 left-0 right-0 h-px bg-amber-600/30"></div>
+                </div>
+                
+                <CardContent className="p-8 text-center relative z-10">
+                  <div className="w-16 h-16 bg-gradient-to-br from-amber-600 to-orange-700 rounded-full flex items-center justify-center mx-auto mb-4 shadow-lg">
+                    <Rabbit className="w-8 h-8 text-white" />
+                  </div>
+                  <h3 className="text-xl font-bold text-orange-900 mb-2">No horses yet</h3>
+                  <p className="text-orange-800 mb-4">Start your breeding program by adding your first horse</p>
                   <Link href="/animals">
-                    <Button className="bg-gradient-to-r from-[hsl(25,60%,35%)] to-[hsl(25,50%,40%)] text-[hsl(45,50%,96%)]">
+                    <Button className="bg-gradient-to-r from-orange-700 to-red-800 text-orange-50 hover:from-orange-600 hover:to-red-700">
                       Get Started
                     </Button>
                   </Link>
@@ -157,22 +204,32 @@ export default function Home() {
 
           <TabsContent value="dogs" className="space-y-6">
             <div className="flex justify-between items-center">
-              <h2 className="text-2xl font-bold text-[hsl(25,60%,20%)]">Your Dogs</h2>
+              <h2 className="text-2xl font-bold text-orange-50">Your Dogs</h2>
               <Link href="/animals">
-                <Button className="bg-gradient-to-r from-[hsl(25,60%,35%)] to-[hsl(25,50%,40%)] text-[hsl(45,50%,96%)] hover:from-[hsl(25,50%,40%)] hover:to-[hsl(25,60%,35%)]">
-                  Manage Dogs
+                <Button className="bg-gradient-to-r from-orange-700 to-red-800 text-orange-50 hover:from-orange-600 hover:to-red-700 shadow-lg border border-orange-600/50 relative overflow-hidden group">
+                  <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700"></div>
+                  <span className="relative z-10">Manage Dogs</span>
                 </Button>
               </Link>
             </div>
             
             {dogs.length === 0 ? (
-              <Card className="bg-[hsl(45,50%,96%)] border-2 border-[hsl(25,30%,70%)]">
-                <CardContent className="p-8 text-center">
-                  <Dog className="w-16 h-16 text-[hsl(25,40%,60%)] mx-auto mb-4" />
-                  <h3 className="text-xl font-bold text-[hsl(25,60%,20%)] mb-2">No dogs yet</h3>
-                  <p className="text-[hsl(25,45%,35%)] mb-4">Expand your kennel by adding your first dog</p>
+              <Card className="bg-gradient-to-br from-amber-50/95 to-orange-50/90 backdrop-blur-sm border border-orange-200/50 shadow-xl relative overflow-hidden">
+                {/* Wooden panel texture */}
+                <div className="absolute inset-0 opacity-15">
+                  <div className="absolute inset-0 bg-gradient-to-r from-amber-800/20 via-transparent to-amber-800/20"></div>
+                  <div className="absolute top-0 left-0 right-0 h-px bg-amber-600/30"></div>
+                  <div className="absolute bottom-0 left-0 right-0 h-px bg-amber-600/30"></div>
+                </div>
+                
+                <CardContent className="p-8 text-center relative z-10">
+                  <div className="w-16 h-16 bg-gradient-to-br from-orange-600 to-red-700 rounded-full flex items-center justify-center mx-auto mb-4 shadow-lg">
+                    <Dog className="w-8 h-8 text-white" />
+                  </div>
+                  <h3 className="text-xl font-bold text-orange-900 mb-2">No dogs yet</h3>
+                  <p className="text-orange-800 mb-4">Expand your kennel by adding your first dog</p>
                   <Link href="/animals">
-                    <Button className="bg-gradient-to-r from-[hsl(25,60%,35%)] to-[hsl(25,50%,40%)] text-[hsl(45,50%,96%)]">
+                    <Button className="bg-gradient-to-r from-orange-700 to-red-800 text-orange-50 hover:from-orange-600 hover:to-red-700">
                       Get Started
                     </Button>
                   </Link>
@@ -189,21 +246,29 @@ export default function Home() {
 
           <TabsContent value="training" className="space-y-6">
             <div className="flex justify-between items-center">
-              <h2 className="text-2xl font-bold text-[hsl(25,60%,20%)]">Active Training</h2>
-              <Button className="bg-gradient-to-r from-[hsl(25,60%,35%)] to-[hsl(25,50%,40%)] text-[hsl(45,50%,96%)] hover:from-[hsl(25,50%,40%)] hover:to-[hsl(25,60%,35%)]">
-                Schedule Training
+              <h2 className="text-2xl font-bold text-orange-50">Active Training</h2>
+              <Button className="bg-gradient-to-r from-orange-700 to-red-800 text-orange-50 hover:from-orange-600 hover:to-red-700 shadow-lg border border-orange-600/50 relative overflow-hidden group">
+                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700"></div>
+                <span className="relative z-10">Schedule Training</span>
               </Button>
             </div>
             
             {activeTraining?.length === 0 ? (
-              <Card className="bg-[hsl(45,50%,96%)] border-2 border-[hsl(25,30%,70%)]">
-                <CardContent className="p-8 text-center">
-                  <div className="w-16 h-16 bg-[hsl(25,40%,60%)] rounded-full mx-auto mb-4 flex items-center justify-center">
-                    <span className="text-[hsl(45,50%,96%)] font-bold">T</span>
+              <Card className="bg-gradient-to-br from-amber-50/95 to-orange-50/90 backdrop-blur-sm border border-orange-200/50 shadow-xl relative overflow-hidden">
+                {/* Wooden panel texture */}
+                <div className="absolute inset-0 opacity-15">
+                  <div className="absolute inset-0 bg-gradient-to-r from-amber-800/20 via-transparent to-amber-800/20"></div>
+                  <div className="absolute top-0 left-0 right-0 h-px bg-amber-600/30"></div>
+                  <div className="absolute bottom-0 left-0 right-0 h-px bg-amber-600/30"></div>
+                </div>
+                
+                <CardContent className="p-8 text-center relative z-10">
+                  <div className="w-16 h-16 bg-gradient-to-br from-amber-600 to-orange-700 rounded-full mx-auto mb-4 flex items-center justify-center shadow-lg">
+                    <span className="text-orange-50 font-bold text-xl">T</span>
                   </div>
-                  <h3 className="text-xl font-bold text-[hsl(25,60%,20%)] mb-2">No active training</h3>
-                  <p className="text-[hsl(25,45%,35%)] mb-4">Start training your animals to improve their stats</p>
-                  <Button className="bg-gradient-to-r from-[hsl(25,60%,35%)] to-[hsl(25,50%,40%)] text-[hsl(45,50%,96%)]">
+                  <h3 className="text-xl font-bold text-orange-900 mb-2">No active training</h3>
+                  <p className="text-orange-800 mb-4">Start training your animals to improve their stats</p>
+                  <Button className="bg-gradient-to-r from-orange-700 to-red-800 text-orange-50 hover:from-orange-600 hover:to-red-700">
                     Start Training
                   </Button>
                 </CardContent>
@@ -211,15 +276,20 @@ export default function Home() {
             ) : (
               <div className="space-y-4">
                 {activeTraining.map((session: any) => (
-                  <Card key={session.id} className="bg-[hsl(45,50%,96%)] border-2 border-[hsl(25,30%,70%)]">
-                    <CardContent className="p-4">
+                  <Card key={session.id} className="bg-gradient-to-br from-amber-50/95 to-orange-50/90 backdrop-blur-sm border border-orange-200/50 shadow-lg relative overflow-hidden">
+                    {/* Wooden panel texture */}
+                    <div className="absolute inset-0 opacity-15">
+                      <div className="absolute inset-0 bg-gradient-to-r from-amber-800/20 via-transparent to-amber-800/20"></div>
+                    </div>
+                    
+                    <CardContent className="p-4 relative z-10">
                       <div className="flex justify-between items-center">
                         <div>
-                          <h3 className="font-bold text-[hsl(25,60%,20%)]">{session.animal?.name}</h3>
-                          <p className="text-[hsl(25,45%,35%)]">{session.trainingType} Training</p>
+                          <h3 className="font-bold text-orange-900">{session.animal?.name}</h3>
+                          <p className="text-orange-800">{session.trainingType} Training</p>
                         </div>
                         <div className="text-right">
-                          <p className="text-sm text-[hsl(25,60%,35%)]">
+                          <p className="text-sm text-orange-700">
                             {Math.ceil((new Date(session.endTime).getTime() - new Date().getTime()) / (1000 * 60))}m remaining
                           </p>
                         </div>
@@ -231,38 +301,25 @@ export default function Home() {
             )}
           </TabsContent>
 
-          <TabsContent value="breeding">
-            <Card className="bg-[hsl(45,50%,96%)] border-2 border-[hsl(25,30%,70%)]">
-              <CardHeader>
-                <CardTitle className="text-[hsl(25,60%,20%)]">Breeding Center</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <p className="text-[hsl(25,45%,35%)]">Breeding features coming soon...</p>
-              </CardContent>
-            </Card>
-          </TabsContent>
-
-          <TabsContent value="marketplace">
-            <Card className="bg-[hsl(45,50%,96%)] border-2 border-[hsl(25,30%,70%)]">
-              <CardHeader>
-                <CardTitle className="text-[hsl(25,60%,20%)]">Marketplace</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <p className="text-[hsl(25,45%,35%)]">Marketplace features coming soon...</p>
-              </CardContent>
-            </Card>
-          </TabsContent>
-
-          <TabsContent value="facilities">
-            <Card className="bg-[hsl(45,50%,96%)] border-2 border-[hsl(25,30%,70%)]">
-              <CardHeader>
-                <CardTitle className="text-[hsl(25,60%,20%)]">Facilities</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <p className="text-[hsl(25,45%,35%)]">Facility management features coming soon...</p>
-              </CardContent>
-            </Card>
-          </TabsContent>
+          {["breeding", "marketplace", "facilities"].map((tabValue) => (
+            <TabsContent key={tabValue} value={tabValue}>
+              <Card className="bg-gradient-to-br from-amber-50/95 to-orange-50/90 backdrop-blur-sm border border-orange-200/50 shadow-xl relative overflow-hidden">
+                {/* Wooden panel texture */}
+                <div className="absolute inset-0 opacity-15">
+                  <div className="absolute inset-0 bg-gradient-to-r from-amber-800/20 via-transparent to-amber-800/20"></div>
+                  <div className="absolute top-0 left-0 right-0 h-px bg-amber-600/30"></div>
+                  <div className="absolute bottom-0 left-0 right-0 h-px bg-amber-600/30"></div>
+                </div>
+                
+                <CardHeader className="relative z-10">
+                  <CardTitle className="text-orange-900 capitalize">{tabValue} Center</CardTitle>
+                </CardHeader>
+                <CardContent className="relative z-10">
+                  <p className="text-orange-800">{tabValue} features coming soon...</p>
+                </CardContent>
+              </Card>
+            </TabsContent>
+          ))}
         </Tabs>
       </div>
     </div>
