@@ -1,0 +1,232 @@
+# Everlasting Victory Acres – Realistic Breeds Edition (Web Game Design)
+
+## 🎡 Game Overview
+
+**Everlasting Victory Acres** is a next-generation browser RPG inspired by *Horzer*, *Dogzer*, *Howrse*, and *Horse Reality*. Players manage horse and dog farms, breed elite animals, train them, explore wild areas, and engage in realistic genetics and career paths.
+
+Start with basic animals and expand to legendary ranches, mythical creatures, and world-class shows.
+
+---
+
+## 🧬 Core Game Systems
+
+### ♻️ Animal Lifecycles
+
+* **Foal/Pup → Yearling → Adult → Senior**
+* Life stages unlock care routines, stat growth, training types.
+* Seniors may develop age-related issues: arthritis, vision loss, dental wear.
+
+### ⚕️ Vet & Wellness Center
+
+* **Conditions:** Colic, kennel cough, fractures, dysplasia.
+* **Treatments:** Antibiotics, bandages, IVs, supplements.
+* **DNA Testing:** HERDA, SCID, PRA, hip scoring, color alleles.
+* **Breeding Support:** Embryo transfer, artificial insemination, cloning (premium).
+
+### 🌳 Wild Biomes & Capture
+
+* Explore **Prairie, Forest, Desert, Mountain** zones.
+* Requires level 5+ and capture passes.
+* Tools: cotton lasso, nylon rope, tranquilizer darts.
+* **Taming mini-games**: Patience training, socialization, reward loops.
+
+### 🧬 Genetics Lab
+
+* Tracks **genotype & phenotype**, with carrier detection.
+* Tools:
+
+  * Inbreeding calculator
+  * GEBVs: Genomic scores
+  * Epigenetic modifiers
+  * Pedigree viewer
+  * Hybrid vigor bonuses
+* Breed planner projects traits, coat odds, mutations.
+
+---
+
+## 🧑‍🏫 Career Paths
+
+Each career unlocks perks, gear, and mini-quests:
+
+* **Breeder:** Higher fertility, private studs, reduced cooldowns.
+* **Trainer:** Stat growth buffs, shorter cooldowns.
+* **Veterinarian:** Reduced treatment costs, rare procedures.
+* **Explorer:** Higher catch success, better biome drops.
+* **Merchant:** Lower fees, bulk sales, analytics.
+* **Show Star:** Extra prize pools, prestige gear, early entries.
+
+---
+
+## 🏡 Facility Building
+
+* Drag-and-drop ranch/kennel design.
+* Build barns, arenas, vet stations, grooming bays.
+* Aesthetic options: fountains, banners, statues.
+* Expand plots, win rare "Heritage Tiles" during events.
+
+---
+
+## 🎮 Player Skills
+
+Level up 5 skill branches:
+
+* **Handling:** Bonding & taming effectiveness.
+* **Training:** Faster growth, advanced moves.
+* **Vet Aid:** Better treatment results, reduced times.
+* **Tracking:** Hidden resources, wild trait discovery.
+* **Marketing:** Better sale outcomes, premium ad boosts.
+
+Each branch has 3 tiers + unique nodes.
+
+---
+
+## 🔧 Crafting & Economy
+
+* **Materials:** Leather, hay, fiber, minerals (from quests & biomes).
+* **Crafting:** Tack, supplements, tonics, breed-specific feeds.
+* **Markets:** Auctions, player shops, seasonal economy.
+
+---
+
+## ☁️ Seasons & Weather
+
+Influences fertility, training, resource access.
+
+| Season | Effects                           |
+| ------ | --------------------------------- |
+| Spring | Fertility boost, forage events    |
+| Summer | Heat stress, swimming bonuses     |
+| Fall   | Coat changes, harvest fairs       |
+| Winter | Indoor training, limited pastures |
+
+Weather events include floods, heatwaves, and snow.
+
+---
+
+## 🎓 Events & Leaderboards
+
+* **Competitions:** Dressage, scent trials, obstacle courses.
+* **Festivals:** Seasonal breeding expos, galas.
+* **Leaderboards:** Wilds captured, prestige titles, best bloodlines.
+
+---
+
+## 🎨 Clubs & Creativity
+
+* **Custom Designs:** Upload tack/arena skins.
+* **Gene Pool Archive:** Mutation logs, vote-to-name, shared research.
+* **Private Clubs:** Breeding groups, member auctions, contests.
+
+---
+
+## 🏰 Prestige & Progression
+
+* **Achievements:** Foals bred, shows won, rare coats found.
+* **Daily Maps:** Grid adventures for rewards.
+* **Prestige Rebirth:** Reset at cap for permanent buffs, rare gear, special breeds.
+
+---
+
+## 🤝 Governance & Reputation
+
+* Stars for fair trades, mentoring, hosting events.
+* Low rep = locked out of auctions/clubs.
+* **Club System:** Elected leaders, rule-setting, disputes.
+
+---
+
+## 🤖 AI-Powered Systems
+
+* Smart breeding advisor, NPC creator, lore generator.
+* Animal generator for hyper-real coats, patterns, aging.
+* Moderation: Flagging, auto-translate, profanity filters.
+
+---
+
+## 💼 Premium vs Free
+
+* **Free Members:** Own dogs bought from premium players (no breeding), limited show entry.
+* **Premium Players:** Breed dogs, access cloning, store embryos, use advanced breeding AI, breed mythical creatures.
+
+---
+
+## 📅 Breed Lists
+
+### Horses (15)
+
+1. Andalusian
+2. Thoroughbred
+3. Friesian
+4. Arabian
+5. Mustang
+6. Hanoverian
+7. Appaloosa
+8. Akhal-Teke
+9. Shire
+10. Gypsy Vanner
+11. Dutch Warmblood
+12. Quarter Horse
+13. Marwari
+14. Oldenburg
+15. Standardbred
+
+### Ponies (15)
+
+1. Shetland
+2. Welsh Pony
+3. Connemara
+4. Dartmoor
+5. Exmoor
+6. Hackney Pony
+7. Icelandic Horse
+8. Highland Pony
+9. Fell Pony
+10. New Forest Pony
+11. German Riding Pony
+12. Dales Pony
+13. Eriskay
+14. Chincoteague
+15. Hokkaido Pony
+
+### Dogs (10)
+
+1. Border Collie
+2. German Shepherd
+3. Belgian Malinois
+4. Labrador Retriever
+5. Australian Cattle Dog
+6. Siberian Husky
+7. Saluki
+8. Jack Russell Terrier
+9. Doberman Pinscher
+10. Czechoslovakian Wolfdog
+
+---
+
+## 🎨 Coat Color Genetics
+
+**Horses:**
+
+* Base: Black (E), Red (e), Bay (A)
+* Dilutions: Cream (Cr), Champagne (Ch), Dun (D), Silver (Z)
+* Modifiers: Roan (Rn), Grey (G), Tobiano (TO), Leopard (Lp)
+
+**Dogs:**
+
+* Merle (M), Brindle (Kbr), Piebald (Sp), Dilute (d), Liver (b)
+
+Inheritance follows dominant/recessive models. Carriers may pass unseen traits.
+
+---
+
+## 📦 Suggested Items
+
+* **Starter Kit:** Grooming brush, hay bale, food dish
+* **Vet Kit:** IV fluid, antiseptic, wraps
+* **Explorer Pack:** Lasso, tranquilizer, travel pouch
+* **Trainer Pack:** Whistle, clicker, treat bag
+* **Breeder Kit:** Pedigree planner, heat booster, AI vial
+
+---
+
+This document outlines the complete gameplay, systems, perks, breeds, genetics, and monetization structure for Everlasting Victory Acres.
