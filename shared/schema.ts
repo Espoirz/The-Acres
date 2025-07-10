@@ -861,6 +861,262 @@ export const insertWeatherSchema = createInsertSchema(weather).omit({
   createdAt: true,
 });
 
+// Wilderness and Biomes System
+export const biomes = pgTable("biomes", {
+  id: serial("id").primaryKey(),
+  name: varchar("name").notNull(),
+  description: text("description"),
+  environment: varchar("environment").notNull(), // "prairie", "mountain", "desert", "forest"
+  difficulty: integer("difficulty").default(1), // 1-10
+  unlockLevel: integer("unlock_level").default(1),
+  resources: jsonb("resources").default([]), // available resources
+  wildAnimals: jsonb("wild_animals").default([]), // species found here
+  weatherEffects: jsonb("weather_effects").default({}),
+  specialFeatures: jsonb("special_features").default([]),
+  imageUrl: varchar("image_url"),
+  isActive: boolean("is_active").default(true),
+  createdAt: timestamp("created_at").defaultNow(),
+});
+
+// Wild Animal Captures
+export const wildCaptures = pgTable("wild_captures", {
+  id: serial("id").primaryKey(),
+  userId: varchar("user_id").notNull().references(() => users.id),
+  biomeId: integer("biome_id").notNull().references(() => biomes.id),
+  animalId: integer("animal_id").references(() => animals.id), // created after successful taming
+  species: varchar("species").notNull(),
+  captureDate: timestamp("capture_date").notNull(),
+  captureMethod: varchar("capture_method").notNull(), // "lasso", "tranquilizer", "patience"
+  tamingProgress: integer("taming_progress").default(0), // 0-100
+  isTamed: boolean("is_tamed").default(false),
+  stressLevel: integer("stress_level").default(50),
+  wildTraits: jsonb("wild_traits").default({}),
+  mutations: jsonb("mutations").default([]),
+  createdAt: timestamp("created_at").defaultNow(),
+});
+
+// Career Paths and Specializations
+export const careers = pgTable("careers", {
+  id: serial("id").primaryKey(),
+  name: varchar("name").notNull(),
+  description: text("description"),
+  category: varchar("category").notNull(), // "breeder", "trainer", "veterinarian", "explorer", "merchant", "show_champion"
+  skillTree: jsonb("skill_tree").notNull().default({}),
+  benefits: jsonb("benefits").default({}),
+  requirements: jsonb("requirements").default({}),
+  maxLevel: integer("max_level").default(100),
+  createdAt: timestamp("created_at").defaultNow(),
+});
+
+// User Career Progress
+export const userCareers = pgTable("user_careers", {
+  id: serial("id").primaryKey(),
+  userId: varchar("user_id").notNull().references(() => users.id),
+  careerId: integer("career_id").notNull().references(() => careers.id),
+  level: integer("level").default(1),
+  experience: integer("experience").default(0),
+  skillPoints: integer("skill_points").default(0),
+  unlockedSkills: jsonb("unlocked_skills").default([]),
+  isActive: boolean("is_active").default(false),
+  startedAt: timestamp("started_at").defaultNow(),
+});
+
+// Player Skills System
+export const playerSkills = pgTable("player_skills", {
+  id: serial("id").primaryKey(),
+  userId: varchar("user_id").notNull().references(() => users.id),
+  skillType: varchar("skill_type").notNull(), // "handling", "training", "veterinary_aid", "tracking", "marketing"
+  level: integer("level").default(1),
+  experience: integer("experience").default(0),
+  masteryPoints: integer("mastery_points").default(0),
+  specializations: jsonb("specializations").default([]),
+  perks: jsonb("perks").default([]),
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
+// Breeding Laboratory Features
+export const breedingLab = pgTable("breeding_lab", {
+  id: serial("id").primaryKey(),
+  userId: varchar("user_id").notNull().references(() => users.id),
+  level: integer("level").default(1),
+  technologies: jsonb("technologies").default([]), // unlocked breeding tech
+  cryobank: jsonb("cryobank").default([]), // stored genetic material
+  activeProjects: jsonb("active_projects").default([]),
+  researchPoints: integer("research_points").default(0),
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
+// Genetic Testing and Services
+export const geneticTests = pgTable("genetic_tests", {
+  id: serial("id").primaryKey(),
+  animalId: integer("animal_id").notNull().references(() => animals.id),
+  testType: varchar("test_type").notNull(), // "DNA", "health_screen", "parentage", "trait_analysis"
+  results: jsonb("results").notNull().default({}),
+  cost: integer("cost").default(0),
+  requestedAt: timestamp("requested_at").notNull(),
+  completedAt: timestamp("completed_at"),
+  isCompleted: boolean("is_completed").default(false),
+  labTechId: varchar("lab_tech_id").references(() => users.id),
+  createdAt: timestamp("created_at").defaultNow(),
+});
+
+// Medical Procedures and Treatments
+export const medicalProcedures = pgTable("medical_procedures", {
+  id: serial("id").primaryKey(),
+  animalId: integer("animal_id").notNull().references(() => animals.id),
+  veterinarianId: varchar("veterinarian_id").references(() => users.id),
+  procedureType: varchar("procedure_type").notNull(), // "surgery", "emergency", "routine", "diagnostic"
+  diagnosis: varchar("diagnosis"),
+  treatment: text("treatment"),
+  medications: jsonb("medications").default([]),
+  followUpRequired: boolean("follow_up_required").default(false),
+  cost: integer("cost").notNull(),
+  success: boolean("success").default(true),
+  complications: text("complications"),
+  scheduledAt: timestamp("scheduled_at"),
+  completedAt: timestamp("completed_at"),
+  createdAt: timestamp("created_at").defaultNow(),
+});
+
+// Crafting System
+export const craftingRecipes = pgTable("crafting_recipes", {
+  id: serial("id").primaryKey(),
+  name: varchar("name").notNull(),
+  category: varchar("category").notNull(), // "tack", "feed", "medicine", "supplements", "equipment"
+  description: text("description"),
+  ingredients: jsonb("ingredients").notNull().default([]),
+  tools: jsonb("tools").default([]),
+  skillRequirements: jsonb("skill_requirements").default({}),
+  craftingTime: integer("crafting_time").default(60), // minutes
+  qualityModifiers: jsonb("quality_modifiers").default({}),
+  unlockLevel: integer("unlock_level").default(1),
+  isHidden: boolean("is_hidden").default(false),
+  createdAt: timestamp("created_at").defaultNow(),
+});
+
+// User Crafting Progress
+export const userCrafting = pgTable("user_crafting", {
+  id: serial("id").primaryKey(),
+  userId: varchar("user_id").notNull().references(() => users.id),
+  recipeId: integer("recipe_id").notNull().references(() => craftingRecipes.id),
+  progress: integer("progress").default(0), // 0-100
+  qualityBonus: integer("quality_bonus").default(0),
+  startedAt: timestamp("started_at").notNull(),
+  completedAt: timestamp("completed_at"),
+  isCompleted: boolean("is_completed").default(false),
+});
+
+// Resources and Materials
+export const resources = pgTable("resources", {
+  id: serial("id").primaryKey(),
+  name: varchar("name").notNull(),
+  type: varchar("type").notNull(), // "material", "ingredient", "tool", "consumable"
+  rarity: varchar("rarity").default("common"),
+  description: text("description"),
+  value: integer("value").default(0),
+  stackable: boolean("stackable").default(true),
+  maxStack: integer("max_stack").default(100),
+  effects: jsonb("effects").default({}),
+  sources: jsonb("sources").default([]), // where to find/craft
+  imageUrl: varchar("image_url"),
+  createdAt: timestamp("created_at").defaultNow(),
+});
+
+// User Inventory
+export const userInventory = pgTable("user_inventory", {
+  id: serial("id").primaryKey(),
+  userId: varchar("user_id").notNull().references(() => users.id),
+  resourceId: integer("resource_id").notNull().references(() => resources.id),
+  quantity: integer("quantity").default(1),
+  quality: integer("quality").default(100), // 0-100
+  acquiredAt: timestamp("acquired_at").defaultNow(),
+});
+
+// Seasons and Weather
+export const seasonalEvents = pgTable("seasonal_events", {
+  id: serial("id").primaryKey(),
+  name: varchar("name").notNull(),
+  season: varchar("season").notNull(), // "spring", "summer", "fall", "winter"
+  description: text("description"),
+  effects: jsonb("effects").notNull().default({}),
+  bonuses: jsonb("bonuses").default({}),
+  penalties: jsonb("penalties").default({}),
+  startDate: timestamp("start_date").notNull(),
+  endDate: timestamp("end_date").notNull(),
+  isActive: boolean("is_active").default(true),
+  imageUrl: varchar("image_url"),
+  createdAt: timestamp("created_at").defaultNow(),
+});
+
+// Ranch/Kennel Layout and Customization
+export const facilityLayouts = pgTable("facility_layouts", {
+  id: serial("id").primaryKey(),
+  facilityId: integer("facility_id").notNull().references(() => facilities.id),
+  layoutData: jsonb("layout_data").notNull().default({}), // positions, rotations, connections
+  theme: varchar("theme").default("rustic"), // "rustic", "modern", "heritage", "luxury"
+  decorations: jsonb("decorations").default([]),
+  functionalItems: jsonb("functional_items").default([]),
+  utilities: jsonb("utilities").default([]),
+  landSize: integer("land_size").default(100), // square units
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
+// Tournament and Competition System
+export const tournaments = pgTable("tournaments", {
+  id: serial("id").primaryKey(),
+  name: varchar("name").notNull(),
+  description: text("description"),
+  type: varchar("type").notNull(), // "elimination", "round_robin", "time_trial", "points_based"
+  competitionType: varchar("competition_type").notNull(), // "show", "agility", "endurance", "obedience"
+  animalType: varchar("animal_type").notNull().$type<AnimalType>(),
+  entryFee: integer("entry_fee").default(0),
+  prizePool: integer("prize_pool").default(0),
+  maxParticipants: integer("max_participants").default(50),
+  currentParticipants: integer("current_participants").default(0),
+  registrationStart: timestamp("registration_start").notNull(),
+  registrationEnd: timestamp("registration_end").notNull(),
+  tournamentStart: timestamp("tournament_start").notNull(),
+  tournamentEnd: timestamp("tournament_end").notNull(),
+  status: varchar("status").default("upcoming"), // "upcoming", "registration", "active", "completed"
+  brackets: jsonb("brackets").default({}),
+  rules: jsonb("rules").default({}),
+  createdAt: timestamp("created_at").defaultNow(),
+});
+
+// Community Features
+export const designShares = pgTable("design_shares", {
+  id: serial("id").primaryKey(),
+  creatorId: varchar("creator_id").notNull().references(() => users.id),
+  name: varchar("name").notNull(),
+  category: varchar("category").notNull(), // "tack", "arena", "kennel", "decoration"
+  description: text("description"),
+  designData: jsonb("design_data").notNull(),
+  downloadCount: integer("download_count").default(0),
+  rating: decimal("rating", { precision: 3, scale: 2 }).default("0.00"),
+  ratingCount: integer("rating_count").default(0),
+  isApproved: boolean("is_approved").default(false),
+  isFeatured: boolean("is_featured").default(false),
+  tags: text("tags").array().default([]),
+  imageUrl: varchar("image_url"),
+  createdAt: timestamp("created_at").defaultNow(),
+});
+
+// Reputation System
+export const reputationHistory = pgTable("reputation_history", {
+  id: serial("id").primaryKey(),
+  userId: varchar("user_id").notNull().references(() => users.id),
+  fromUserId: varchar("from_user_id").references(() => users.id),
+  category: varchar("category").notNull(), // "trading", "breeding", "help", "behavior"
+  points: integer("points").notNull(), // can be positive or negative
+  reason: text("reason"),
+  transactionId: varchar("transaction_id"), // reference to trade, breeding, etc.
+  isValid: boolean("is_valid").default(true),
+  createdAt: timestamp("created_at").defaultNow(),
+});
+
 // Export types
 export type UpsertUser = typeof users.$inferInsert;
 export type User = typeof users.$inferSelect;
@@ -878,3 +1134,48 @@ export type Competition = typeof competitions.$inferSelect;
 export type InsertCompetition = z.infer<typeof insertCompetitionSchema>;
 export type CompetitionEntry = typeof competitionEntries.$inferSelect;
 export type InsertCompetitionEntry = z.infer<typeof insertCompetitionEntrySchema>;
+
+// New type exports for all the enhanced features
+export type DailyCare = typeof dailyCare.$inferSelect;
+export type InsertDailyCare = z.infer<typeof insertDailyCareSchema>;
+export type VetRecord = typeof vetRecords.$inferSelect;
+export type InsertVetRecord = z.infer<typeof insertVetRecordSchema>;
+export type Achievement = typeof achievements.$inferSelect;
+export type InsertAchievement = z.infer<typeof insertAchievementSchema>;
+export type UserAchievement = typeof userAchievements.$inferSelect;
+export type Quest = typeof quests.$inferSelect;
+export type UserQuest = typeof userQuests.$inferSelect;
+export type Friendship = typeof friendships.$inferSelect;
+export type Guild = typeof guilds.$inferSelect;
+export type GuildMember = typeof guildMembers.$inferSelect;
+export type Equipment = typeof equipment.$inferSelect;
+export type UserEquipment = typeof userEquipment.$inferSelect;
+export type Auction = typeof auctions.$inferSelect;
+export type AuctionBid = typeof auctionBids.$inferSelect;
+export type Staff = typeof staff.$inferSelect;
+export type UserStaff = typeof userStaff.$inferSelect;
+export type GameEvent = typeof gameEvents.$inferSelect;
+export type Notification = typeof notifications.$inferSelect;
+export type Research = typeof research.$inferSelect;
+export type UserResearch = typeof userResearch.$inferSelect;
+export type InsurancePolicy = typeof insurancePolicies.$inferSelect;
+export type Weather = typeof weather.$inferSelect;
+
+// Advanced feature types
+export type Biome = typeof biomes.$inferSelect;
+export type WildCapture = typeof wildCaptures.$inferSelect;
+export type Career = typeof careers.$inferSelect;
+export type UserCareer = typeof userCareers.$inferSelect;
+export type PlayerSkill = typeof playerSkills.$inferSelect;
+export type BreedingLab = typeof breedingLab.$inferSelect;
+export type GeneticTest = typeof geneticTests.$inferSelect;
+export type MedicalProcedure = typeof medicalProcedures.$inferSelect;
+export type CraftingRecipe = typeof craftingRecipes.$inferSelect;
+export type UserCrafting = typeof userCrafting.$inferSelect;
+export type Resource = typeof resources.$inferSelect;
+export type UserInventory = typeof userInventory.$inferSelect;
+export type SeasonalEvent = typeof seasonalEvents.$inferSelect;
+export type FacilityLayout = typeof facilityLayouts.$inferSelect;
+export type Tournament = typeof tournaments.$inferSelect;
+export type DesignShare = typeof designShares.$inferSelect;
+export type ReputationHistory = typeof reputationHistory.$inferSelect;
