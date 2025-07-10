@@ -1,0 +1,291 @@
+Got it! Here's a full **visual layout description** of what each page of *Everlasting Victory Acres* should look like. These are **UI/UX wireframe-style descriptions**, guiding what the frontend should display, section by section. This is ideal for mockup design, frontend coding, or briefing a designer.
+
+---
+
+## 🏠 **Homepage / Landing Page**
+
+### Purpose: First impression, registration, basic overview.
+
+**Header:**
+
+* Game logo (animated horse/dog silhouettes)
+* Top-right: Login | Register | Language toggle
+
+**Hero Section (Full-width):**
+
+* Background: Panoramic animated ranch/farm with horses grazing and dogs running
+* CTA Buttons:
+
+  * 🐴 “Start Your Ranch” (Register)
+  * 🧬 “View Game Features” (Scroll down)
+
+**Feature Highlights:**
+
+* Icons + short text for:
+
+  * Realistic Genetics
+  * Wild Captures
+  * Breeding Labs
+  * Careers & Clubs
+  * Shows & Tournaments
+
+**Footer:**
+
+* Links: About, ToS, Contact, Discord
+* Social media icons (stylized like rustic tack buttons)
+
+---
+
+## 🔐 **Login/Register Page**
+
+### Purpose: User access and onboarding.
+
+**Split Layout (Left/Right Panels):**
+
+* Left:
+
+  * Login form: Username / Password
+  * “Forgot password” link
+* Right:
+
+  * Register form: Username, Email, Age (13+), Pick starter breed
+  * Optional: Referral code
+
+**Background:** Subtle farm fence and meadow scene with ambient birdsong.
+
+---
+
+## 📋 **Dashboard / Player Hub**
+
+### Purpose: Main player control center.
+
+**Top Bar:**
+
+* Coins | Tokens | Reputation Stars
+* Notification bell (quests, events, breedings)
+* Mini-avatar + dropdown (Settings, Log out)
+
+**Main Body:**
+
+* Welcome Back Message (with animated avatar or ranch pet)
+* Quick buttons:
+
+  * 🐎 My Animals
+  * 🏡 My Ranch
+  * 🌳 Explore Wilds
+  * 🧬 Breeding Center
+  * 🛒 Marketplace
+  * 💬 Club & Forums
+
+**Side Panel (Right):**
+
+* Active quests
+* Breeding cooldown timers
+* Message inbox previews
+* Random breed tip or lore fact
+
+---
+
+## 🐴 **Animal Profile Page (Horse/Dog)**
+
+### Purpose: View and manage individual animals.
+
+**Header:**
+
+* Animal name + breed
+* Age | Gender | Temperament
+* Health bar | Hunger | Mood icons
+
+**Main Display (Left):**
+
+* 3D-rendered or AI-generated animal image (changes with age)
+* Tabs below image:
+
+  * Overview
+  * Stats
+  * Pedigree
+  * Training
+  * Health
+
+**Right Panel:**
+
+* Owner info
+* Breeding status + stud fees (if adult)
+* Buttons: Groom, Feed, Train, Show, Vet Visit
+
+---
+
+## 🏥 **Vet & Wellness Center**
+
+### Purpose: Treat and monitor health.
+
+**Tabs:**
+
+* Routine Checkup
+* Emergency Visit
+* Genetic Testing
+* Surgery & Reproduction
+* Wellness Store (buy meds/supplements)
+
+**Interface:**
+
+* Interactive UI with clinic background
+* Drag-animal-into-exam-table mechanic
+* Mini-game overlays for surgery or diagnostics (e.g., tap/drag tools)
+
+---
+
+## 🧬 **Breeding Center**
+
+### Purpose: Breed animals or manage embryo/genetics.
+
+**Sections:**
+
+* Select Pair (dropdown or drag & drop stall view)
+* View Compatibility (shows genetics + stat comparison)
+* Predicted Outcomes:
+
+  * Coat color % pie chart
+  * Trait bars (Strength, Agility, Show Potential)
+  * Inbreeding warning (if too close)
+* AI or Embryo Transfer toggle (if unlocked)
+* Cryobank tab: Frozen semen/embryos
+* Breeding Cooldowns table
+
+---
+
+## 🌳 **Explore Wilds Page**
+
+### Purpose: Capture wild animals.
+
+**Biomes Map (selectable regions):**
+
+* Prairie
+* Forest
+* Desert
+* Mountain
+
+**Within Region:**
+
+* Animated scene background
+* Gear bag (select lasso type, tranquilizer, treats)
+* Bushes shake randomly (tap to investigate)
+* Mini-game for capturing (timed click, quick-drag pattern, or slider bar)
+
+**After Capture:**
+
+* New animal enters taming pen
+* Traits hidden (reveal after taming)
+* Assign name, gender, and keeper
+
+---
+
+## 🏡 **Ranch & Kennel Builder**
+
+### Purpose: Customize facilities.
+
+**Drag-and-Drop Grid Layout:**
+
+* Building palette on left (barns, paddocks, clinics, arenas)
+* Decorations tab (flowerbeds, fences, trees)
+* Each tile upgradeable (click → upgrade dialog)
+* View visitors walking around the ranch
+* Button to visit friend ranches or clubs
+
+---
+
+## 🏆 **Shows & Events Page**
+
+### Purpose: Register and compete.
+
+**Tabs:**
+
+* Upcoming Events
+* Active Shows (live timers)
+* Results
+* Register Animal
+
+**Entry Form:**
+
+* Select animal
+* Choose class (based on breed, skill, and age)
+* Pay fee (or use free ticket)
+
+**Leaderboard (Real-time):**
+
+* Global, Club-only, Friend-only filters
+* Icons for rewards (ribbons, trophies, XP)
+
+---
+
+## 📚 **Career & Skills Page**
+
+### Purpose: Career choice, skill trees.
+
+**Choose Path (First Time):**
+
+* Breeder | Trainer | Vet | Explorer | Merchant | Show Champion
+
+**After Choice:**
+
+* Skill tree UI with nodes (hover to see bonuses)
+* XP bar for career
+* Side quests related to chosen job
+
+---
+
+## 🧵 **Crafting & Economy Page**
+
+### Purpose: Craft items, buy/sell.
+
+**Workshops:**
+
+* Saddlery
+* Herbalist Den
+* Tack & Collar Studio
+* Feed Mill
+
+**Inventory UI:**
+
+* Materials tab
+* Recipes tab (searchable with filters)
+
+**Marketplace Tabs:**
+
+* Auction House (horses/dogs/items)
+* Player Shops
+* Public Trades (filter by price, quality, rarity)
+
+---
+
+## 💬 **Club House & Forums**
+
+### Purpose: Player social interaction.
+
+**Club Room Layout:**
+
+* Club banner + logo
+* Club Council Memberboard
+* Shared Breeding Pool
+* Research Tree (club-exclusive upgrades)
+
+**Forum Style:**
+
+* Categories: Game Help, Art, Roleplay, Genetics
+* Post format: Titles, avatars, quick reply
+* Admin/mod tools for player-led governance
+
+---
+
+## 🎨 **Design Lab & AI Toolkits**
+
+### Purpose: Create & submit custom items/art.
+
+* **Upload:** Tack skins, ranch signs, pet art
+* **AI Filter:** Preview stylization into game-ready art
+* **Submission Queue:** Staff approval with comments
+* **Rewards:** Get shop tokens or coins if approved
+
+---
+
+Would you like wireframes or image mockups of these layouts next? Or code frameworks (HTML/React) for any of these pages?

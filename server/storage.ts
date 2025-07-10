@@ -120,7 +120,7 @@ export class DatabaseStorage implements IStorage {
   }
 
   async createAnimal(animal: InsertAnimal): Promise<Animal> {
-    const [newAnimal] = await db.insert(animals).values(animal).returning();
+    const [newAnimal] = await db.insert(animals).values([animal]).returning();
     return newAnimal;
   }
 
@@ -139,12 +139,24 @@ export class DatabaseStorage implements IStorage {
 
   // Breeding operations
   async getBreedingsByOwner(ownerId: string): Promise<Breeding[]> {
-    return await db
-      .select()
+    const results = await db
+      .select({
+        id: breedings.id,
+        createdAt: breedings.createdAt,
+        motherId: breedings.motherId,
+        fatherId: breedings.fatherId,
+        offspringId: breedings.offspringId,
+        breedingDate: breedings.breedingDate,
+        expectedDueDate: breedings.expectedDueDate,
+        actualBirthDate: breedings.actualBirthDate,
+        geneticPredictions: breedings.geneticPredictions,
+        isCompleted: breedings.isCompleted,
+      })
       .from(breedings)
       .leftJoin(animals, eq(breedings.motherId, animals.id))
       .where(eq(animals.ownerId, ownerId))
       .orderBy(desc(breedings.createdAt));
+    return results;
   }
 
   async createBreeding(breeding: InsertBreeding): Promise<Breeding> {
@@ -183,8 +195,19 @@ export class DatabaseStorage implements IStorage {
   }
 
   async getActiveTrainingsByOwner(ownerId: string): Promise<TrainingSession[]> {
-    return await db
-      .select()
+    const results = await db
+      .select({
+        id: trainingSessions.id,
+        animalId: trainingSessions.animalId,
+        trainingType: trainingSessions.trainingType,
+        cost: trainingSessions.cost,
+        duration: trainingSessions.duration,
+        startTime: trainingSessions.startTime,
+        endTime: trainingSessions.endTime,
+        statImprovement: trainingSessions.statImprovement,
+        isCompleted: trainingSessions.isCompleted,
+        createdAt: trainingSessions.createdAt,
+      })
       .from(trainingSessions)
       .leftJoin(animals, eq(trainingSessions.animalId, animals.id))
       .where(
@@ -194,6 +217,7 @@ export class DatabaseStorage implements IStorage {
         )
       )
       .orderBy(asc(trainingSessions.endTime));
+    return results;
   }
 
   async createTrainingSession(session: InsertTrainingSession): Promise<TrainingSession> {
@@ -218,31 +242,43 @@ export class DatabaseStorage implements IStorage {
     maxPrice?: number;
     sortBy?: string;
   }): Promise<MarketplaceListing[]> {
-    let query = db
-      .select()
-      .from(marketplaceListings)
-      .leftJoin(animals, eq(marketplaceListings.animalId, animals.id))
-      .leftJoin(users, eq(marketplaceListings.sellerId, users.id))
-      .where(eq(marketplaceListings.isActive, true));
+    const conditions = [eq(marketplaceListings.isActive, true)];
 
     if (filters?.animalType) {
-      query = query.where(eq(animals.type, filters.animalType));
+      conditions.push(eq(animals.type, filters.animalType as "horse" | "dog"));
     }
     if (filters?.breed) {
-      query = query.where(eq(animals.breed, filters.breed));
+      conditions.push(eq(animals.breed, filters.breed));
     }
     if (filters?.minPrice) {
-      query = query.where(gte(marketplaceListings.price, filters.minPrice));
+      conditions.push(gte(marketplaceListings.price, filters.minPrice));
     }
     if (filters?.maxPrice) {
-      query = query.where(lte(marketplaceListings.price, filters.maxPrice));
+      conditions.push(lte(marketplaceListings.price, filters.maxPrice));
     }
 
     const orderBy = filters?.sortBy === "price_desc" ? desc(marketplaceListings.price) :
                    filters?.sortBy === "price_asc" ? asc(marketplaceListings.price) :
                    desc(marketplaceListings.createdAt);
 
-    return await query.orderBy(orderBy);
+    const results = await db
+      .select({
+        id: marketplaceListings.id,
+        animalId: marketplaceListings.animalId,
+        sellerId: marketplaceListings.sellerId,
+        price: marketplaceListings.price,
+        description: marketplaceListings.description,
+        isActive: marketplaceListings.isActive,
+        createdAt: marketplaceListings.createdAt,
+        updatedAt: marketplaceListings.updatedAt,
+      })
+      .from(marketplaceListings)
+      .leftJoin(animals, eq(marketplaceListings.animalId, animals.id))
+      .leftJoin(users, eq(marketplaceListings.sellerId, users.id))
+      .where(and(...conditions))
+      .orderBy(orderBy);
+
+    return results;
   }
 
   async createMarketplaceListing(listing: InsertMarketplaceListing): Promise<MarketplaceListing> {
