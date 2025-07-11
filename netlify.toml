@@ -1,16 +1,13 @@
 [build]
   command = "npm run build"
-  publish = "client/dist"
+  publish = "dist/public"
   functions = "netlify/functions"
 
 [dev]
   command = "npm run dev"
   targetPort = 5173
   port = 8888
-
-[functions]
-  external_node_modules = ["@neondatabase/serverless"]
-  node_bundler = "esbuild"
+  framework = "vite"
 
 [functions]
   external_node_modules = ["@neondatabase/serverless"]
