@@ -11,6 +11,7 @@ import Breeding from "@/pages/breeding";
 import Training from "@/pages/training";
 import Marketplace from "@/pages/marketplace";
 import Facilities from "@/pages/facilities";
+import LoginPreview from "@/pages/login-preview";
 import NotFound from "@/pages/not-found";
 
 function Router() {
@@ -18,6 +19,7 @@ function Router() {
 
   return (
     <Switch>
+      <Route path="/preview" component={LoginPreview} />
       {isLoading || !isAuthenticated ? (
         <Route path="/" component={Landing} />
       ) : (
