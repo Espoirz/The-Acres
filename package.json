@@ -5,10 +5,9 @@
   "license": "MIT",
   "scripts": {
     "dev": "NODE_ENV=development tsx server/index.ts",
-    "build": "vite build && esbuild server/index.ts --platform=node --packages=external --bundle --format=esm --outdir=dist",
-    "build:render": "vite build && esbuild server/index.ts --platform=node --packages=external --bundle --format=esm --outdir=dist",
-    "build:vercel": "vite build && esbuild server/index.ts --platform=node --packages=external --bundle --format=esm --outdir=dist",
-    "start": "NODE_ENV=production node dist/index.js",
+    "build": "npm run netlify:build",
+    "netlify:build": "vite build && tsc netlify/functions/api.ts",
+    "start": "NODE_ENV=production netlify dev",
     "check": "tsc",
     "db:push": "drizzle-kit push",
     "db:migrate": "drizzle-kit migrate"
@@ -82,6 +81,7 @@
     "zod-validation-error": "^3.4.0"
   },
   "devDependencies": {
+    "@netlify/functions": "^4.1.10",
     "@replit/vite-plugin-cartographer": "^0.2.7",
     "@replit/vite-plugin-runtime-error-modal": "^0.0.3",
     "@tailwindcss/typography": "^0.5.15",
@@ -99,6 +99,7 @@
     "autoprefixer": "^10.4.20",
     "drizzle-kit": "^0.30.4",
     "esbuild": "^0.25.0",
+    "netlify-cli": "^22.2.2",
     "postcss": "^8.4.47",
     "tailwindcss": "^3.4.17",
     "tsx": "^4.19.1",

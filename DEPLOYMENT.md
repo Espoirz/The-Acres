@@ -66,6 +66,73 @@
 2. Monitor the deployment process
 3. Test the application once deployed
 
+## Railway Deployment
+
+### Step 1: Prepare Your Project
+1. Install Railway CLI (optional but recommended):
+   ```bash
+   npm i -g @railway/cli
+   ```
+2. Ensure your `package.json` has the following scripts:
+   ```json
+   {
+     "scripts": {
+       "build": "vite build && esbuild server/index.ts --platform=node --packages=external --bundle --format=esm --outdir=dist",
+       "start": "NODE_ENV=production node dist/index.js"
+     }
+   }
+   ```
+
+### Step 2: Create Railway Project
+1. Go to [Railway Dashboard](https://railway.app/dashboard)
+2. Click "New Project"
+3. Choose "Deploy from GitHub repo"
+4. Select your repository
+
+### Step 3: Configure Database
+1. Click "New" and add a PostgreSQL database
+2. Railway will automatically add the `DATABASE_URL` to your environment variables
+
+### Step 4: Configure Environment Variables
+1. Go to your project settings in Railway dashboard
+2. Add the following variables:
+   - `NODE_ENV`: `production`
+   - `PORT`: `3000` (or your preferred port)
+   - Any other environment variables your app needs
+
+### Step 5: Configure Build Settings
+1. Go to project settings
+2. Set the following:
+   - Start Command: `npm start`
+   - Build Command: `npm run build`
+   - Watch Paths: `client/**, server/**`
+
+### Step 6: Deploy
+1. Railway will automatically deploy when you push to your main branch
+2. You can also trigger manual deploys from the dashboard
+
+### Troubleshooting Railway Deployment
+
+1. **Build Fails**
+   - Check the build logs in Railway dashboard
+   - Ensure all dependencies are in `package.json`
+   - Verify your Node.js version in `package.json` or `.node-version`
+
+2. **Runtime Errors**
+   - Check application logs in Railway dashboard
+   - Verify environment variables are set correctly
+   - Ensure database connection is working
+
+3. **Database Connection Issues**
+   - Confirm `DATABASE_URL` is set in Railway environment variables
+   - Check if the database service is running
+   - Verify your database migration has run: `railway run npm run db:push`
+
+4. **Common Solutions**
+   - Clear build cache in Railway dashboard
+   - Ensure you're not exceeding Railway's free tier limits
+   - Check if your port configuration matches Railway's requirements
+
 ## Environment Variables
 
 ### Required Variables
@@ -92,6 +159,11 @@
 2. Get connection string from provider
 3. Add to Vercel environment variables
 
+### For Railway
+1. Railway will provision a PostgreSQL database automatically
+2. Connection string will be available as `DATABASE_URL` in environment variables
+3. Run migrations: `railway run npm run db:push`
+
 ## Post-deployment Testing
 
 - [ ] Website loads correctly
@@ -113,9 +185,4 @@
 
 - **Render**: Check logs in the Render dashboard
 - **Vercel**: Use `vercel logs` command or check in dashboard
-
-## Monitoring
-
-- Set up monitoring for your deployed application
-- Monitor database performance and connections
-- Set up alerts for downtime or errors
+- **Railway**: View logs in the Railway dashboard
