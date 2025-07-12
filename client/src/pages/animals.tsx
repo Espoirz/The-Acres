@@ -14,6 +14,10 @@ import {
   Eye,
   MoreVertical,
   Trophy,
+  Palette,
+  Camera,
+  Sparkles,
+  Dna,
 } from "lucide-react";
 import { Button } from "../components/ui/button";
 import { Badge } from "../components/ui/badge";
@@ -31,6 +35,15 @@ import {
   CardHeader,
   CardTitle,
 } from "../components/ui/card";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "../components/ui/dialog";
+import { HorseGenerator } from "../components/horse-generator";
+import { generateCompleteHorse, HorseGenetics } from "../lib/horse-genetics";
 
 // Mock data for animals
 const animals = [
@@ -259,9 +272,16 @@ const AnimalCard = ({ animal }: { animal: (typeof animals)[0] }) => {
         </div>
 
         {/* Genetics */}
-        <div>
-          <span className="text-xs text-muted-foreground">Genetics: </span>
-          <span className="genetics-display">{animal.genetics}</span>
+        <div className="flex items-center justify-between">
+          <div>
+            <span className="text-xs text-muted-foreground">Genetics: </span>
+            <span className="genetics-display">{animal.genetics}</span>
+          </div>
+          {animal.type === "Horse" && (
+            <Button variant="ghost" size="sm" className="h-6 px-2">
+              <Dna className="w-3 h-3" />
+            </Button>
+          )}
         </div>
 
         {/* Stats preview */}
@@ -306,6 +326,28 @@ const AnimalCard = ({ animal }: { animal: (typeof animals)[0] }) => {
             <Activity className="w-4 h-4 mr-1" />
             Train
           </Button>
+          {animal.type === "Horse" && (
+            <Dialog>
+              <DialogTrigger asChild>
+                <Button variant="outline" size="sm">
+                  <Camera className="w-4 h-4" />
+                </Button>
+              </DialogTrigger>
+              <DialogContent className="max-w-4xl">
+                <DialogHeader>
+                  <DialogTitle>
+                    Generate New Images for {animal.name}
+                  </DialogTitle>
+                </DialogHeader>
+                <div className="text-center py-8">
+                  <p className="text-muted-foreground mb-4">
+                    AI image generation for existing animals coming soon!
+                  </p>
+                  <Badge variant="secondary">Genetics: {animal.genetics}</Badge>
+                </div>
+              </DialogContent>
+            </Dialog>
+          )}
         </div>
       </CardContent>
     </Card>
@@ -350,10 +392,33 @@ export function Animals() {
               </p>
             </div>
 
-            <Button className="btn-primary lg:self-start">
-              <Plus className="w-4 h-4 mr-2" />
-              Add Animal
-            </Button>
+            <div className="flex gap-2">
+              <Dialog>
+                <DialogTrigger asChild>
+                  <Button className="btn-primary">
+                    <Sparkles className="w-4 h-4 mr-2" />
+                    Generate Horse
+                  </Button>
+                </DialogTrigger>
+                <DialogContent className="max-w-6xl max-h-[90vh] overflow-y-auto">
+                  <DialogHeader>
+                    <DialogTitle>AI Horse Generator</DialogTitle>
+                  </DialogHeader>
+                  <HorseGenerator
+                    onHorseGenerated={(horse, images) => {
+                      console.log("Generated horse:", horse);
+                      console.log("Generated images:", images);
+                      // Here you would typically save the horse to your animals collection
+                    }}
+                  />
+                </DialogContent>
+              </Dialog>
+
+              <Button variant="outline">
+                <Plus className="w-4 h-4 mr-2" />
+                Add Manual
+              </Button>
+            </div>
           </div>
 
           {/* Stats overview */}
