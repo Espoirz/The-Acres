@@ -129,7 +129,7 @@ export function SimpleHorseGenerator({
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
-            <Horse className="w-6 h-6 text-amber-600" />
+            <Heart className="w-6 h-6 text-amber-600" />
             Horse Generator
           </CardTitle>
           <p className="text-muted-foreground">
