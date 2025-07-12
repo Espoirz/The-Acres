@@ -2,6 +2,7 @@ import type { Express } from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
 import { setupAuth, isAuthenticated } from "./replitAuth";
+import session from "express-session";
 import {
   insertAnimalSchema,
   insertBreedingSchema,
@@ -1463,12 +1464,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
       res.status(201).json(policy);
     } catch (error) {
       if (error instanceof z.ZodError) {
-        return res
-          .status(400)
-          .json({
-            message: "Invalid insurance policy data",
-            errors: error.errors,
-          });
+        return res.status(400).json({
+          message: "Invalid insurance policy data",
+          errors: error.errors,
+        });
       }
       console.error("Error creating insurance policy:", error);
       res.status(500).json({ message: "Failed to create insurance policy" });
