@@ -16,6 +16,7 @@ import { Breeding } from "./pages/breeding";
 import { Minigames } from "./pages/minigames";
 import { WildCapture } from "./pages/wild-capture";
 import { HorseGeneratorPage } from "./pages/horse-generator";
+import { Premium } from "./pages/premium";
 import Landing from "./pages/landing";
 import LoginPreview from "./pages/login-preview";
 import NotFound from "./pages/not-found";
