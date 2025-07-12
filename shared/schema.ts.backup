@@ -949,20 +949,19 @@ export const weatherRelations = relations(weather, ({ many }) => ({
 
 // Additional relations for genetics and advanced features - moved after table definitions
 
-// Temporarily commented out - will move after table definitions
-// export const medicalProceduresRelations = relations(
-//   medicalProcedures,
-//   ({ one }) => ({
-//     animal: one(animals, {
-//       fields: [medicalProcedures.animalId],
-//       references: [animals.id],
-//     }),
-//     veterinarian: one(users, {
-//       fields: [medicalProcedures.veterinarianId],
-//       references: [users.id],
-//     }),
-//   }),
-// );
+export const medicalProceduresRelations = relations(
+  medicalProcedures,
+  ({ one }) => ({
+    animal: one(animals, {
+      fields: [medicalProcedures.animalId],
+      references: [animals.id],
+    }),
+    veterinarian: one(users, {
+      fields: [medicalProcedures.veterinarianId],
+      references: [users.id],
+    }),
+  }),
+);
 
 export const biomesRelations = relations(biomes, ({ many }) => ({
   wildCaptures: many(wildCaptures),
