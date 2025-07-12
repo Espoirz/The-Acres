@@ -10,7 +10,7 @@ import {
   Heart,
   Brain,
   Gauge,
-  Muscle,
+  Dumbbell,
   Shield,
   Users,
   ArrowRight,
