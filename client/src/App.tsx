@@ -76,8 +76,6 @@ const Explore = () => (
   />
 );
 
-import { Premium } from "./pages/premium";
-
 const Genetics = () => (
   <PlaceholderPage
     title="Gene Viewer"
