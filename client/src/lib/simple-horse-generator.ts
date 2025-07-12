@@ -107,29 +107,15 @@ export const BODY_MARKINGS = [
   "Heart",
 ];
 
-// Common horse breeds
-export const HORSE_BREEDS = [
-  "Arabian",
-  "Thoroughbred",
-  "Quarter Horse",
-  "Paint Horse",
-  "Appaloosa",
-  "Friesian",
-  "Clydesdale",
-  "Shire",
-  "Percheron",
-  "Andalusian",
-  "Mustang",
-  "Morgan",
-  "Tennessee Walker",
-  "Standardbred",
-  "Warmblood",
-  "Icelandic Horse",
-  "Haflinger",
-  "Shetland Pony",
-  "Welsh Pony",
-  "Connemara",
-];
+// Import breed data
+import {
+  HORSE_BREEDS as BREED_DATABASE,
+  getBreedsByCategory,
+  getBreedInfo,
+} from "./breed-database";
+
+// Common horse breeds (just names for backwards compatibility)
+export const HORSE_BREEDS = Object.keys(BREED_DATABASE);
 
 // Possible defects/conditions
 export const DEFECTS = [
