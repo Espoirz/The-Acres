@@ -23,7 +23,7 @@ export default function Landing() {
       <div
         className="absolute inset-0 bg-cover bg-center bg-no-repeat"
         style={{
-          backgroundImage: `url('https://cdn.builder.io/api/v1/image/assets%2F587d1a381dc140a2b97537bd0994633f%2Fcb1338710a254c3db11369b05d3070f5?format=webp&width=800')`,
+          backgroundImage: `url('https://cdn.builder.io/api/v1/image/assets%2F587d1a381dc140a2b97537bd0994633f%2F825104d175d143af9bc08fe98b4d94fa?format=webp&width=800')`,
         }}
       >
         {/* Warm overlay to enhance readability */}
