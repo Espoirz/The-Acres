@@ -35,58 +35,87 @@ export const users = pgTable("users", {
   profileImageUrl: varchar("profile_image_url"),
   currency: integer("currency").default(5000),
   prestige: integer("prestige").default(1),
-  
+
   // New progression and reputation systems
   experience: integer("experience").default(0),
   level: integer("level").default(1),
   breedingReputation: integer("breeding_reputation").default(0),
   trainingReputation: integer("training_reputation").default(0),
   tradingReputation: integer("trading_reputation").default(0),
-  
+
   // Social features
   friendCode: varchar("friend_code").unique(),
   guildId: integer("guild_id"),
-  
+
   // Premium features
   isPremium: boolean("is_premium").default(false),
   premiumExpires: timestamp("premium_expires"),
-  
+
   // Settings
   notificationSettings: jsonb("notification_settings").default({}),
   gameSettings: jsonb("game_settings").default({}),
-  
+
   createdAt: timestamp("created_at").defaultNow(),
   updatedAt: timestamp("updated_at").defaultNow(),
 });
 
 // Animal types enum
-export const animalTypes = ["horse", "dog", "cat", "pig", "sheep", "goat", "cow", "chicken"] as const;
-export type AnimalType = typeof animalTypes[number];
+export const animalTypes = [
+  "horse",
+  "dog",
+  "cat",
+  "pig",
+  "sheep",
+  "goat",
+  "cow",
+  "chicken",
+] as const;
+export type AnimalType = (typeof animalTypes)[number];
 
 // Animal lifecycle stages
 export const lifecycleStages = ["foal", "yearling", "adult", "senior"] as const;
-export type LifecycleStage = typeof lifecycleStages[number];
+export type LifecycleStage = (typeof lifecycleStages)[number];
 
 // Animal conditions
-export const animalConditions = ["excellent", "good", "fair", "poor", "sick", "injured"] as const;
-export type AnimalCondition = typeof animalConditions[number];
+export const animalConditions = [
+  "excellent",
+  "good",
+  "fair",
+  "poor",
+  "sick",
+  "injured",
+] as const;
+export type AnimalCondition = (typeof animalConditions)[number];
 
 // Training types
-export const trainingTypes = ["speed", "endurance", "agility", "intelligence", "loyalty", "strength", "focus"] as const;
-export type TrainingType = typeof trainingTypes[number];
+export const trainingTypes = [
+  "speed",
+  "endurance",
+  "agility",
+  "intelligence",
+  "loyalty",
+  "strength",
+  "focus",
+] as const;
+export type TrainingType = (typeof trainingTypes)[number];
 
 // Animals table
 export const animals = pgTable("animals", {
   id: serial("id").primaryKey(),
-  ownerId: varchar("owner_id").notNull().references(() => users.id),
+  ownerId: varchar("owner_id")
+    .notNull()
+    .references(() => users.id),
   name: varchar("name").notNull(),
   type: varchar("type").notNull().$type<AnimalType>(),
   breed: varchar("breed").notNull(),
   gender: varchar("gender").notNull(), // "male", "female"
   age: integer("age").notNull().default(0), // in months
   ageInDays: integer("age_in_days").notNull().default(0), // for precise aging
-  lifecycleStage: varchar("lifecycle_stage").notNull().default("foal").$type<LifecycleStage>(),
-  
+  lifecycleStage: varchar("lifecycle_stage")
+    .notNull()
+    .default("foal")
+    .$type<LifecycleStage>(),
+
   // Enhanced Stats
   speed: integer("speed").notNull().default(50),
   endurance: integer("endurance").notNull().default(50),
@@ -95,16 +124,18 @@ export const animals = pgTable("animals", {
   loyalty: integer("loyalty").notNull().default(50),
   strength: integer("strength").notNull().default(50),
   focus: integer("focus").notNull().default(50),
-  
+
   // Potential stats (genetic ceiling)
   speedPotential: integer("speed_potential").notNull().default(100),
   endurancePotential: integer("endurance_potential").notNull().default(100),
   agilityPotential: integer("agility_potential").notNull().default(100),
-  intelligencePotential: integer("intelligence_potential").notNull().default(100),
+  intelligencePotential: integer("intelligence_potential")
+    .notNull()
+    .default(100),
   loyaltyPotential: integer("loyalty_potential").notNull().default(100),
   strengthPotential: integer("strength_potential").notNull().default(100),
   focusPotential: integer("focus_potential").notNull().default(100),
-  
+
   // Enhanced Genetics
   coatColor: varchar("coat_color").notNull(),
   eyeColor: varchar("eye_color").default("brown"),
@@ -115,77 +146,83 @@ export const animals = pgTable("animals", {
   hiddenTraits: jsonb("hidden_traits").notNull().default({}),
   lineage: jsonb("lineage").notNull().default({}),
   geneticTestResults: jsonb("genetic_test_results").default({}),
-  
+
   // Parentage and breeding genetics
   motherId: integer("mother_id").references(() => animals.id),
   fatherId: integer("father_id").references(() => animals.id),
-  inbreedingCoefficient: decimal("inbreeding_coefficient", { precision: 5, scale: 4 }).default("0.0000"),
+  inbreedingCoefficient: decimal("inbreeding_coefficient", {
+    precision: 5,
+    scale: 4,
+  }).default("0.0000"),
   generationNumber: integer("generation_number").default(1),
-  
+
   // Temperament and behavior genetics
   temperament: varchar("temperament", { length: 50 }),
   behaviorScore: integer("behavior_score").default(50),
-  
+
   // Genetic breeding value and quality
   geneticRarity: varchar("genetic_rarity").default("common"), // common, uncommon, rare, very_rare, legendary
-  
+
   // Enhanced Health and Care
   health: integer("health").notNull().default(100),
   happiness: integer("happiness").notNull().default(100),
   energy: integer("energy").notNull().default(100),
-  condition: varchar("condition").notNull().default("good").$type<AnimalCondition>(),
+  condition: varchar("condition")
+    .notNull()
+    .default("good")
+    .$type<AnimalCondition>(),
   lastFed: timestamp("last_fed"),
   lastGroomed: timestamp("last_groomed"),
   lastExercised: timestamp("last_exercised"),
   lastVetCheckup: timestamp("last_vet_checkup"),
-  
+
   // Nutrition and Care
   nutritionLevel: integer("nutrition_level").notNull().default(100),
   groomingLevel: integer("grooming_level").notNull().default(100),
   exerciseLevel: integer("exercise_level").notNull().default(100),
-  
+
   // Medical
   vaccinations: jsonb("vaccinations").notNull().default([]),
   medications: jsonb("medications").notNull().default([]),
   injuries: jsonb("injuries").notNull().default([]),
   illnesses: jsonb("illnesses").notNull().default([]),
-  
+
   // Enhanced Breeding
   isBreedingEligible: boolean("is_breeding_eligible").notNull().default(false),
   lastBred: timestamp("last_bred"),
   pregnancyDue: timestamp("pregnancy_due"),
   breedingCooldown: timestamp("breeding_cooldown"),
   totalOffspring: integer("total_offspring").default(0),
-  
+
   // Performance and Records
   competitionsWon: integer("competitions_won").default(0),
   competitionsEntered: integer("competitions_entered").default(0),
   bestSpeed: decimal("best_speed", { precision: 10, scale: 2 }),
   bestEndurance: decimal("best_endurance", { precision: 10, scale: 2 }),
   bestAgility: decimal("best_agility", { precision: 10, scale: 2 }),
-  
+
   // Market and Value
   isForSale: boolean("is_for_sale").notNull().default(false),
   price: integer("price"),
   marketValue: integer("market_value").default(0),
   breedingValue: integer("breeding_value").default(0),
-  
+
   // Special Status
   isRetired: boolean("is_retired").default(false),
   isHallOfFame: boolean("is_hall_of_fame").default(false),
   isChampion: boolean("is_champion").default(false),
   specialTitles: text("special_titles").array().default([]),
-  
+
   // Facility Assignment
   currentFacilityId: integer("current_facility_id"),
   preferredFacilityType: varchar("preferred_facility_type"),
-  
+
   // Metadata
   imageUrl: varchar("image_url"),
   description: text("description"),
   personalityTraits: jsonb("personality_traits").default({}),
   achievements: jsonb("achievements").default([]),
-  
+
   createdAt: timestamp("created_at").defaultNow(),
   updatedAt: timestamp("updated_at").defaultNow(),
 });
@@ -193,8 +230,12 @@ export const animals = pgTable("animals", {
 // Breeding records
 export const breedings = pgTable("breedings", {
   id: serial("id").primaryKey(),
-  motherId: integer("mother_id").notNull().references(() => animals.id),
-  fatherId: integer("father_id").notNull().references(() => animals.id),
+  motherId: integer("mother_id")
+    .notNull()
+    .references(() => animals.id),
+  fatherId: integer("father_id")
+    .notNull()
+    .references(() => animals.id),
   offspringId: integer("offspring_id").references(() => animals.id),
   breedingDate: timestamp("breeding_date").notNull(),
   expectedDueDate: timestamp("expected_due_date").notNull(),
@@ -207,7 +248,9 @@ export const breedings = pgTable("breedings", {
 // Training sessions
 export const trainingSessions = pgTable("training_sessions", {
   id: serial("id").primaryKey(),
-  animalId: integer("animal_id").notNull().references(() => animals.id),
+  animalId: integer("animal_id")
+    .notNull()
+    .references(() => animals.id),
   trainingType: varchar("training_type").notNull(), // "speed", "endurance", "agility", "intelligence"
   duration: integer("duration").notNull(), // in minutes
   cost: integer("cost").notNull(),
@@ -221,8 +264,12 @@ export const trainingSessions = pgTable("training_sessions", {
 // Marketplace listings
 export const marketplaceListings = pgTable("marketplace_listings", {
   id: serial("id").primaryKey(),
-  sellerId: varchar("seller_id").notNull().references(() => users.id),
-  animalId: integer("animal_id").notNull().references(() => animals.id),
+  sellerId: varchar("seller_id")
+    .notNull()
+    .references(() => users.id),
+  animalId: integer("animal_id")
+    .notNull()
+    .references(() => animals.id),
   price: integer("price").notNull(),
   description: text("description"),
   isActive: boolean("is_active").notNull().default(true),
@@ -233,7 +280,9 @@ export const marketplaceListings = pgTable("marketplace_listings", {
 // Facilities
 export const facilities = pgTable("facilities", {
   id: serial("id").primaryKey(),
-  ownerId: varchar("owner_id").notNull().references(() => users.id),
+  ownerId: varchar("owner_id")
+    .notNull()
+    .references(() => users.id),
   name: varchar("name").notNull(),
   type: varchar("type").notNull(), // "stable", "kennel", "arena", "vet_clinic"
   capacity: integer("capacity").notNull(),
@@ -262,9 +311,15 @@ export const competitions = pgTable("competitions", {
 // Competition entries
 export const competitionEntries = pgTable("competition_entries", {
   id: serial("id").primaryKey(),
-  competitionId: integer("competition_id").notNull().references(() => competitions.id),
-  animalId: integer("animal_id").notNull().references(() => animals.id),
-  ownerId: varchar("owner_id").notNull().references(() => users.id),
+  competitionId: integer("competition_id")
+    .notNull()
+    .references(() => competitions.id),
+  animalId: integer("animal_id")
+    .notNull()
+    .references(() => animals.id),
+  ownerId: varchar("owner_id")
+    .notNull()
+    .references(() => users.id),
   score: integer("score"),
   placement: integer("placement"),
   prizeMoney: integer("prize_money").default(0),
@@ -274,8 +329,12 @@ export const competitionEntries = pgTable("competition_entries", {
 // Daily Care Activities
 export const dailyCare = pgTable("daily_care", {
   id: serial("id").primaryKey(),
-  animalId: integer("animal_id").notNull().references(() => animals.id),
-  ownerId: varchar("owner_id").notNull().references(() => users.id),
+  animalId: integer("animal_id")
+    .notNull()
+    .references(() => animals.id),
+  ownerId: varchar("owner_id")
+    .notNull()
+    .references(() => users.id),
   careType: varchar("care_type").notNull(), // "feeding", "grooming", "exercise", "play"
   quality: varchar("quality").notNull(), // "poor", "average", "good", "excellent"
   cost: integer("cost").default(0),
@@ -289,8 +348,12 @@ export const dailyCare = pgTable("daily_care", {
 // Veterinary Records
 export const vetRecords = pgTable("vet_records", {
   id: serial("id").primaryKey(),
-  animalId: integer("animal_id").notNull().references(() => animals.id),
-  ownerId: varchar("owner_id").notNull().references(() => users.id),
+  animalId: integer("animal_id")
+    .notNull()
+    .references(() => animals.id),
+  ownerId: varchar("owner_id")
+    .notNull()
+    .references(() => users.id),
   vetType: varchar("vet_type").notNull(), // "checkup", "vaccination", "treatment", "surgery"
   condition: varchar("condition"), // what was treated
   treatment: text("treatment"),
@@ -319,8 +382,12 @@ export const achievements = pgTable("achievements", {
 // User Achievements
 export const userAchievements = pgTable("user_achievements", {
   id: serial("id").primaryKey(),
-  userId: varchar("user_id").notNull().references(() => users.id),
-  achievementId: integer("achievement_id").notNull().references(() => achievements.id),
+  userId: varchar("user_id")
+    .notNull()
+    .references(() => users.id),
+  achievementId: integer("achievement_id")
+    .notNull()
+    .references(() => achievements.id),
   progress: integer("progress").default(0),
   maxProgress: integer("max_progress").default(1),
   isCompleted: boolean("is_completed").default(false),
@@ -347,8 +414,12 @@ export const quests = pgTable("quests", {
 // User Quests
 export const userQuests = pgTable("user_quests", {
   id: serial("id").primaryKey(),
-  userId: varchar("user_id").notNull().references(() => users.id),
-  questId: integer("quest_id").notNull().references(() => quests.id),
+  userId: varchar("user_id")
+    .notNull()
+    .references(() => users.id),
+  questId: integer("quest_id")
+    .notNull()
+    .references(() => quests.id),
   progress: jsonb("progress").notNull().default({}),
   isCompleted: boolean("is_completed").default(false),
   isCollected: boolean("is_collected").default(false),
@@ -361,8 +432,12 @@ export const userQuests = pgTable("user_quests", {
 // Friends System
 export const friendships = pgTable("friendships", {
   id: serial("id").primaryKey(),
-  userId: varchar("user_id").notNull().references(() => users.id),
-  friendId: varchar("friend_id").notNull().references(() => users.id),
+  userId: varchar("user_id")
+    .notNull()
+    .references(() => users.id),
+  friendId: varchar("friend_id")
+    .notNull()
+    .references(() => users.id),
   status: varchar("status").notNull().default("pending"), // "pending", "accepted", "blocked"
   createdAt: timestamp("created_at").defaultNow(),
   acceptedAt: timestamp("accepted_at"),
@@ -373,7 +448,9 @@ export const guilds = pgTable("guilds", {
   id: serial("id").primaryKey(),
   name: varchar("name").notNull().unique(),
   description: text("description"),
-  ownerId: varchar("owner_id").notNull().references(() => users.id),
+  ownerId: varchar("owner_id")
+    .notNull()
+    .references(() => users.id),
   memberLimit: integer("member_limit").default(50),
   isPublic: boolean("is_public").default(true),
   requirements: jsonb("requirements").default({}),
@@ -388,8 +465,12 @@ export const guilds = pgTable("guilds", {
 // Guild Members
 export const guildMembers = pgTable("guild_members", {
   id: serial("id").primaryKey(),
-  guildId: integer("guild_id").notNull().references(() => guilds.id),
-  userId: varchar("user_id").notNull().references(() => users.id),
+  guildId: integer("guild_id")
+    .notNull()
+    .references(() => guilds.id),
+  userId: varchar("user_id")
+    .notNull()
+    .references(() => users.id),
   role: varchar("role").default("member"), // "member", "officer", "leader"
   joinedAt: timestamp("joined_at").defaultNow(),
   contribution: integer("contribution").default(0),
@@ -413,19 +494,27 @@ export const equipment = pgTable("equipment", {
 // User Equipment Inventory
 export const userEquipment = pgTable("user_equipment", {
   id: serial("id").primaryKey(),
-  userId: varchar("user_id").notNull().references(() => users.id),
-  equipmentId: integer("equipment_id").notNull().references(() => equipment.id),
+  userId: varchar("user_id")
+    .notNull()
+    .references(() => users.id),
+  equipmentId: integer("equipment_id")
+    .notNull()
+    .references(() => equipment.id),
   quantity: integer("quantity").default(1),
   condition: integer("condition").default(100), // 0-100
   isEquipped: boolean("is_equipped").default(false),
-  equippedToAnimalId: integer("equipped_to_animal_id").references(() => animals.id),
+  equippedToAnimalId: integer("equipped_to_animal_id").references(
+    () => animals.id,
+  ),
   purchasedAt: timestamp("purchased_at").defaultNow(),
 });
 
 // Auction House
 export const auctions = pgTable("auctions", {
   id: serial("id").primaryKey(),
-  sellerId: varchar("seller_id").notNull().references(() => users.id),
+  sellerId: varchar("seller_id")
+    .notNull()
+    .references(() => users.id),
   itemType: varchar("item_type").notNull(), // "animal", "equipment", "facility"
   itemId: integer("item_id").notNull(),
   startingPrice: integer("starting_price").notNull(),
@@ -441,8 +530,12 @@ export const auctions = pgTable("auctions", {
 // Auction Bids
 export const auctionBids = pgTable("auction_bids", {
   id: serial("id").primaryKey(),
-  auctionId: integer("auction_id").notNull().references(() => auctions.id),
-  bidderId: varchar("bidder_id").notNull().references(() => users.id),
+  auctionId: integer("auction_id")
+    .notNull()
+    .references(() => auctions.id),
+  bidderId: varchar("bidder_id")
+    .notNull()
+    .references(() => users.id),
   bidAmount: integer("bid_amount").notNull(),
   isWinning: boolean("is_winning").default(false),
   createdAt: timestamp("created_at").defaultNow(),
@@ -469,8 +562,12 @@ export const staff = pgTable("staff", {
 // User Staff (hired staff)
 export const userStaff = pgTable("user_staff", {
   id: serial("id").primaryKey(),
-  userId: varchar("user_id").notNull().references(() => users.id),
-  staffId: integer("staff_id").notNull().references(() => staff.id),
+  userId: varchar("user_id")
+    .notNull()
+    .references(() => users.id),
+  staffId: integer("staff_id")
+    .notNull()
+    .references(() => staff.id),
   facilityId: integer("facility_id").references(() => facilities.id),
   hiredAt: timestamp("hired_at").defaultNow(),
   contractLength: integer("contract_length").default(30), // days
@@ -496,7 +593,9 @@ export const gameEvents = pgTable("game_events", {
 // Notifications
 export const notifications = pgTable("notifications", {
   id: serial("id").primaryKey(),
-  userId: varchar("user_id").notNull().references(() => users.id),
+  userId: varchar("user_id")
+    .notNull()
+    .references(() => users.id),
   type: varchar("type").notNull(), // "breeding_complete", "training_done", "competition_result"
   title: varchar("title").notNull(),
   message: text("message").notNull(),
@@ -525,8 +624,12 @@ export const research = pgTable("research", {
 // User Research
 export const userResearch = pgTable("user_research", {
   id: serial("id").primaryKey(),
-  userId: varchar("user_id").notNull().references(() => users.id),
-  researchId: integer("research_id").notNull().references(() => research.id),
+  userId: varchar("user_id")
+    .notNull()
+    .references(() => users.id),
+  researchId: integer("research_id")
+    .notNull()
+    .references(() => research.id),
   progress: integer("progress").default(0),
   isCompleted: boolean("is_completed").default(false),
   startedAt: timestamp("started_at"),
@@ -536,8 +639,12 @@ export const userResearch = pgTable("user_research", {
 // Insurance Policies
 export const insurancePolicies = pgTable("insurance_policies", {
   id: serial("id").primaryKey(),
-  userId: varchar("user_id").notNull().references(() => users.id),
-  animalId: integer("animal_id").notNull().references(() => animals.id),
+  userId: varchar("user_id")
+    .notNull()
+    .references(() => users.id),
+  animalId: integer("animal_id")
+    .notNull()
+    .references(() => animals.id),
   policyType: varchar("policy_type").notNull(), // "basic", "premium", "elite"
   coverage: integer("coverage").notNull(), // coverage amount
   premium: integer("premium").notNull(), // monthly cost
@@ -586,8 +693,16 @@ export const usersRelations = relations(users, ({ many, one }) => ({
 
 export const animalsRelations = relations(animals, ({ one, many }) => ({
   owner: one(users, { fields: [animals.ownerId], references: [users.id] }),
-  mother: one(animals, { fields: [animals.motherId], references: [animals.id], relationName: "parentMother" }),
-  father: one(animals, { fields: [animals.fatherId], references: [animals.id], relationName: "parentFather" }),
+  mother: one(animals, {
+    fields: [animals.motherId],
+    references: [animals.id],
+    relationName: "parentMother",
+  }),
+  father: one(animals, {
+    fields: [animals.fatherId],
+    references: [animals.id],
+    relationName: "parentFather",
+  }),
   offspring: many(animals, { relationName: "children" }),
   motherBreedings: many(breedings, { relationName: "mother" }),
   fatherBreedings: many(breedings, { relationName: "father" }),
@@ -599,25 +714,55 @@ export const animalsRelations = relations(animals, ({ one, many }) => ({
   vetRecords: many(vetRecords),
   geneticTests: many(geneticTests),
   medicalProcedures: many(medicalProcedures),
-  currentFacility: one(facilities, { fields: [animals.currentFacilityId], references: [facilities.id] }),
+  currentFacility: one(facilities, {
+    fields: [animals.currentFacilityId],
+    references: [facilities.id],
+  }),
   equippedItems: many(userEquipment),
   insurancePolicies: many(insurancePolicies),
 }));
 
 export const breedingsRelations = relations(breedings, ({ one }) => ({
-  mother: one(animals, { fields: [breedings.motherId], references: [animals.id], relationName: "mother" }),
-  father: one(animals, { fields: [breedings.fatherId], references: [animals.id], relationName: "father" }),
-  offspring: one(animals, { fields: [breedings.offspringId], references: [animals.id], relationName: "offspring" }),
+  mother: one(animals, {
+    fields: [breedings.motherId],
+    references: [animals.id],
+    relationName: "mother",
+  }),
+  father: one(animals, {
+    fields: [breedings.fatherId],
+    references: [animals.id],
+    relationName: "father",
+  }),
+  offspring: one(animals, {
+    fields: [breedings.offspringId],
+    references: [animals.id],
+    relationName: "offspring",
+  }),
 }));
 
-export const trainingSessionsRelations = relations(trainingSessions, ({ one }) => ({
-  animal: one(animals, { fields: [trainingSessions.animalId], references: [animals.id] }),
-}));
+export const trainingSessionsRelations = relations(
+  trainingSessions,
+  ({ one }) => ({
+    animal: one(animals, {
+      fields: [trainingSessions.animalId],
+      references: [animals.id],
+    }),
+  }),
+);
 
-export const marketplaceListingsRelations = relations(marketplaceListings, ({ one }) => ({
-  seller: one(users, { fields: [marketplaceListings.sellerId], references: [users.id] }),
-  animal: one(animals, { fields: [marketplaceListings.animalId], references: [animals.id] }),
-}));
+export const marketplaceListingsRelations = relations(
+  marketplaceListings,
+  ({ one }) => ({
+    seller: one(users, {
+      fields: [marketplaceListings.sellerId],
+      references: [users.id],
+    }),
+    animal: one(animals, {
+      fields: [marketplaceListings.animalId],
+      references: [animals.id],
+    }),
+  }),
+);
 
 export const facilitiesRelations = relations(facilities, ({ one }) => ({
   owner: one(users, { fields: [facilities.ownerId], references: [users.id] }),
@@ -627,20 +772,38 @@ export const competitionsRelations = relations(competitions, ({ many }) => ({
   entries: many(competitionEntries),
 }));
 
-export const competitionEntriesRelations = relations(competitionEntries, ({ one }) => ({
-  competition: one(competitions, { fields: [competitionEntries.competitionId], references: [competitions.id] }),
-  animal: one(animals, { fields: [competitionEntries.animalId], references: [animals.id] }),
-  owner: one(users, { fields: [competitionEntries.ownerId], references: [users.id] }),
-}));
+export const competitionEntriesRelations = relations(
+  competitionEntries,
+  ({ one }) => ({
+    competition: one(competitions, {
+      fields: [competitionEntries.competitionId],
+      references: [competitions.id],
+    }),
+    animal: one(animals, {
+      fields: [competitionEntries.animalId],
+      references: [animals.id],
+    }),
+    owner: one(users, {
+      fields: [competitionEntries.ownerId],
+      references: [users.id],
+    }),
+  }),
+);
 
 // New relations for all the new tables
 export const dailyCareRelations = relations(dailyCare, ({ one }) => ({
-  animal: one(animals, { fields: [dailyCare.animalId], references: [animals.id] }),
+  animal: one(animals, {
+    fields: [dailyCare.animalId],
+    references: [animals.id],
+  }),
   owner: one(users, { fields: [dailyCare.ownerId], references: [users.id] }),
 }));
 
 export const vetRecordsRelations = relations(vetRecords, ({ one }) => ({
-  animal: one(animals, { fields: [vetRecords.animalId], references: [animals.id] }),
+  animal: one(animals, {
+    fields: [vetRecords.animalId],
+    references: [animals.id],
+  }),
   owner: one(users, { fields: [vetRecords.ownerId], references: [users.id] }),
 }));
 
@@ -648,10 +811,19 @@ export const achievementsRelations = relations(achievements, ({ many }) => ({
   userAchievements: many(userAchievements),
 }));
 
-export const userAchievementsRelations = relations(userAchievements, ({ one }) => ({
-  user: one(users, { fields: [userAchievements.userId], references: [users.id] }),
-  achievement: one(achievements, { fields: [userAchievements.achievementId], references: [achievements.id] }),
-}));
+export const userAchievementsRelations = relations(
+  userAchievements,
+  ({ one }) => ({
+    user: one(users, {
+      fields: [userAchievements.userId],
+      references: [users.id],
+    }),
+    achievement: one(achievements, {
+      fields: [userAchievements.achievementId],
+      references: [achievements.id],
+    }),
+  }),
+);
 
 export const questsRelations = relations(quests, ({ many }) => ({
   userQuests: many(userQuests),
@@ -663,8 +835,16 @@ export const userQuestsRelations = relations(userQuests, ({ one }) => ({
 }));
 
 export const friendshipsRelations = relations(friendships, ({ one }) => ({
-  user: one(users, { fields: [friendships.userId], references: [users.id], relationName: "sender" }),
-  friend: one(users, { fields: [friendships.friendId], references: [users.id], relationName: "receiver" }),
+  user: one(users, {
+    fields: [friendships.userId],
+    references: [users.id],
+    relationName: "sender",
+  }),
+  friend: one(users, {
+    fields: [friendships.friendId],
+    references: [users.id],
+    relationName: "receiver",
+  }),
 }));
 
 export const guildsRelations = relations(guilds, ({ one, many }) => ({
@@ -673,7 +853,10 @@ export const guildsRelations = relations(guilds, ({ one, many }) => ({
 }));
 
 export const guildMembersRelations = relations(guildMembers, ({ one }) => ({
-  guild: one(guilds, { fields: [guildMembers.guildId], references: [guilds.id] }),
+  guild: one(guilds, {
+    fields: [guildMembers.guildId],
+    references: [guilds.id],
+  }),
   user: one(users, { fields: [guildMembers.userId], references: [users.id] }),
 }));
 
@@ -683,19 +866,34 @@ export const equipmentRelations = relations(equipment, ({ many }) => ({
 
 export const userEquipmentRelations = relations(userEquipment, ({ one }) => ({
   user: one(users, { fields: [userEquipment.userId], references: [users.id] }),
-  equipment: one(equipment, { fields: [userEquipment.equipmentId], references: [equipment.id] }),
-  equippedAnimal: one(animals, { fields: [userEquipment.equippedToAnimalId], references: [animals.id] }),
+  equipment: one(equipment, {
+    fields: [userEquipment.equipmentId],
+    references: [equipment.id],
+  }),
+  equippedAnimal: one(animals, {
+    fields: [userEquipment.equippedToAnimalId],
+    references: [animals.id],
+  }),
 }));
 
 export const auctionsRelations = relations(auctions, ({ one, many }) => ({
   seller: one(users, { fields: [auctions.sellerId], references: [users.id] }),
-  highestBidder: one(users, { fields: [auctions.highestBidderId], references: [users.id] }),
+  highestBidder: one(users, {
+    fields: [auctions.highestBidderId],
+    references: [users.id],
+  }),
   bids: many(auctionBids),
 }));
 
 export const auctionBidsRelations = relations(auctionBids, ({ one }) => ({
-  auction: one(auctions, { fields: [auctionBids.auctionId], references: [auctions.id] }),
-  bidder: one(users, { fields: [auctionBids.bidderId], references: [users.id] }),
+  auction: one(auctions, {
+    fields: [auctionBids.auctionId],
+    references: [auctions.id],
+  }),
+  bidder: one(users, {
+    fields: [auctionBids.bidderId],
+    references: [users.id],
+  }),
 }));
 
 export const staffRelations = relations(staff, ({ many }) => ({
@@ -705,7 +903,10 @@ export const staffRelations = relations(staff, ({ many }) => ({
 export const userStaffRelations = relations(userStaff, ({ one }) => ({
   user: one(users, { fields: [userStaff.userId], references: [users.id] }),
   staff: one(staff, { fields: [userStaff.staffId], references: [staff.id] }),
-  facility: one(facilities, { fields: [userStaff.facilityId], references: [facilities.id] }),
+  facility: one(facilities, {
+    fields: [userStaff.facilityId],
+    references: [facilities.id],
+  }),
 }));
 
 export const gameEventsRelations = relations(gameEvents, ({ many }) => ({
@@ -722,28 +923,45 @@ export const researchRelations = relations(research, ({ many }) => ({
 
 export const userResearchRelations = relations(userResearch, ({ one }) => ({
   user: one(users, { fields: [userResearch.userId], references: [users.id] }),
-  research: one(research, { fields: [userResearch.researchId], references: [research.id] }),
+  research: one(research, {
+    fields: [userResearch.researchId],
+    references: [research.id],
+  }),
 }));
 
-export const insurancePoliciesRelations = relations(insurancePolicies, ({ one }) => ({
-  user: one(users, { fields: [insurancePolicies.userId], references: [users.id] }),
-  animal: one(animals, { fields: [insurancePolicies.animalId], references: [animals.id] }),
-}));
+export const insurancePoliciesRelations = relations(
+  insurancePolicies,
+  ({ one }) => ({
+    user: one(users, {
+      fields: [insurancePolicies.userId],
+      references: [users.id],
+    }),
+    animal: one(animals, {
+      fields: [insurancePolicies.animalId],
+      references: [animals.id],
+    }),
+  }),
+);
 
 export const weatherRelations = relations(weather, ({ many }) => ({
   // No direct relations, but weather affects many things
 }));
 
-// Additional relations for genetics and advanced features
-export const geneticTestsRelations = relations(geneticTests, ({ one }) => ({
-  animal: one(animals, { fields: [geneticTests.animalId], references: [animals.id] }),
-  labTech: one(users, { fields: [geneticTests.labTechId], references: [users.id] }),
-}));
+// Additional relations for genetics and advanced features - moved after table definitions
 
-export const medicalProceduresRelations = relations(medicalProcedures, ({ one }) => ({
-  animal: one(animals, { fields: [medicalProcedures.animalId], references: [animals.id] }),
-  veterinarian: one(users, { fields: [medicalProcedures.veterinarianId], references: [users.id] }),
-}));
+export const medicalProceduresRelations = relations(
+  medicalProcedures,
+  ({ one }) => ({
+    animal: one(animals, {
+      fields: [medicalProcedures.animalId],
+      references: [animals.id],
+    }),
+    veterinarian: one(users, {
+      fields: [medicalProcedures.veterinarianId],
+      references: [users.id],
+    }),
+  }),
+);
 
 export const biomesRelations = relations(biomes, ({ many }) => ({
   wildCaptures: many(wildCaptures),
@@ -751,8 +969,14 @@ export const biomesRelations = relations(biomes, ({ many }) => ({
 
 export const wildCapturesRelations = relations(wildCaptures, ({ one }) => ({
   user: one(users, { fields: [wildCaptures.userId], references: [users.id] }),
-  biome: one(biomes, { fields: [wildCaptures.biomeId], references: [biomes.id] }),
-  animal: one(animals, { fields: [wildCaptures.animalId], references: [animals.id] }),
+  biome: one(biomes, {
+    fields: [wildCaptures.biomeId],
+    references: [biomes.id],
+  }),
+  animal: one(animals, {
+    fields: [wildCaptures.animalId],
+    references: [animals.id],
+  }),
 }));
 
 export const careersRelations = relations(careers, ({ many }) => ({
@@ -761,7 +985,10 @@ export const careersRelations = relations(careers, ({ many }) => ({
 
 export const userCareersRelations = relations(userCareers, ({ one }) => ({
   user: one(users, { fields: [userCareers.userId], references: [users.id] }),
-  career: one(careers, { fields: [userCareers.careerId], references: [careers.id] }),
+  career: one(careers, {
+    fields: [userCareers.careerId],
+    references: [careers.id],
+  }),
 }));
 
 export const playerSkillsRelations = relations(playerSkills, ({ one }) => ({
@@ -772,13 +999,19 @@ export const breedingLabRelations = relations(breedingLab, ({ one }) => ({
   user: one(users, { fields: [breedingLab.userId], references: [users.id] }),
 }));
 
-export const craftingRecipesRelations = relations(craftingRecipes, ({ many }) => ({
-  userCrafting: many(userCrafting),
-}));
+export const craftingRecipesRelations = relations(
+  craftingRecipes,
+  ({ many }) => ({
+    userCrafting: many(userCrafting),
+  }),
+);
 
 export const userCraftingRelations = relations(userCrafting, ({ one }) => ({
   user: one(users, { fields: [userCrafting.userId], references: [users.id] }),
-  recipe: one(craftingRecipes, { fields: [userCrafting.recipeId], references: [craftingRecipes.id] }),
+  recipe: one(craftingRecipes, {
+    fields: [userCrafting.recipeId],
+    references: [craftingRecipes.id],
+  }),
 }));
 
 export const resourcesRelations = relations(resources, ({ many }) => ({
@@ -787,35 +1020,61 @@ export const resourcesRelations = relations(resources, ({ many }) => ({
 
 export const userInventoryRelations = relations(userInventory, ({ one }) => ({
   user: one(users, { fields: [userInventory.userId], references: [users.id] }),
-  resource: one(resources, { fields: [userInventory.resourceId], references: [resources.id] }),
+  resource: one(resources, {
+    fields: [userInventory.resourceId],
+    references: [resources.id],
+  }),
 }));
 
-export const facilityLayoutsRelations = relations(facilityLayouts, ({ one }) => ({
-  facility: one(facilities, { fields: [facilityLayouts.facilityId], references: [facilities.id] }),
-}));
+export const facilityLayoutsRelations = relations(
+  facilityLayouts,
+  ({ one }) => ({
+    facility: one(facilities, {
+      fields: [facilityLayouts.facilityId],
+      references: [facilities.id],
+    }),
+  }),
+);
 
 // Insert schemas
-export const insertAnimalSchema = createInsertSchema(animals).omit({
-  id: true,
-  createdAt: true,
-  updatedAt: true,
-}).extend({
-  type: z.enum(["horse", "dog", "cat", "pig", "sheep", "goat", "cow", "chicken"]),
-  lifecycleStage: z.enum(["foal", "yearling", "adult", "senior"]).optional(),
-  condition: z.enum(["excellent", "good", "fair", "poor", "sick", "injured"]).optional(),
-});
+export const insertAnimalSchema = createInsertSchema(animals)
+  .omit({
+    id: true,
+    createdAt: true,
+    updatedAt: true,
+  })
+  .extend({
+    type: z.enum([
+      "horse",
+      "dog",
+      "cat",
+      "pig",
+      "sheep",
+      "goat",
+      "cow",
+      "chicken",
+    ]),
+    lifecycleStage: z.enum(["foal", "yearling", "adult", "senior"]).optional(),
+    condition: z
+      .enum(["excellent", "good", "fair", "poor", "sick", "injured"])
+      .optional(),
+  });
 
 export const insertBreedingSchema = createInsertSchema(breedings).omit({
   id: true,
   createdAt: true,
 });
 
-export const insertTrainingSessionSchema = createInsertSchema(trainingSessions).omit({
+export const insertTrainingSessionSchema = createInsertSchema(
+  trainingSessions,
+).omit({
   id: true,
   createdAt: true,
 });
 
-export const insertMarketplaceListingSchema = createInsertSchema(marketplaceListings).omit({
+export const insertMarketplaceListingSchema = createInsertSchema(
+  marketplaceListings,
+).omit({
   id: true,
   createdAt: true,
   updatedAt: true,
@@ -832,7 +1091,9 @@ export const insertCompetitionSchema = createInsertSchema(competitions).omit({
   createdAt: true,
 });
 
-export const insertCompetitionEntrySchema = createInsertSchema(competitionEntries).omit({
+export const insertCompetitionEntrySchema = createInsertSchema(
+  competitionEntries,
+).omit({
   id: true,
   createdAt: true,
 });
@@ -853,7 +1114,9 @@ export const insertAchievementSchema = createInsertSchema(achievements).omit({
   createdAt: true,
 });
 
-export const insertUserAchievementSchema = createInsertSchema(userAchievements).omit({
+export const insertUserAchievementSchema = createInsertSchema(
+  userAchievements,
+).omit({
   id: true,
   createdAt: true,
 });
@@ -888,9 +1151,11 @@ export const insertEquipmentSchema = createInsertSchema(equipment).omit({
   createdAt: true,
 });
 
-export const insertUserEquipmentSchema = createInsertSchema(userEquipment).omit({
-  id: true,
-});
+export const insertUserEquipmentSchema = createInsertSchema(userEquipment).omit(
+  {
+    id: true,
+  },
+);
 
 export const insertAuctionSchema = createInsertSchema(auctions).omit({
   id: true,
@@ -930,7 +1195,9 @@ export const insertUserResearchSchema = createInsertSchema(userResearch).omit({
   id: true,
 });
 
-export const insertInsurancePolicySchema = createInsertSchema(insurancePolicies).omit({
+export const insertInsurancePolicySchema = createInsertSchema(
+  insurancePolicies,
+).omit({
   id: true,
   createdAt: true,
 });
@@ -960,8 +1227,12 @@ export const biomes = pgTable("biomes", {
 // Wild Animal Captures
 export const wildCaptures = pgTable("wild_captures", {
   id: serial("id").primaryKey(),
-  userId: varchar("user_id").notNull().references(() => users.id),
-  biomeId: integer("biome_id").notNull().references(() => biomes.id),
+  userId: varchar("user_id")
+    .notNull()
+    .references(() => users.id),
+  biomeId: integer("biome_id")
+    .notNull()
+    .references(() => biomes.id),
   animalId: integer("animal_id").references(() => animals.id), // created after successful taming
   species: varchar("species").notNull(),
   captureDate: timestamp("capture_date").notNull(),
@@ -990,8 +1261,12 @@ export const careers = pgTable("careers", {
 // User Career Progress
 export const userCareers = pgTable("user_careers", {
   id: serial("id").primaryKey(),
-  userId: varchar("user_id").notNull().references(() => users.id),
-  careerId: integer("career_id").notNull().references(() => careers.id),
+  userId: varchar("user_id")
+    .notNull()
+    .references(() => users.id),
+  careerId: integer("career_id")
+    .notNull()
+    .references(() => careers.id),
   level: integer("level").default(1),
   experience: integer("experience").default(0),
   skillPoints: integer("skill_points").default(0),
@@ -1003,7 +1278,9 @@ export const userCareers = pgTable("user_careers", {
 // Player Skills System
 export const playerSkills = pgTable("player_skills", {
   id: serial("id").primaryKey(),
-  userId: varchar("user_id").notNull().references(() => users.id),
+  userId: varchar("user_id")
+    .notNull()
+    .references(() => users.id),
   skillType: varchar("skill_type").notNull(), // "handling", "training", "veterinary_aid", "tracking", "marketing"
   level: integer("level").default(1),
   experience: integer("experience").default(0),
@@ -1017,7 +1294,9 @@ export const playerSkills = pgTable("player_skills", {
 // Breeding Laboratory Features
 export const breedingLab = pgTable("breeding_lab", {
   id: serial("id").primaryKey(),
-  userId: varchar("user_id").notNull().references(() => users.id),
+  userId: varchar("user_id")
+    .notNull()
+    .references(() => users.id),
   level: integer("level").default(1),
   technologies: jsonb("technologies").default([]), // unlocked breeding tech
   cryobank: jsonb("cryobank").default([]), // stored genetic material
@@ -1030,7 +1309,9 @@ export const breedingLab = pgTable("breeding_lab", {
 // Genetic Testing and Services
 export const geneticTests = pgTable("genetic_tests", {
   id: serial("id").primaryKey(),
-  animalId: integer("animal_id").notNull().references(() => animals.id),
+  animalId: integer("animal_id")
+    .notNull()
+    .references(() => animals.id),
   testType: varchar("test_type").notNull(), // "DNA", "health_screen", "parentage", "trait_analysis"
   results: jsonb("results").notNull().default({}),
   cost: integer("cost").default(0),
@@ -1044,7 +1325,9 @@ export const geneticTests = pgTable("genetic_tests", {
 // Medical Procedures and Treatments
 export const medicalProcedures = pgTable("medical_procedures", {
   id: serial("id").primaryKey(),
-  animalId: integer("animal_id").notNull().references(() => animals.id),
+  animalId: integer("animal_id")
+    .notNull()
+    .references(() => animals.id),
   veterinarianId: varchar("veterinarian_id").references(() => users.id),
   procedureType: varchar("procedure_type").notNull(), // "surgery", "emergency", "routine", "diagnostic"
   diagnosis: varchar("diagnosis"),
@@ -1078,8 +1361,12 @@ export const craftingRecipes = pgTable("crafting_recipes", {
 // User Crafting Progress
 export const userCrafting = pgTable("user_crafting", {
   id: serial("id").primaryKey(),
-  userId: varchar("user_id").notNull().references(() => users.id),
-  recipeId: integer("recipe_id").notNull().references(() => craftingRecipes.id),
+  userId: varchar("user_id")
+    .notNull()
+    .references(() => users.id),
+  recipeId: integer("recipe_id")
+    .notNull()
+    .references(() => craftingRecipes.id),
   progress: integer("progress").default(0), // 0-100
   qualityBonus: integer("quality_bonus").default(0),
   startedAt: timestamp("started_at").notNull(),
@@ -1106,8 +1393,12 @@ export const resources = pgTable("resources", {
 // User Inventory
 export const userInventory = pgTable("user_inventory", {
   id: serial("id").primaryKey(),
-  userId: varchar("user_id").notNull().references(() => users.id),
-  resourceId: integer("resource_id").notNull().references(() => resources.id),
+  userId: varchar("user_id")
+    .notNull()
+    .references(() => users.id),
+  resourceId: integer("resource_id")
+    .notNull()
+    .references(() => resources.id),
   quantity: integer("quantity").default(1),
   quality: integer("quality").default(100), // 0-100
   acquiredAt: timestamp("acquired_at").defaultNow(),
@@ -1132,7 +1423,9 @@ export const seasonalEvents = pgTable("seasonal_events", {
 // Ranch/Kennel Layout and Customization
 export const facilityLayouts = pgTable("facility_layouts", {
   id: serial("id").primaryKey(),
-  facilityId: integer("facility_id").notNull().references(() => facilities.id),
+  facilityId: integer("facility_id")
+    .notNull()
+    .references(() => facilities.id),
   layoutData: jsonb("layout_data").notNull().default({}), // positions, rotations, connections
   theme: varchar("theme").default("rustic"), // "rustic", "modern", "heritage", "luxury"
   decorations: jsonb("decorations").default([]),
@@ -1168,7 +1461,9 @@ export const tournaments = pgTable("tournaments", {
 // Community Features
 export const designShares = pgTable("design_shares", {
   id: serial("id").primaryKey(),
-  creatorId: varchar("creator_id").notNull().references(() => users.id),
+  creatorId: varchar("creator_id")
+    .notNull()
+    .references(() => users.id),
   name: varchar("name").notNull(),
   category: varchar("category").notNull(), // "tack", "arena", "kennel", "decoration"
   description: text("description"),
@@ -1186,7 +1481,9 @@ export const designShares = pgTable("design_shares", {
 // Reputation System
 export const reputationHistory = pgTable("reputation_history", {
   id: serial("id").primaryKey(),
-  userId: varchar("user_id").notNull().references(() => users.id),
+  userId: varchar("user_id")
+    .notNull()
+    .references(() => users.id),
   fromUserId: varchar("from_user_id").references(() => users.id),
   category: varchar("category").notNull(), // "trading", "breeding", "help", "behavior"
   points: integer("points").notNull(), // can be positive or negative
@@ -1206,13 +1503,17 @@ export type InsertBreeding = z.infer<typeof insertBreedingSchema>;
 export type TrainingSession = typeof trainingSessions.$inferSelect;
 export type InsertTrainingSession = z.infer<typeof insertTrainingSessionSchema>;
 export type MarketplaceListing = typeof marketplaceListings.$inferSelect;
-export type InsertMarketplaceListing = z.infer<typeof insertMarketplaceListingSchema>;
+export type InsertMarketplaceListing = z.infer<
+  typeof insertMarketplaceListingSchema
+>;
 export type Facility = typeof facilities.$inferSelect;
 export type InsertFacility = z.infer<typeof insertFacilitySchema>;
 export type Competition = typeof competitions.$inferSelect;
 export type InsertCompetition = z.infer<typeof insertCompetitionSchema>;
 export type CompetitionEntry = typeof competitionEntries.$inferSelect;
-export type InsertCompetitionEntry = z.infer<typeof insertCompetitionEntrySchema>;
+export type InsertCompetitionEntry = z.infer<
+  typeof insertCompetitionEntrySchema
+>;
 
 // New type exports for all the enhanced features
 export type DailyCare = typeof dailyCare.$inferSelect;
