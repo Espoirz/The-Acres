@@ -57,24 +57,24 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   // Auth routes
   app.get("/api/auth/user", isAuthenticated, async (req: any, res) => {
+    const userId = req.user.claims.sub;
+
+    // Development mode - return mock user data
+    if (process.env.NODE_ENV === "development") {
+      res.json({
+        id: userId,
+        name: req.user.claims.name,
+        email: req.user.claims.email,
+        level: 15,
+        experience: 2450,
+        coins: 15000,
+        createdAt: new Date().toISOString(),
+      });
+      return;
+    }
+
+    // Production mode - fetch from database
     try {
-      const userId = req.user.claims.sub;
-
-      // Development mode - return mock user data
-      if (process.env.NODE_ENV === "development") {
-        res.json({
-          id: userId,
-          name: req.user.claims.name,
-          email: req.user.claims.email,
-          level: 15,
-          experience: 2450,
-          coins: 15000,
-          createdAt: new Date().toISOString(),
-        });
-        return;
-      }
-
-      // Production mode - fetch from database
       const user = await storage.getUser(userId);
       res.json(user);
     } catch (error) {
