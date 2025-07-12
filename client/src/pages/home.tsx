@@ -103,7 +103,7 @@ export function Home() {
         <div
           className="absolute inset-0 bg-cover bg-center bg-no-repeat opacity-80"
           style={{
-            backgroundImage: `url('https://cdn.builder.io/api/v1/image/assets%2F587d1a381dc140a2b97537bd0994633f%2F8564f62e4dcd4493b510ad5bf69fcb39?format=webp&width=800')`,
+            backgroundImage: `url('https://cdn.builder.io/api/v1/image/assets%2F587d1a381dc140a2b97537bd0994633f%2F622347a7fa194188bc4de713b8354a59?format=webp&width=800')`,
           }}
         />
         <div className="absolute inset-0 bg-black/20" />
