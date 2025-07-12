@@ -1322,6 +1322,17 @@ export const geneticTests = pgTable("genetic_tests", {
   createdAt: timestamp("created_at").defaultNow(),
 });
 
+export const geneticTestsRelations = relations(geneticTests, ({ one }) => ({
+  animal: one(animals, {
+    fields: [geneticTests.animalId],
+    references: [animals.id],
+  }),
+  labTech: one(users, {
+    fields: [geneticTests.labTechId],
+    references: [users.id],
+  }),
+}));
+
 // Medical Procedures and Treatments
 export const medicalProcedures = pgTable("medical_procedures", {
   id: serial("id").primaryKey(),
