@@ -27,11 +27,11 @@ const features = [
     gradient: "from-red-500 to-pink-500",
   },
   {
-    icon: Sparkles,
-    title: "Mythical Breeds",
+    icon: Star,
+    title: "Premium Breeds",
     description:
-      "Discover and breed rare unicorns, pegasi, and other mystical creatures with unique abilities.",
-    gradient: "from-purple-500 to-violet-500",
+      "Discover and breed rare heritage breeds with unique characteristics and bloodlines.",
+    gradient: "from-emerald-500 to-green-500",
   },
   {
     icon: Trophy,
@@ -42,9 +42,9 @@ const features = [
   },
   {
     icon: Map,
-    title: "Explore Biomes",
+    title: "Explore Wild Lands",
     description:
-      "Journey through diverse landscapes to capture wild animals and discover hidden treasures.",
+      "Journey through stunning landscapes to capture wild horses and discover rare breeds.",
     gradient: "from-emerald-500 to-green-500",
   },
   {
@@ -55,10 +55,10 @@ const features = [
     gradient: "from-blue-500 to-cyan-500",
   },
   {
-    icon: Zap,
-    title: "AI-Powered",
+    icon: Palette,
+    title: "Beautiful AI Art",
     description:
-      "Experience dynamic storytelling with AI-written NPCs and generated animal portraits.",
+      "Experience stunning AI-generated portraits of your horses and dogs with realistic detail.",
     gradient: "from-indigo-500 to-purple-500",
   },
 ];
@@ -91,7 +91,7 @@ const stats = [
   { label: "Active Players", value: "12,000+" },
   { label: "Animals Bred", value: "500K+" },
   { label: "Competitions Held", value: "2,500+" },
-  { label: "Mythical Breeds", value: "50+" },
+  { label: "Breeds Available", value: "150+" },
 ];
 
 export function Home() {
@@ -99,21 +99,27 @@ export function Home() {
     <div className="min-h-screen bg-background">
       {/* Hero Section */}
       <section className="relative overflow-hidden">
-        {/* Background gradient */}
-        <div className="absolute inset-0 hero-gradient opacity-10" />
+        {/* Background image */}
+        <div
+          className="absolute inset-0 bg-cover bg-center bg-no-repeat opacity-80"
+          style={{
+            backgroundImage: `url('https://cdn.builder.io/api/v1/image/assets%2F587d1a381dc140a2b97537bd0994633f%2F8564f62e4dcd4493b510ad5bf69fcb39?format=webp&width=800')`,
+          }}
+        />
+        <div className="absolute inset-0 bg-black/20" />
 
         {/* Floating elements */}
-        <div className="absolute top-20 left-20 w-20 h-20 bg-violet/20 rounded-full blur-xl animate-float" />
+        <div className="absolute top-20 left-20 w-20 h-20 bg-amber/30 rounded-full blur-xl animate-float" />
         <div
-          className="absolute top-40 right-32 w-16 h-16 bg-amber/20 rounded-full blur-xl animate-float"
+          className="absolute top-40 right-32 w-16 h-16 bg-orange/30 rounded-full blur-xl animate-float"
           style={{ animationDelay: "1s" }}
         />
         <div
-          className="absolute bottom-20 left-1/3 w-24 h-24 bg-emerald/20 rounded-full blur-xl animate-float"
+          className="absolute bottom-20 left-1/3 w-24 h-24 bg-yellow/30 rounded-full blur-xl animate-float"
           style={{ animationDelay: "2s" }}
         />
 
-        <div className="relative max-w-7xl mx-auto px-4 py-20 lg:py-32">
+        <div className="relative max-w-7xl mx-auto px-4 py-20 lg:py-32 z-10">
           <div className="text-center max-w-4xl mx-auto">
             {/* Badge */}
             <Badge className="premium-badge mb-6">
@@ -122,17 +128,19 @@ export function Home() {
             </Badge>
 
             {/* Main headline */}
-            <h1 className="font-display text-5xl lg:text-7xl font-bold mb-6">
-              <span className="text-gradient">Everlasting</span>
+            <h1 className="font-display text-5xl lg:text-7xl font-bold mb-6 text-white drop-shadow-2xl">
+              <span className="text-gradient bg-gradient-to-r from-amber-300 to-orange-400 bg-clip-text text-transparent">
+                Everlasting
+              </span>
               <br />
-              <span className="text-foreground">Victory Acres</span>
+              <span className="text-white">Victory Acres</span>
             </h1>
 
             {/* Subtitle */}
-            <p className="text-xl lg:text-2xl text-muted-foreground mb-8 leading-relaxed">
+            <p className="text-xl lg:text-2xl text-white/90 mb-8 leading-relaxed drop-shadow-lg">
               The ultimate breeding simulation where{" "}
-              <strong>real genetics</strong> meet
-              <strong className="text-violet"> mythical creatures</strong>.
+              <strong className="text-amber-200">real genetics</strong> meet
+              <strong className="text-orange-300"> authentic breeds</strong>.
               Breed, train, and compete with horses and dogs in an immersive
               world of endless possibilities.
             </p>
@@ -154,13 +162,14 @@ export function Home() {
             {/* Stats */}
             <div className="grid grid-cols-2 lg:grid-cols-4 gap-8 mt-16">
               {stats.map((stat, index) => (
-                <div key={index} className="text-center">
-                  <div className="text-3xl lg:text-4xl font-bold text-gradient mb-2">
+                <div
+                  key={index}
+                  className="text-center bg-white/10 backdrop-blur-sm rounded-xl p-4"
+                >
+                  <div className="text-3xl lg:text-4xl font-bold text-amber-300 mb-2">
                     {stat.value}
                   </div>
-                  <div className="text-muted-foreground text-sm">
-                    {stat.label}
-                  </div>
+                  <div className="text-white/80 text-sm">{stat.label}</div>
                 </div>
               ))}
             </div>
