@@ -1,0 +1,670 @@
+/* Horse Simulation Game Theme - Inspired by Howrse, Horse Reality, etc. */
+
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Crimson+Text:wght@400;600;700&family=Roboto:wght@300;400;500;600&display=swap");
+
+:root {
+  /* Primary Brand Colors - Inspired by horse simulation games */
+  --primary-green: #2d5016; /* Deep forest green */
+  --primary-green-light: #4a7c59; /* Medium forest green */
+  --primary-green-lighter: #8fbc8f; /* Light sage green */
+
+  /* Earth Tone Palette */
+  --earth-brown: #8b4513; /* Saddle brown */
+  --earth-brown-light: #a0522d; /* Sienna */
+  --earth-tan: #d2b48c; /* Tan */
+  --earth-cream: #f5deb3; /* Wheat */
+  --earth-ivory: #faf0e6; /* Linen */
+
+  /* Accent Colors */
+  --accent-gold: #daa520; /* Goldenrod */
+  --accent-copper: #b87333; /* Dark goldenrod */
+  --accent-sage: #9caf88; /* Sage green */
+
+  /* UI Colors */
+  --background-primary: #fdfbf7; /* Warm white */
+  --background-secondary: #f8f6f0; /* Light cream */
+  --background-accent: #f0ede7; /* Soft beige */
+
+  /* Text Colors */
+  --text-primary: #2c2c2c; /* Dark charcoal */
+  --text-secondary: #5d4e37; /* Dark olive */
+  --text-muted: #8b7355; /* Medium brown */
+  --text-light: #a69780; /* Light brown */
+
+  /* Card & Surface Colors */
+  --card-background: #ffffff;
+  --card-border: #e6ddd4;
+  --card-shadow: rgba(139, 69, 19, 0.1);
+
+  /* Status Colors */
+  --success-green: #22c55e;
+  --warning-amber: #f59e0b;
+  --error-red: #ef4444;
+  --info-blue: #3b82f6;
+
+  /* Horse-specific UI Elements */
+  --stable-wood: #deb887; /* Burlywood */
+  --stable-wood-dark: #cd853f; /* Peru */
+  --hay-gold: #f4a460; /* Sandy brown */
+  --pasture-green: #90ee90; /* Light green */
+
+  /* Premium Colors */
+  --premium-gold: #ffd700; /* Gold */
+  --premium-bronze: #cd7f32; /* Bronze */
+  --premium-silver: #c0c0c0; /* Silver */
+}
+
+/* Base Styling */
+* {
+  box-sizing: border-box;
+}
+
+body {
+  font-family:
+    "Inter",
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    sans-serif;
+  background-color: var(--background-primary);
+  color: var(--text-primary);
+  line-height: 1.6;
+  margin: 0;
+  padding: 0;
+}
+
+/* Typography */
+.font-display {
+  font-family: "Crimson Text", serif;
+}
+
+.font-body {
+  font-family: "Inter", sans-serif;
+}
+
+/* Layout Components */
+.horse-sim-container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+.horse-sim-header {
+  background: linear-gradient(
+    135deg,
+    var(--primary-green) 0%,
+    var(--primary-green-light) 100%
+  );
+  color: white;
+  padding: 1rem 0;
+  box-shadow: 0 2px 8px var(--card-shadow);
+}
+
+.horse-sim-nav {
+  background: var(--stable-wood);
+  border-bottom: 3px solid var(--stable-wood-dark);
+  padding: 0.75rem 0;
+}
+
+.horse-sim-nav ul {
+  display: flex;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  gap: 2rem;
+}
+
+.horse-sim-nav a {
+  color: var(--text-primary);
+  text-decoration: none;
+  font-weight: 500;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  transition: all 0.2s ease;
+}
+
+.horse-sim-nav a:hover {
+  background: var(--background-primary);
+  color: var(--primary-green);
+}
+
+.horse-sim-nav a.active {
+  background: var(--primary-green);
+  color: white;
+}
+
+/* Card Components */
+.horse-card {
+  background: var(--card-background);
+  border: 2px solid var(--card-border);
+  border-radius: 12px;
+  box-shadow: 0 4px 12px var(--card-shadow);
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.horse-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(139, 69, 19, 0.15);
+  border-color: var(--primary-green-light);
+}
+
+.horse-card-header {
+  background: linear-gradient(
+    135deg,
+    var(--earth-cream) 0%,
+    var(--earth-tan) 100%
+  );
+  padding: 1rem;
+  border-bottom: 2px solid var(--card-border);
+}
+
+.horse-card-title {
+  font-family: "Crimson Text", serif;
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin: 0 0 0.25rem 0;
+}
+
+.horse-card-subtitle {
+  color: var(--text-secondary);
+  font-size: 0.875rem;
+  margin: 0;
+}
+
+.horse-card-content {
+  padding: 1rem;
+}
+
+.horse-card-image {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+  border-radius: 8px;
+  margin-bottom: 1rem;
+}
+
+/* Stat Bars */
+.stat-container {
+  margin-bottom: 1rem;
+}
+
+.stat-label {
+  display: flex;
+  justify-content: between;
+  align-items: center;
+  margin-bottom: 0.25rem;
+}
+
+.stat-name {
+  font-weight: 500;
+  color: var(--text-secondary);
+  font-size: 0.875rem;
+}
+
+.stat-value {
+  font-weight: 600;
+  color: var(--text-primary);
+  font-size: 0.875rem;
+}
+
+.stat-bar {
+  height: 8px;
+  background: var(--background-accent);
+  border-radius: 4px;
+  overflow: hidden;
+  border: 1px solid var(--card-border);
+}
+
+.stat-fill {
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    var(--success-green) 0%,
+    var(--accent-gold) 100%
+  );
+  transition: width 0.5s ease;
+  border-radius: 3px;
+}
+
+.stat-fill.low {
+  background: linear-gradient(
+    90deg,
+    var(--error-red) 0%,
+    var(--warning-amber) 100%
+  );
+}
+
+.stat-fill.medium {
+  background: linear-gradient(
+    90deg,
+    var(--warning-amber) 0%,
+    var(--accent-gold) 100%
+  );
+}
+
+.stat-fill.high {
+  background: linear-gradient(
+    90deg,
+    var(--success-green) 0%,
+    var(--primary-green-light) 100%
+  );
+}
+
+/* Buttons */
+.horse-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.625rem 1.25rem;
+  border: none;
+  border-radius: 6px;
+  font-weight: 500;
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-decoration: none;
+  font-family: inherit;
+}
+
+.horse-btn-primary {
+  background: linear-gradient(
+    135deg,
+    var(--primary-green) 0%,
+    var(--primary-green-light) 100%
+  );
+  color: white;
+  border: 2px solid var(--primary-green);
+}
+
+.horse-btn-primary:hover {
+  background: var(--primary-green);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(45, 80, 22, 0.3);
+}
+
+.horse-btn-secondary {
+  background: var(--stable-wood);
+  color: var(--text-primary);
+  border: 2px solid var(--stable-wood-dark);
+}
+
+.horse-btn-secondary:hover {
+  background: var(--stable-wood-dark);
+  color: white;
+}
+
+.horse-btn-accent {
+  background: linear-gradient(
+    135deg,
+    var(--accent-gold) 0%,
+    var(--accent-copper) 100%
+  );
+  color: white;
+  border: 2px solid var(--accent-copper);
+}
+
+.horse-btn-accent:hover {
+  background: var(--accent-copper);
+  transform: translateY(-1px);
+}
+
+.horse-btn-premium {
+  background: linear-gradient(
+    135deg,
+    var(--premium-gold) 0%,
+    var(--accent-gold) 100%
+  );
+  color: var(--text-primary);
+  border: 2px solid var(--premium-bronze);
+  font-weight: 600;
+}
+
+.horse-btn-premium:hover {
+  background: var(--premium-gold);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(255, 215, 0, 0.4);
+}
+
+/* Badges */
+.horse-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.25rem 0.5rem;
+  border-radius: 12px;
+  font-size: 0.75rem;
+  font-weight: 500;
+  border: 1px solid;
+}
+
+.horse-badge-common {
+  background: var(--background-accent);
+  color: var(--text-secondary);
+  border-color: var(--card-border);
+}
+
+.horse-badge-uncommon {
+  background: #dbeafe;
+  color: #1d4ed8;
+  border-color: #93c5fd;
+}
+
+.horse-badge-rare {
+  background: #fce7f3;
+  color: #be185d;
+  border-color: #f9a8d4;
+}
+
+.horse-badge-legendary {
+  background: #fef3c7;
+  color: #d97706;
+  border-color: var(--accent-gold);
+}
+
+.horse-badge-premium {
+  background: linear-gradient(
+    135deg,
+    var(--premium-gold) 0%,
+    var(--accent-gold) 100%
+  );
+  color: var(--text-primary);
+  border-color: var(--premium-bronze);
+  font-weight: 600;
+}
+
+/* Layout Grid */
+.horse-grid {
+  display: grid;
+  gap: 1.5rem;
+}
+
+.horse-grid-1 {
+  grid-template-columns: 1fr;
+}
+.horse-grid-2 {
+  grid-template-columns: repeat(2, 1fr);
+}
+.horse-grid-3 {
+  grid-template-columns: repeat(3, 1fr);
+}
+.horse-grid-4 {
+  grid-template-columns: repeat(4, 1fr);
+}
+
+@media (max-width: 1200px) {
+  .horse-grid-4 {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .horse-grid-3,
+  .horse-grid-4 {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 480px) {
+  .horse-grid-2,
+  .horse-grid-3,
+  .horse-grid-4 {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Sidebar Layout */
+.horse-layout {
+  display: grid;
+  grid-template-columns: 250px 1fr;
+  gap: 2rem;
+  min-height: 100vh;
+}
+
+.horse-sidebar {
+  background: var(--card-background);
+  border-right: 2px solid var(--card-border);
+  padding: 1rem;
+}
+
+.horse-main {
+  padding: 1rem;
+  min-height: 100vh;
+}
+
+@media (max-width: 1024px) {
+  .horse-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .horse-sidebar {
+    border-right: none;
+    border-bottom: 2px solid var(--card-border);
+  }
+}
+
+/* Special Effects */
+.horse-shine {
+  position: relative;
+  overflow: hidden;
+}
+
+.horse-shine::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.3),
+    transparent
+  );
+  transition: left 0.5s ease;
+}
+
+.horse-shine:hover::before {
+  left: 100%;
+}
+
+/* Loading States */
+.horse-loading {
+  background: linear-gradient(
+    90deg,
+    var(--background-accent) 25%,
+    var(--background-secondary) 50%,
+    var(--background-accent) 75%
+  );
+  background-size: 200% 100%;
+  animation: horse-shimmer 1.5s infinite;
+}
+
+@keyframes horse-shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+/* Form Elements */
+.horse-input {
+  width: 100%;
+  padding: 0.75rem;
+  border: 2px solid var(--card-border);
+  border-radius: 6px;
+  background: var(--card-background);
+  color: var(--text-primary);
+  font-family: inherit;
+  font-size: 0.875rem;
+  transition: all 0.2s ease;
+}
+
+.horse-input:focus {
+  outline: none;
+  border-color: var(--primary-green);
+  box-shadow: 0 0 0 3px rgba(45, 80, 22, 0.1);
+}
+
+.horse-select {
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
+  background-position: right 0.5rem center;
+  background-repeat: no-repeat;
+  background-size: 1.5em 1.5em;
+  padding-right: 2.5rem;
+}
+
+/* Utility Classes */
+.text-primary {
+  color: var(--text-primary);
+}
+.text-secondary {
+  color: var(--text-secondary);
+}
+.text-muted {
+  color: var(--text-muted);
+}
+.text-success {
+  color: var(--success-green);
+}
+.text-warning {
+  color: var(--warning-amber);
+}
+.text-error {
+  color: var(--error-red);
+}
+
+.bg-primary {
+  background-color: var(--primary-green);
+}
+.bg-secondary {
+  background-color: var(--background-secondary);
+}
+.bg-accent {
+  background-color: var(--background-accent);
+}
+
+.rounded-sm {
+  border-radius: 4px;
+}
+.rounded {
+  border-radius: 6px;
+}
+.rounded-lg {
+  border-radius: 12px;
+}
+.rounded-xl {
+  border-radius: 16px;
+}
+
+.shadow-sm {
+  box-shadow: 0 2px 4px var(--card-shadow);
+}
+.shadow {
+  box-shadow: 0 4px 8px var(--card-shadow);
+}
+.shadow-lg {
+  box-shadow: 0 8px 16px var(--card-shadow);
+}
+
+/* Responsive Typography */
+.text-xs {
+  font-size: 0.75rem;
+}
+.text-sm {
+  font-size: 0.875rem;
+}
+.text-base {
+  font-size: 1rem;
+}
+.text-lg {
+  font-size: 1.125rem;
+}
+.text-xl {
+  font-size: 1.25rem;
+}
+.text-2xl {
+  font-size: 1.5rem;
+}
+.text-3xl {
+  font-size: 1.875rem;
+}
+.text-4xl {
+  font-size: 2.25rem;
+}
+
+/* Spacing */
+.p-1 {
+  padding: 0.25rem;
+}
+.p-2 {
+  padding: 0.5rem;
+}
+.p-3 {
+  padding: 0.75rem;
+}
+.p-4 {
+  padding: 1rem;
+}
+.p-6 {
+  padding: 1.5rem;
+}
+.p-8 {
+  padding: 2rem;
+}
+
+.m-1 {
+  margin: 0.25rem;
+}
+.m-2 {
+  margin: 0.5rem;
+}
+.m-3 {
+  margin: 0.75rem;
+}
+.m-4 {
+  margin: 1rem;
+}
+.m-6 {
+  margin: 1.5rem;
+}
+.m-8 {
+  margin: 2rem;
+}
+
+.mt-1 {
+  margin-top: 0.25rem;
+}
+.mt-2 {
+  margin-top: 0.5rem;
+}
+.mt-4 {
+  margin-top: 1rem;
+}
+.mt-6 {
+  margin-top: 1.5rem;
+}
+.mt-8 {
+  margin-top: 2rem;
+}
+
+.mb-1 {
+  margin-bottom: 0.25rem;
+}
+.mb-2 {
+  margin-bottom: 0.5rem;
+}
+.mb-4 {
+  margin-bottom: 1rem;
+}
+.mb-6 {
+  margin-bottom: 1.5rem;
+}
+.mb-8 {
+  margin-bottom: 2rem;
+}

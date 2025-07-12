@@ -1,270 +1,708 @@
-import { useQuery } from "@tanstack/react-query";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Navigation } from "@/components/navigation";
-import { AnimalCard } from "@/components/animal-card";
 import { Link } from "wouter";
-import { Rabbit, Dog, Trophy, Dna } from "lucide-react";
+import {
+  Heart,
+  Trophy,
+  Users,
+  Crown,
+  Map,
+  Zap,
+  Star,
+  ArrowRight,
+  Play,
+  ChevronRight,
+  Award,
+  Target,
+  Palette,
+  TrendingUp,
+  Calendar,
+  MessageCircle,
+  Gem,
+  BarChart3,
+  Clock,
+} from "lucide-react";
+import { Button } from "../components/ui/button";
+import { Badge } from "../components/ui/badge";
 
-export default function Home() {
-  const { data: stats, isLoading: statsLoading } = useQuery({
-    queryKey: ['/api/stats'],
-  });
+const quickStats = [
+  { label: "Total Horses", value: "24", icon: Heart, color: "text-red-500" },
+  {
+    label: "Competitions Won",
+    value: "12",
+    icon: Trophy,
+    color: "text-amber-500",
+  },
+  {
+    label: "Training Sessions",
+    value: "156",
+    icon: Target,
+    color: "text-green-500",
+  },
+  {
+    label: "Total Value",
+    value: "$45,250",
+    icon: Star,
+    color: "text-purple-500",
+  },
+];
 
-  const { data: animals, isLoading: animalsLoading } = useQuery({
-    queryKey: ['/api/animals'],
-  });
+const recentActivity = [
+  {
+    time: "2 hours ago",
+    action: "Training completed",
+    horse: "Thunder Storm",
+    result: "+15 XP",
+    icon: Target,
+    color: "text-green-600",
+  },
+  {
+    time: "4 hours ago",
+    action: "Competition won",
+    horse: "Moonlight Dancer",
+    result: "1st Place",
+    icon: Trophy,
+    color: "text-amber-600",
+  },
+  {
+    time: "6 hours ago",
+    action: "New foal born",
+    horse: "Silver Belle",
+    result: "Healthy filly",
+    icon: Heart,
+    color: "text-pink-600",
+  },
+  {
+    time: "1 day ago",
+    action: "Horse purchased",
+    horse: "Storm Runner",
+    result: "$8,500",
+    icon: Star,
+    color: "text-blue-600",
+  },
+];
 
-  const { data: activeTraining, isLoading: trainingLoading } = useQuery({
-    queryKey: ['/api/training/active'],
-  });
+const upcomingEvents = [
+  {
+    date: "Today 3:00 PM",
+    event: "Regional Dressage Championship",
+    horse: "Silver Belle",
+    status: "Registered",
+  },
+  {
+    date: "Tomorrow 10:00 AM",
+    event: "Endurance Training Session",
+    horse: "Moonlight Dancer",
+    status: "Scheduled",
+  },
+  {
+    date: "Wed 2:00 PM",
+    event: "Breeding Appointment",
+    horse: "Thunder Storm",
+    status: "Confirmed",
+  },
+];
 
-  const horses = animals?.filter((animal: any) => animal.type === 'horse') || [];
-  const dogs = animals?.filter((animal: any) => animal.type === 'dog') || [];
+const features = [
+  {
+    icon: Heart,
+    title: "Realistic Genetics",
+    description:
+      "Experience authentic horse breeding with real genetic inheritance patterns and color variations.",
+    gradient: "from-red-500 to-pink-500",
+  },
+  {
+    icon: Star,
+    title: "Premium Breeds",
+    description:
+      "Discover and breed rare heritage horses with unique characteristics and bloodlines.",
+    gradient: "from-emerald-500 to-green-500",
+  },
+  {
+    icon: Trophy,
+    title: "Competitions & Shows",
+    description:
+      "Compete in prestigious horse shows and earn recognition for your breeding achievements.",
+    gradient: "from-amber-500 to-yellow-500",
+  },
+  {
+    icon: Map,
+    title: "Wild Capture",
+    description:
+      "Explore stunning landscapes to capture wild horses and discover rare breeds.",
+    gradient: "from-emerald-500 to-green-500",
+  },
+  {
+    icon: Users,
+    title: "Community",
+    description:
+      "Join a vibrant community of horse enthusiasts, share knowledge, and make friends.",
+    gradient: "from-blue-500 to-cyan-500",
+  },
+  {
+    icon: Palette,
+    title: "Horse Creator",
+    description:
+      "Design your perfect horse with detailed customization options and breeding tools.",
+    gradient: "from-indigo-500 to-purple-500",
+  },
+];
 
-  if (statsLoading || animalsLoading || trainingLoading) {
-    return (
-      <div className="min-h-screen bg-gradient-to-br from-[hsl(45,50%,96%)] to-[hsl(25,30%,85%)]">
-        <Navigation />
-        <div className="max-w-7xl mx-auto p-6">
-          <div className="animate-pulse">
-            <div className="h-8 bg-[hsl(25,30%,80%)] rounded mb-8"></div>
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
-              {[...Array(4)].map((_, i) => (
-                <div key={i} className="h-24 bg-[hsl(25,30%,80%)] rounded"></div>
-              ))}
+export function Home() {
+  return (
+    <div
+      style={{ minHeight: "100vh", background: "var(--background-primary)" }}
+    >
+      {/* Hero Dashboard */}
+      <section
+        style={{
+          background:
+            "linear-gradient(135deg, var(--primary-green) 0%, var(--primary-green-light) 100%)",
+          color: "white",
+          padding: "2rem 0",
+        }}
+      >
+        <div className="horse-sim-container">
+          <div style={{ textAlign: "center", marginBottom: "2rem" }}>
+            <Badge
+              style={{
+                background: "rgba(255,255,255,0.2)",
+                color: "white",
+                padding: "0.5rem 1rem",
+                borderRadius: "20px",
+                marginBottom: "1rem",
+                display: "inline-flex",
+                alignItems: "center",
+                gap: "0.5rem",
+              }}
+            >
+              <Crown className="w-4 h-4" />
+              Welcome back, Alex!
+            </Badge>
+
+            <h1
+              style={{
+                fontSize: "3rem",
+                fontWeight: "700",
+                margin: "0 0 1rem 0",
+                fontFamily: "Crimson Text, serif",
+              }}
+            >
+              Victory Acres
+            </h1>
+
+            <p
+              style={{
+                fontSize: "1.25rem",
+                opacity: 0.9,
+                maxWidth: "600px",
+                margin: "0 auto 2rem auto",
+                lineHeight: 1.6,
+              }}
+            >
+              The ultimate horse breeding simulation where authentic genetics
+              meet passionate community. Build your legacy, one horse at a time.
+            </p>
+
+            <div
+              style={{
+                display: "flex",
+                gap: "1rem",
+                justifyContent: "center",
+                flexWrap: "wrap",
+              }}
+            >
+              <Link href="/animals">
+                <button
+                  className="horse-btn horse-btn-accent"
+                  style={{
+                    background: "white",
+                    color: "var(--primary-green)",
+                    border: "2px solid white",
+                  }}
+                >
+                  <Heart className="w-5 h-5" />
+                  <span>View My Horses</span>
+                  <ArrowRight className="w-4 h-4" />
+                </button>
+              </Link>
+
+              <Link href="/horse-generator">
+                <button
+                  className="horse-btn horse-btn-secondary"
+                  style={{
+                    background: "rgba(255,255,255,0.1)",
+                    color: "white",
+                    border: "2px solid rgba(255,255,255,0.3)",
+                  }}
+                >
+                  <Palette className="w-5 h-5" />
+                  <span>Create Horse</span>
+                </button>
+              </Link>
+            </div>
+          </div>
+
+          {/* Quick Stats */}
+          <div className="horse-grid horse-grid-4" style={{ gap: "1rem" }}>
+            {quickStats.map((stat, index) => (
+              <div
+                key={index}
+                style={{
+                  background: "rgba(255,255,255,0.1)",
+                  backdropFilter: "blur(10px)",
+                  borderRadius: "12px",
+                  padding: "1.5rem",
+                  textAlign: "center",
+                  border: "1px solid rgba(255,255,255,0.2)",
+                }}
+              >
+                <stat.icon
+                  className={`w-8 h-8 mx-auto mb-2 ${stat.color}`}
+                  style={{ color: "white" }}
+                />
+                <div
+                  style={{
+                    fontSize: "2rem",
+                    fontWeight: "700",
+                    marginBottom: "0.25rem",
+                  }}
+                >
+                  {stat.value}
+                </div>
+                <div style={{ fontSize: "0.875rem", opacity: 0.8 }}>
+                  {stat.label}
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Main Dashboard */}
+      <section style={{ padding: "2rem 0" }}>
+        <div className="horse-sim-container">
+          <div
+            className="horse-grid horse-grid-3"
+            style={{ gap: "2rem", alignItems: "start" }}
+          >
+            {/* Recent Activity */}
+            <div className="horse-card">
+              <div className="horse-card-header">
+                <h3
+                  className="horse-card-title"
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "0.5rem",
+                  }}
+                >
+                  <Clock className="w-5 h-5" />
+                  Recent Activity
+                </h3>
+              </div>
+              <div className="horse-card-content">
+                <div style={{ display: "grid", gap: "1rem" }}>
+                  {recentActivity.map((activity, index) => (
+                    <div
+                      key={index}
+                      style={{
+                        display: "flex",
+                        alignItems: "center",
+                        gap: "0.75rem",
+                        padding: "0.75rem",
+                        background: "var(--background-accent)",
+                        borderRadius: "8px",
+                        border: "1px solid var(--card-border)",
+                      }}
+                    >
+                      <activity.icon className={`w-5 h-5 ${activity.color}`} />
+                      <div style={{ flex: 1 }}>
+                        <div
+                          style={{
+                            fontWeight: "500",
+                            fontSize: "0.875rem",
+                            marginBottom: "0.25rem",
+                          }}
+                        >
+                          {activity.action}
+                        </div>
+                        <div
+                          style={{
+                            fontSize: "0.75rem",
+                            color: "var(--text-muted)",
+                          }}
+                        >
+                          {activity.horse} • {activity.time}
+                        </div>
+                      </div>
+                      <Badge
+                        className="horse-badge-common"
+                        style={{ fontSize: "0.625rem" }}
+                      >
+                        {activity.result}
+                      </Badge>
+                    </div>
+                  ))}
+                </div>
+
+                <Link href="/animals">
+                  <button
+                    className="horse-btn horse-btn-secondary"
+                    style={{ width: "100%", marginTop: "1rem" }}
+                  >
+                    <BarChart3 className="w-4 h-4" />
+                    <span>View All Activity</span>
+                  </button>
+                </Link>
+              </div>
+            </div>
+
+            {/* Upcoming Events */}
+            <div className="horse-card">
+              <div className="horse-card-header">
+                <h3
+                  className="horse-card-title"
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "0.5rem",
+                  }}
+                >
+                  <Calendar className="w-5 h-5" />
+                  Upcoming Events
+                </h3>
+              </div>
+              <div className="horse-card-content">
+                <div style={{ display: "grid", gap: "1rem" }}>
+                  {upcomingEvents.map((event, index) => (
+                    <div
+                      key={index}
+                      style={{
+                        padding: "1rem",
+                        background: "var(--background-accent)",
+                        borderRadius: "8px",
+                        border: "1px solid var(--card-border)",
+                      }}
+                    >
+                      <div
+                        style={{
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "space-between",
+                          marginBottom: "0.5rem",
+                        }}
+                      >
+                        <div
+                          style={{
+                            fontSize: "0.75rem",
+                            color: "var(--text-muted)",
+                          }}
+                        >
+                          {event.date}
+                        </div>
+                        <Badge
+                          className="horse-badge-uncommon"
+                          style={{ fontSize: "0.625rem" }}
+                        >
+                          {event.status}
+                        </Badge>
+                      </div>
+                      <div
+                        style={{
+                          fontWeight: "500",
+                          fontSize: "0.875rem",
+                          marginBottom: "0.25rem",
+                        }}
+                      >
+                        {event.event}
+                      </div>
+                      <div
+                        style={{
+                          fontSize: "0.75rem",
+                          color: "var(--text-secondary)",
+                        }}
+                      >
+                        {event.horse}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+
+                <Link href="/competitions">
+                  <button
+                    className="horse-btn horse-btn-secondary"
+                    style={{ width: "100%", marginTop: "1rem" }}
+                  >
+                    <Trophy className="w-4 h-4" />
+                    <span>View All Events</span>
+                  </button>
+                </Link>
+              </div>
+            </div>
+
+            {/* Quick Actions */}
+            <div className="horse-card">
+              <div className="horse-card-header">
+                <h3
+                  className="horse-card-title"
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "0.5rem",
+                  }}
+                >
+                  <Zap className="w-5 h-5" />
+                  Quick Actions
+                </h3>
+              </div>
+              <div className="horse-card-content">
+                <div style={{ display: "grid", gap: "1rem" }}>
+                  <Link href="/training">
+                    <button
+                      className="horse-btn horse-btn-primary"
+                      style={{ width: "100%" }}
+                    >
+                      <Target className="w-5 h-5" />
+                      <span>Train All Horses</span>
+                    </button>
+                  </Link>
+
+                  <button
+                    className="horse-btn horse-btn-secondary"
+                    style={{ width: "100%" }}
+                  >
+                    <Heart className="w-5 h-5" />
+                    <span>Feed & Care</span>
+                  </button>
+
+                  <Link href="/breeding">
+                    <button
+                      className="horse-btn horse-btn-accent"
+                      style={{ width: "100%" }}
+                    >
+                      <Users className="w-5 h-5" />
+                      <span>Breeding Center</span>
+                    </button>
+                  </Link>
+
+                  <Link href="/marketplace">
+                    <button
+                      className="horse-btn horse-btn-secondary"
+                      style={{ width: "100%" }}
+                    >
+                      <Star className="w-5 h-5" />
+                      <span>Browse Market</span>
+                    </button>
+                  </Link>
+
+                  <Link href="/wild-capture">
+                    <button
+                      className="horse-btn horse-btn-accent"
+                      style={{ width: "100%" }}
+                    >
+                      <Map className="w-5 h-5" />
+                      <span>Wild Capture</span>
+                    </button>
+                  </Link>
+                </div>
+              </div>
             </div>
           </div>
         </div>
-      </div>
-    );
-  }
+      </section>
 
-  return (
-    <div className="min-h-screen bg-gradient-to-br from-[hsl(45,50%,96%)] to-[hsl(25,30%,85%)]">
-      <Navigation />
-      
-      <div className="max-w-7xl mx-auto p-6">
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold text-[hsl(25,60%,20%)] mb-2">
-            Welcome to Victory Acres
-          </h1>
-          <p className="text-[hsl(25,45%,35%)]">
-            Manage your ranch, breed champions, and build your legacy
-          </p>
-        </div>
+      {/* Features Section */}
+      <section
+        style={{
+          background: "var(--background-secondary)",
+          padding: "3rem 0",
+        }}
+      >
+        <div className="horse-sim-container">
+          <div style={{ textAlign: "center", marginBottom: "3rem" }}>
+            <h2
+              style={{
+                fontSize: "2.5rem",
+                fontWeight: "700",
+                marginBottom: "1rem",
+                fontFamily: "Crimson Text, serif",
+                color: "var(--text-primary)",
+              }}
+            >
+              Why Choose{" "}
+              <span style={{ color: "var(--primary-green)" }}>
+                Victory Acres
+              </span>
+              ?
+            </h2>
+            <p
+              style={{
+                fontSize: "1.125rem",
+                color: "var(--text-secondary)",
+                maxWidth: "600px",
+                margin: "0 auto",
+              }}
+            >
+              Experience the most realistic and engaging horse breeding
+              simulation with authentic genetics and passionate community.
+            </p>
+          </div>
 
-        {/* Quick Stats */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
-          <Card className="bg-[hsl(45,50%,96%)] border-2 border-[hsl(25,30%,70%)] shadow-lg">
-            <CardContent className="p-4 text-center">
-              <Rabbit className="w-8 h-8 text-[hsl(25,60%,35%)] mb-2 mx-auto" />
-              <h3 className="text-2xl font-bold text-[hsl(25,50%,40%)]">
-                {stats?.totalHorses || 0}
-              </h3>
-              <p className="text-sm text-[hsl(25,60%,35%)]">Horses</p>
-            </CardContent>
-          </Card>
-
-          <Card className="bg-[hsl(45,50%,96%)] border-2 border-[hsl(25,30%,70%)] shadow-lg">
-            <CardContent className="p-4 text-center">
-              <Dog className="w-8 h-8 text-[hsl(25,60%,35%)] mb-2 mx-auto" />
-              <h3 className="text-2xl font-bold text-[hsl(25,50%,40%)]">
-                {stats?.totalDogs || 0}
-              </h3>
-              <p className="text-sm text-[hsl(25,60%,35%)]">Dogs</p>
-            </CardContent>
-          </Card>
-
-          <Card className="bg-[hsl(45,50%,96%)] border-2 border-[hsl(25,30%,70%)] shadow-lg">
-            <CardContent className="p-4 text-center">
-              <Trophy className="w-8 h-8 text-[hsl(40,80%,50%)] mb-2 mx-auto" />
-              <h3 className="text-2xl font-bold text-[hsl(25,50%,40%)]">
-                {stats?.competitionsWon || 0}
-              </h3>
-              <p className="text-sm text-[hsl(25,60%,35%)]">Competitions Won</p>
-            </CardContent>
-          </Card>
-
-          <Card className="bg-[hsl(45,50%,96%)] border-2 border-[hsl(25,30%,70%)] shadow-lg">
-            <CardContent className="p-4 text-center">
-              <Dna className="w-8 h-8 text-[hsl(25,60%,35%)] mb-2 mx-auto" />
-              <h3 className="text-2xl font-bold text-[hsl(25,50%,40%)]">
-                {stats?.offspringBred || 0}
-              </h3>
-              <p className="text-sm text-[hsl(25,60%,35%)]">Offspring Bred</p>
-            </CardContent>
-          </Card>
-        </div>
-
-        {/* Main Content Tabs */}
-        <Tabs defaultValue="horses" className="space-y-6">
-          <TabsList className="grid w-full grid-cols-2 md:grid-cols-3 lg:grid-cols-6 bg-[hsl(45,50%,96%)] border-2 border-[hsl(25,30%,70%)]">
-            <TabsTrigger value="horses" className="data-[state=active]:bg-[hsl(25,60%,35%)] data-[state=active]:text-[hsl(45,50%,96%)]">
-              <Rabbit className="w-4 h-4 mr-2" />
-              Horses
-            </TabsTrigger>
-            <TabsTrigger value="dogs" className="data-[state=active]:bg-[hsl(25,60%,35%)] data-[state=active]:text-[hsl(45,50%,96%)]">
-              <Dog className="w-4 h-4 mr-2" />
-              Dogs
-            </TabsTrigger>
-            <TabsTrigger value="training" className="data-[state=active]:bg-[hsl(25,60%,35%)] data-[state=active]:text-[hsl(45,50%,96%)]">
-              Training
-            </TabsTrigger>
-            <TabsTrigger value="breeding" className="data-[state=active]:bg-[hsl(25,60%,35%)] data-[state=active]:text-[hsl(45,50%,96%)]">
-              Breeding
-            </TabsTrigger>
-            <TabsTrigger value="marketplace" className="data-[state=active]:bg-[hsl(25,60%,35%)] data-[state=active]:text-[hsl(45,50%,96%)]">
-              Marketplace
-            </TabsTrigger>
-            <TabsTrigger value="facilities" className="data-[state=active]:bg-[hsl(25,60%,35%)] data-[state=active]:text-[hsl(45,50%,96%)]">
-              Facilities
-            </TabsTrigger>
-          </TabsList>
-
-          <TabsContent value="horses" className="space-y-6">
-            <div className="flex justify-between items-center">
-              <h2 className="text-2xl font-bold text-[hsl(25,60%,20%)]">Your Horses</h2>
-              <Link href="/animals">
-                <Button className="bg-gradient-to-r from-[hsl(25,60%,35%)] to-[hsl(25,50%,40%)] text-[hsl(45,50%,96%)] hover:from-[hsl(25,50%,40%)] hover:to-[hsl(25,60%,35%)]">
-                  Manage Horses
-                </Button>
-              </Link>
-            </div>
-            
-            {horses.length === 0 ? (
-              <Card className="bg-[hsl(45,50%,96%)] border-2 border-[hsl(25,30%,70%)]">
-                <CardContent className="p-8 text-center">
-                  <Rabbit className="w-16 h-16 text-[hsl(25,40%,60%)] mx-auto mb-4" />
-                  <h3 className="text-xl font-bold text-[hsl(25,60%,20%)] mb-2">No horses yet</h3>
-                  <p className="text-[hsl(25,45%,35%)] mb-4">Start your breeding program by adding your first horse</p>
-                  <Link href="/animals">
-                    <Button className="bg-gradient-to-r from-[hsl(25,60%,35%)] to-[hsl(25,50%,40%)] text-[hsl(45,50%,96%)]">
-                      Get Started
-                    </Button>
-                  </Link>
-                </CardContent>
-              </Card>
-            ) : (
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {horses.map((horse: any) => (
-                  <AnimalCard key={horse.id} animal={horse} />
-                ))}
-              </div>
-            )}
-          </TabsContent>
-
-          <TabsContent value="dogs" className="space-y-6">
-            <div className="flex justify-between items-center">
-              <h2 className="text-2xl font-bold text-[hsl(25,60%,20%)]">Your Dogs</h2>
-              <Link href="/animals">
-                <Button className="bg-gradient-to-r from-[hsl(25,60%,35%)] to-[hsl(25,50%,40%)] text-[hsl(45,50%,96%)] hover:from-[hsl(25,50%,40%)] hover:to-[hsl(25,60%,35%)]">
-                  Manage Dogs
-                </Button>
-              </Link>
-            </div>
-            
-            {dogs.length === 0 ? (
-              <Card className="bg-[hsl(45,50%,96%)] border-2 border-[hsl(25,30%,70%)]">
-                <CardContent className="p-8 text-center">
-                  <Dog className="w-16 h-16 text-[hsl(25,40%,60%)] mx-auto mb-4" />
-                  <h3 className="text-xl font-bold text-[hsl(25,60%,20%)] mb-2">No dogs yet</h3>
-                  <p className="text-[hsl(25,45%,35%)] mb-4">Expand your kennel by adding your first dog</p>
-                  <Link href="/animals">
-                    <Button className="bg-gradient-to-r from-[hsl(25,60%,35%)] to-[hsl(25,50%,40%)] text-[hsl(45,50%,96%)]">
-                      Get Started
-                    </Button>
-                  </Link>
-                </CardContent>
-              </Card>
-            ) : (
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {dogs.map((dog: any) => (
-                  <AnimalCard key={dog.id} animal={dog} />
-                ))}
-              </div>
-            )}
-          </TabsContent>
-
-          <TabsContent value="training" className="space-y-6">
-            <div className="flex justify-between items-center">
-              <h2 className="text-2xl font-bold text-[hsl(25,60%,20%)]">Active Training</h2>
-              <Button className="bg-gradient-to-r from-[hsl(25,60%,35%)] to-[hsl(25,50%,40%)] text-[hsl(45,50%,96%)] hover:from-[hsl(25,50%,40%)] hover:to-[hsl(25,60%,35%)]">
-                Schedule Training
-              </Button>
-            </div>
-            
-            {activeTraining?.length === 0 ? (
-              <Card className="bg-[hsl(45,50%,96%)] border-2 border-[hsl(25,30%,70%)]">
-                <CardContent className="p-8 text-center">
-                  <div className="w-16 h-16 bg-[hsl(25,40%,60%)] rounded-full mx-auto mb-4 flex items-center justify-center">
-                    <span className="text-[hsl(45,50%,96%)] font-bold">T</span>
+          <div className="horse-grid horse-grid-3" style={{ gap: "2rem" }}>
+            {features.map((feature, index) => (
+              <div
+                key={index}
+                className="horse-card horse-shine"
+                style={{ height: "fit-content" }}
+              >
+                <div className="horse-card-content">
+                  <div
+                    style={{
+                      width: "3.5rem",
+                      height: "3.5rem",
+                      borderRadius: "12px",
+                      background: `linear-gradient(135deg, var(--primary-green), var(--primary-green-light))`,
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      marginBottom: "1.5rem",
+                    }}
+                  >
+                    <feature.icon className="w-7 h-7 text-white" />
                   </div>
-                  <h3 className="text-xl font-bold text-[hsl(25,60%,20%)] mb-2">No active training</h3>
-                  <p className="text-[hsl(25,45%,35%)] mb-4">Start training your animals to improve their stats</p>
-                  <Button className="bg-gradient-to-r from-[hsl(25,60%,35%)] to-[hsl(25,50%,40%)] text-[hsl(45,50%,96%)]">
-                    Start Training
-                  </Button>
-                </CardContent>
-              </Card>
-            ) : (
-              <div className="space-y-4">
-                {activeTraining.map((session: any) => (
-                  <Card key={session.id} className="bg-[hsl(45,50%,96%)] border-2 border-[hsl(25,30%,70%)]">
-                    <CardContent className="p-4">
-                      <div className="flex justify-between items-center">
-                        <div>
-                          <h3 className="font-bold text-[hsl(25,60%,20%)]">{session.animal?.name}</h3>
-                          <p className="text-[hsl(25,45%,35%)]">{session.trainingType} Training</p>
-                        </div>
-                        <div className="text-right">
-                          <p className="text-sm text-[hsl(25,60%,35%)]">
-                            {Math.ceil((new Date(session.endTime).getTime() - new Date().getTime()) / (1000 * 60))}m remaining
-                          </p>
-                        </div>
-                      </div>
-                    </CardContent>
-                  </Card>
-                ))}
+
+                  <h3
+                    style={{
+                      fontSize: "1.25rem",
+                      fontWeight: "600",
+                      marginBottom: "1rem",
+                      color: "var(--text-primary)",
+                      fontFamily: "Crimson Text, serif",
+                    }}
+                  >
+                    {feature.title}
+                  </h3>
+
+                  <p
+                    style={{
+                      color: "var(--text-secondary)",
+                      lineHeight: 1.6,
+                      marginBottom: "1.5rem",
+                    }}
+                  >
+                    {feature.description}
+                  </p>
+
+                  <button className="horse-btn horse-btn-secondary">
+                    <span>Learn More</span>
+                    <ArrowRight className="w-4 h-4" />
+                  </button>
+                </div>
               </div>
-            )}
-          </TabsContent>
+            ))}
+          </div>
+        </div>
+      </section>
 
-          <TabsContent value="breeding">
-            <Card className="bg-[hsl(45,50%,96%)] border-2 border-[hsl(25,30%,70%)]">
-              <CardHeader>
-                <CardTitle className="text-[hsl(25,60%,20%)]">Breeding Center</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <p className="text-[hsl(25,45%,35%)]">Breeding features coming soon...</p>
-              </CardContent>
-            </Card>
-          </TabsContent>
+      {/* Premium CTA */}
+      <section
+        style={{
+          background:
+            "linear-gradient(135deg, var(--accent-gold) 0%, var(--accent-copper) 100%)",
+          color: "white",
+          padding: "3rem 0",
+        }}
+      >
+        <div className="horse-sim-container">
+          <div style={{ textAlign: "center" }}>
+            <Badge
+              style={{
+                background: "rgba(255,255,255,0.2)",
+                color: "white",
+                padding: "0.5rem 1rem",
+                borderRadius: "20px",
+                marginBottom: "1rem",
+                display: "inline-flex",
+                alignItems: "center",
+                gap: "0.5rem",
+              }}
+            >
+              <Crown className="w-4 h-4" />
+              Premium Features
+            </Badge>
 
-          <TabsContent value="marketplace">
-            <Card className="bg-[hsl(45,50%,96%)] border-2 border-[hsl(25,30%,70%)]">
-              <CardHeader>
-                <CardTitle className="text-[hsl(25,60%,20%)]">Marketplace</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <p className="text-[hsl(25,45%,35%)]">Marketplace features coming soon...</p>
-              </CardContent>
-            </Card>
-          </TabsContent>
+            <h2
+              style={{
+                fontSize: "2.5rem",
+                fontWeight: "700",
+                marginBottom: "1rem",
+                fontFamily: "Crimson Text, serif",
+              }}
+            >
+              Unlock the Full Experience
+            </h2>
 
-          <TabsContent value="facilities">
-            <Card className="bg-[hsl(45,50%,96%)] border-2 border-[hsl(25,30%,70%)]">
-              <CardHeader>
-                <CardTitle className="text-[hsl(25,60%,20%)]">Facilities</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <p className="text-[hsl(25,45%,35%)]">Facility management features coming soon...</p>
-              </CardContent>
-            </Card>
-          </TabsContent>
-        </Tabs>
-      </div>
+            <p
+              style={{
+                fontSize: "1.125rem",
+                opacity: 0.9,
+                maxWidth: "600px",
+                margin: "0 auto 2rem auto",
+              }}
+            >
+              Get access to advanced breeding tools, extra stalls, automation
+              features, and exclusive content for just $5/month.
+            </p>
+
+            <div
+              style={{
+                display: "flex",
+                flexWrap: "wrap",
+                justifyContent: "center",
+                gap: "1rem",
+                marginBottom: "2rem",
+              }}
+            >
+              {[
+                "20 Extra Stalls",
+                "Auto Care & Training",
+                "Dog Breeding",
+                "Premium Shows",
+                "Advanced Genetics",
+              ].map((feature) => (
+                <Badge
+                  key={feature}
+                  style={{
+                    background: "rgba(255,255,255,0.2)",
+                    color: "white",
+                    padding: "0.25rem 0.75rem",
+                    fontSize: "0.875rem",
+                  }}
+                >
+                  <Star className="w-3 h-3 mr-1" />
+                  {feature}
+                </Badge>
+              ))}
+            </div>
+
+            <Link href="/premium">
+              <button
+                className="horse-btn horse-btn-premium"
+                style={{
+                  background: "white",
+                  color: "var(--accent-gold)",
+                  border: "2px solid white",
+                  fontSize: "1.125rem",
+                  padding: "0.75rem 2rem",
+                }}
+              >
+                <Crown className="w-5 h-5" />
+                <span>Upgrade to Premium</span>
+                <Gem className="w-4 h-4" />
+              </button>
+            </Link>
+          </div>
+        </div>
+      </section>
     </div>
   );
 }

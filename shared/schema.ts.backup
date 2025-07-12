@@ -949,94 +949,92 @@ export const weatherRelations = relations(weather, ({ many }) => ({
 
 // Additional relations for genetics and advanced features - moved after table definitions
 
-// Temporarily commented out - will move after table definitions
-// export const medicalProceduresRelations = relations(
-//   medicalProcedures,
-//   ({ one }) => ({
-//     animal: one(animals, {
-//       fields: [medicalProcedures.animalId],
-//       references: [animals.id],
-//     }),
-//     veterinarian: one(users, {
-//       fields: [medicalProcedures.veterinarianId],
-//       references: [users.id],
-//     }),
-//   }),
-// );
+export const medicalProceduresRelations = relations(
+  medicalProcedures,
+  ({ one }) => ({
+    animal: one(animals, {
+      fields: [medicalProcedures.animalId],
+      references: [animals.id],
+    }),
+    veterinarian: one(users, {
+      fields: [medicalProcedures.veterinarianId],
+      references: [users.id],
+    }),
+  }),
+);
 
-// Temporarily commented out - tables defined later in file
-// export const biomesRelations = relations(biomes, ({ many }) => ({
-//   wildCaptures: many(wildCaptures),
-// }));
+export const biomesRelations = relations(biomes, ({ many }) => ({
+  wildCaptures: many(wildCaptures),
+}));
 
-// export const wildCapturesRelations = relations(wildCaptures, ({ one }) => ({
-//   user: one(users, { fields: [wildCaptures.userId], references: [users.id] }),
-//   biome: one(biomes, {
-//     fields: [wildCaptures.biomeId],
-//     references: [biomes.id],
-//   }),
-//   animal: one(animals, {
-//     fields: [wildCaptures.animalId],
-//     references: [animals.id],
-//   }),
-// }));
+export const wildCapturesRelations = relations(wildCaptures, ({ one }) => ({
+  user: one(users, { fields: [wildCaptures.userId], references: [users.id] }),
+  biome: one(biomes, {
+    fields: [wildCaptures.biomeId],
+    references: [biomes.id],
+  }),
+  animal: one(animals, {
+    fields: [wildCaptures.animalId],
+    references: [animals.id],
+  }),
+}));
 
-// export const careersRelations = relations(careers, ({ many }) => ({
-//   userCareers: many(userCareers),
-// }));
+export const careersRelations = relations(careers, ({ many }) => ({
+  userCareers: many(userCareers),
+}));
 
-// export const userCareersRelations = relations(userCareers, ({ one }) => ({
-//   user: one(users, { fields: [userCareers.userId], references: [users.id] }),
-//   career: one(careers, {
-//     fields: [userCareers.careerId],
-//     references: [careers.id],
-//   }),
-// }));
+export const userCareersRelations = relations(userCareers, ({ one }) => ({
+  user: one(users, { fields: [userCareers.userId], references: [users.id] }),
+  career: one(careers, {
+    fields: [userCareers.careerId],
+    references: [careers.id],
+  }),
+}));
 
-// export const playerSkillsRelations = relations(playerSkills, ({ one }) => ({
-//   user: one(users, { fields: [playerSkills.userId], references: [users.id] }),
-// }));
+export const playerSkillsRelations = relations(playerSkills, ({ one }) => ({
+  user: one(users, { fields: [playerSkills.userId], references: [users.id] }),
+}));
 
-// export const breedingLabRelations = relations(breedingLab, ({ one }) => ({
-//   user: one(users, { fields: [breedingLab.userId], references: [users.id] }),
-// }));
+export const breedingLabRelations = relations(breedingLab, ({ one }) => ({
+  user: one(users, { fields: [breedingLab.userId], references: [users.id] }),
+}));
 
-// export const craftingRecipesRelations = relations(
-//   craftingRecipes,
-//   ({ many }) => ({
-//     userCrafting: many(userCrafting),
-//   }),
-// );
+export const craftingRecipesRelations = relations(
+  craftingRecipes,
+  ({ many }) => ({
+    userCrafting: many(userCrafting),
+  }),
+);
 
-// export const userCraftingRelations = relations(userCrafting, ({ one }) => ({
-//   user: one(users, { fields: [userCrafting.userId], references: [users.id] }),
-//   recipe: one(craftingRecipes, {
-//     fields: [userCrafting.recipeId],
-//     references: [craftingRecipes.id],
-//   }),
-// }));
+export const userCraftingRelations = relations(userCrafting, ({ one }) => ({
+  user: one(users, { fields: [userCrafting.userId], references: [users.id] }),
+  recipe: one(craftingRecipes, {
+    fields: [userCrafting.recipeId],
+    references: [craftingRecipes.id],
+  }),
+}));
 
-// export const resourcesRelations = relations(resources, ({ many }) => ({
-//   userInventory: many(userInventory),
-// }));
+export const resourcesRelations = relations(resources, ({ many }) => ({
+  userInventory: many(userInventory),
+}));
 
-// export const userInventoryRelations = relations(userInventory, ({ one }) => ({
-//   user: one(users, { fields: [userInventory.userId], references: [users.id] }),
-//   resource: one(resources, {
-//     fields: [userInventory.resourceId],
-//     references: [resources.id],
-//   }),
-// }));
+export const userInventoryRelations = relations(userInventory, ({ one }) => ({
+  user: one(users, { fields: [userInventory.userId], references: [users.id] }),
+  resource: one(resources, {
+    fields: [userInventory.resourceId],
+    references: [resources.id],
+  }),
+}));
 
-// export const facilityLayoutsRelations = relations(
-//   facilityLayouts,
-//   ({ one }) => ({
-//     facility: one(facilities, {
-//       fields: [facilityLayouts.facilityId],
-//       references: [facilities.id],
-//     }),
-//   }),
-// );
+export const facilityLayoutsRelations = relations(
+  facilityLayouts,
+  ({ one }) => ({
+    facility: one(facilities, {
+      fields: [facilityLayouts.facilityId],
+      references: [facilities.id],
+    }),
+  }),
+);
 
 // Insert schemas
 export const insertAnimalSchema = createInsertSchema(animals)

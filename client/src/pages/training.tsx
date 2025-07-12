@@ -1,350 +1,702 @@
-import { useState } from "react";
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Badge } from "@/components/ui/badge";
-import { Progress } from "@/components/ui/progress";
-import { Navigation } from "@/components/navigation";
-import { TrainingSchedule } from "@/components/training-schedule";
-import { useToast } from "@/hooks/use-toast";
-import { Dumbbell, Clock, TrendingUp, Zap, Heart, Brain } from "lucide-react";
-import { apiRequest } from "@/lib/queryClient";
+import { useState, useEffect } from "react";
+import {
+  Play,
+  Trophy,
+  Zap,
+  Clock,
+  Star,
+  Target,
+  Activity,
+  Heart,
+  Brain,
+  Gauge,
+  Dumbbell,
+  Shield,
+  Users,
+  ArrowRight,
+  RefreshCw,
+  Award,
+} from "lucide-react";
+import { Button } from "../components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from "../components/ui/card";
+import { Badge } from "../components/ui/badge";
+import { Progress } from "../components/ui/progress";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "../components/ui/select";
 
-const trainingPrograms = [
+// Mock data for animals
+const mockAnimals = [
   {
-    type: "speed",
-    name: "Speed Training",
-    description: "Improve acceleration and top speed",
-    duration: 4,
-    cost: 150,
-    icon: Zap,
-    statImprovement: 5,
+    id: 1,
+    name: "Thunder Storm",
+    type: "Horse",
+    breed: "Thoroughbred",
+    level: 12,
+    energy: 85,
+    mood: 90,
+    bond: 75,
+    stats: {
+      speed: 78,
+      agility: 65,
+      stamina: 82,
+      intelligence: 70,
+      strength: 75,
+      discipline: 60,
+    },
+    image:
+      "https://images.unsplash.com/photo-1449824913935-59a10b8d2000?w=300&h=200&fit=crop",
   },
   {
-    type: "endurance",
-    name: "Endurance Training", 
-    description: "Build stamina and longevity",
-    duration: 6,
-    cost: 200,
-    icon: Heart,
-    statImprovement: 5,
-  },
-  {
-    type: "agility",
-    name: "Agility Training",
-    description: "Enhance maneuverability and reflexes", 
-    duration: 3,
-    cost: 120,
-    icon: TrendingUp,
-    statImprovement: 5,
-  },
-  {
-    type: "intelligence",
-    name: "Intelligence Training",
-    description: "Improve learning and problem-solving",
-    duration: 5,
-    cost: 180,
-    icon: Brain,
-    statImprovement: 5,
+    id: 2,
+    name: "Golden Max",
+    type: "Dog",
+    breed: "Golden Retriever",
+    level: 8,
+    energy: 92,
+    mood: 95,
+    bond: 88,
+    stats: {
+      speed: 60,
+      agility: 85,
+      stamina: 70,
+      intelligence: 90,
+      strength: 55,
+      discipline: 78,
+    },
+    image:
+      "https://images.unsplash.com/photo-1552053831-71594a27632d?w=300&h=200&fit=crop",
   },
 ];
 
-export default function Training() {
-  const [selectedAnimal, setSelectedAnimal] = useState<string>("");
-  const [selectedProgram, setSelectedProgram] = useState<string>("");
-  const { toast } = useToast();
-  const queryClient = useQueryClient();
+const trainingTypes = [
+  {
+    id: "speed",
+    name: "Speed Training",
+    icon: Zap,
+    color: "text-blue-600",
+    description: "Barrel Dash mini-game",
+  },
+  {
+    id: "agility",
+    name: "Agility Training",
+    icon: Target,
+    color: "text-green-600",
+    description: "Jump Grid Challenge",
+  },
+  {
+    id: "stamina",
+    name: "Stamina Training",
+    icon: Activity,
+    color: "text-orange-600",
+    description: "Trail Trek endurance",
+  },
+  {
+    id: "intelligence",
+    name: "Intelligence Training",
+    icon: Brain,
+    color: "text-purple-600",
+    description: "Puzzle solving",
+  },
+  {
+    id: "strength",
+    name: "Strength Training",
+    icon: Dumbbell,
+    color: "text-red-600",
+    description: "Resistance training",
+  },
+  {
+    id: "discipline",
+    name: "Discipline Training",
+    icon: Shield,
+    color: "text-amber-600",
+    description: "Obedience commands",
+  },
+];
 
-  const { data: animals = [], isLoading: animalsLoading } = useQuery({
-    queryKey: ['/api/animals'],
-  });
+// Barrel Dash Mini-Game Component
+function BarrelDashGame({
+  onComplete,
+}: {
+  onComplete: (score: number) => void;
+}) {
+  const [gameState, setGameState] = useState<"ready" | "playing" | "finished">(
+    "ready",
+  );
+  const [score, setScore] = useState(0);
+  const [timeLeft, setTimeLeft] = useState(30);
+  const [position, setPosition] = useState(50);
+  const [obstacles, setObstacles] = useState<number[]>([]);
 
-  const { data: activeSessions = [], isLoading: sessionsLoading } = useQuery({
-    queryKey: ['/api/training/active'],
-  });
+  useEffect(() => {
+    if (gameState === "playing") {
+      const timer = setInterval(() => {
+        setTimeLeft((prev) => {
+          if (prev <= 1) {
+            setGameState("finished");
+            onComplete(score);
+            return 0;
+          }
+          return prev - 1;
+        });
+      }, 1000);
 
-  const trainingMutation = useMutation({
-    mutationFn: async (trainingData: any) => {
-      const response = await apiRequest('POST', '/api/training', trainingData);
-      return response.json();
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['/api/training/active'] });
-      queryClient.invalidateQueries({ queryKey: ['/api/animals'] });
-      toast({
-        title: "Training Started",
-        description: "Your animal has begun training",
-      });
-      setSelectedAnimal("");
-      setSelectedProgram("");
-    },
-    onError: (error) => {
-      toast({
-        title: "Training Failed",
-        description: error.message,
-        variant: "destructive",
-      });
-    },
-  });
+      const obstacleTimer = setInterval(() => {
+        setObstacles((prev) => [...prev, Math.random() * 80 + 10]);
+      }, 2000);
 
-  const availableAnimals = animals.filter((animal: any) => {
-    // Check if animal is not currently in training
-    const isInTraining = activeSessions.some((session: any) => session.animalId === animal.id);
-    return !isInTraining && animal.health >= 50; // Only healthy animals can train
-  });
-
-  const selectedAnimalData = animals.find((a: any) => a.id.toString() === selectedAnimal);
-  const selectedProgramData = trainingPrograms.find(p => p.type === selectedProgram);
-
-  const handleStartTraining = () => {
-    if (!selectedAnimal || !selectedProgram) {
-      toast({
-        title: "Selection Required",
-        description: "Please select both an animal and training program",
-        variant: "destructive",
-      });
-      return;
+      return () => {
+        clearInterval(timer);
+        clearInterval(obstacleTimer);
+      };
     }
+  }, [gameState, score, onComplete]);
 
-    if (!selectedAnimalData || !selectedProgramData) return;
+  const moveLeft = () => position > 10 && setPosition((prev) => prev - 10);
+  const moveRight = () => position < 90 && setPosition((prev) => prev + 10);
 
-    const startTime = new Date();
-    const endTime = new Date(startTime.getTime() + selectedProgramData.duration * 60 * 60 * 1000);
-
-    trainingMutation.mutate({
-      animalId: parseInt(selectedAnimal),
-      trainingType: selectedProgram,
-      duration: selectedProgramData.duration * 60, // Convert to minutes
-      cost: selectedProgramData.cost,
-      startTime: startTime.toISOString(),
-      endTime: endTime.toISOString(),
-      statImprovement: selectedProgramData.statImprovement,
-    });
+  const handleKeyPress = (e: React.KeyboardEvent) => {
+    if (e.key === "ArrowLeft") moveLeft();
+    if (e.key === "ArrowRight") moveRight();
   };
 
-  if (animalsLoading || sessionsLoading) {
+  useEffect(() => {
+    const checkCollisions = () => {
+      obstacles.forEach((obstaclePos, index) => {
+        if (Math.abs(obstaclePos - position) < 8) {
+          setScore((prev) => prev + 10);
+          setObstacles((prev) => prev.filter((_, i) => i !== index));
+        }
+      });
+    };
+    checkCollisions();
+  }, [position, obstacles]);
+
+  if (gameState === "ready") {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-[hsl(45,50%,96%)] to-[hsl(25,30%,85%)]">
-        <Navigation />
-        <div className="max-w-7xl mx-auto p-6">
-          <div className="animate-pulse space-y-4">
-            <div className="h-8 bg-[hsl(25,30%,80%)] rounded"></div>
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-              <div className="h-96 bg-[hsl(25,30%,80%)] rounded-xl"></div>
-              <div className="h-96 bg-[hsl(25,30%,80%)] rounded-xl"></div>
-            </div>
-          </div>
+      <div className="text-center p-8 bg-amber-50/80 rounded-lg border-2 border-amber-200">
+        <Target className="w-16 h-16 text-amber-600 mx-auto mb-4" />
+        <h3 className="text-xl font-bold text-amber-900 mb-2">Barrel Dash</h3>
+        <p className="text-amber-700 mb-6">
+          Navigate around barrels to improve speed! Use arrow keys to move.
+        </p>
+        <Button
+          onClick={() => setGameState("playing")}
+          className="bg-amber-600 hover:bg-amber-700"
+        >
+          <Play className="w-4 h-4 mr-2" />
+          Start Training
+        </Button>
+      </div>
+    );
+  }
+
+  if (gameState === "finished") {
+    const stars = score > 100 ? 3 : score > 50 ? 2 : 1;
+    return (
+      <div className="text-center p-8 bg-green-50/80 rounded-lg border-2 border-green-200">
+        <Trophy className="w-16 h-16 text-green-600 mx-auto mb-4" />
+        <h3 className="text-xl font-bold text-green-900 mb-2">
+          Training Complete!
+        </h3>
+        <div className="flex justify-center gap-1 mb-4">
+          {[...Array(3)].map((_, i) => (
+            <Star
+              key={i}
+              className={`w-6 h-6 ${i < stars ? "text-amber-400 fill-current" : "text-gray-300"}`}
+            />
+          ))}
+        </div>
+        <p className="text-green-700 mb-4">Score: {score} points</p>
+        <div className="text-sm text-green-600">
+          +{Math.floor(score / 10)} Speed XP • +{stars} Training Points
         </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[hsl(45,50%,96%)] to-[hsl(25,30%,85%)]">
-      <Navigation />
-      
-      <div className="max-w-7xl mx-auto p-6">
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold text-[hsl(25,60%,20%)] mb-2">Training Center</h1>
-          <p className="text-[hsl(25,45%,35%)]">
-            Improve your animals' abilities through specialized training programs
-          </p>
+    <div
+      className="bg-green-100/80 rounded-lg border-2 border-green-200 p-6"
+      onKeyDown={handleKeyPress}
+      tabIndex={0}
+    >
+      <div className="flex justify-between items-center mb-4">
+        <div className="flex items-center gap-2">
+          <Clock className="w-4 h-4 text-green-600" />
+          <span className="font-medium text-green-800">Time: {timeLeft}s</span>
+        </div>
+        <div className="flex items-center gap-2">
+          <Trophy className="w-4 h-4 text-amber-600" />
+          <span className="font-medium text-amber-800">Score: {score}</span>
+        </div>
+      </div>
+
+      {/* Game Area */}
+      <div className="relative h-64 bg-green-200/50 rounded-lg border-2 border-green-300 overflow-hidden">
+        {/* Track */}
+        <div className="absolute inset-x-0 bottom-0 h-16 bg-amber-200/50 border-t-2 border-amber-300" />
+
+        {/* Horse/Dog */}
+        <div
+          className="absolute bottom-4 w-8 h-8 bg-amber-600 rounded-full transition-all duration-200 flex items-center justify-center"
+          style={{ left: `${position}%` }}
+        >
+          🐎
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
-          {/* Training Scheduler */}
-          <Card className="bg-[hsl(45,50%,96%)] border-2 border-[hsl(25,30%,70%)] shadow-lg">
-            <CardHeader>
-              <CardTitle className="text-[hsl(25,60%,20%)] flex items-center">
-                <Dumbbell className="w-5 h-5 mr-2" />
-                Schedule Training
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-6">
+        {/* Obstacles */}
+        {obstacles.map((obstaclePos, index) => (
+          <div
+            key={index}
+            className="absolute bottom-20 w-6 h-12 bg-amber-800 rounded transition-all duration-1000"
+            style={{ left: `${obstaclePos}%` }}
+          >
+            🛢️
+          </div>
+        ))}
+      </div>
+
+      <div className="mt-4 flex justify-center gap-4">
+        <Button
+          onClick={moveLeft}
+          variant="outline"
+          className="border-green-300"
+        >
+          ← Move Left
+        </Button>
+        <Button
+          onClick={moveRight}
+          variant="outline"
+          className="border-green-300"
+        >
+          Move Right →
+        </Button>
+      </div>
+    </div>
+  );
+}
+
+// Stat Bar Component
+function StatBar({
+  label,
+  value,
+  maxValue = 100,
+  icon: Icon,
+  color,
+}: {
+  label: string;
+  value: number;
+  maxValue?: number;
+  icon: any;
+  color: string;
+}) {
+  const percentage = (value / maxValue) * 100;
+
+  return (
+    <div className="space-y-2">
+      <div className="flex items-center justify-between">
+        <div className="flex items-center gap-2">
+          <Icon className={`w-4 h-4 ${color}`} />
+          <span className="text-sm font-medium text-amber-900">{label}</span>
+        </div>
+        <span className="text-sm font-bold text-amber-800">
+          {value}/{maxValue}
+        </span>
+      </div>
+      <Progress value={percentage} className="h-2 bg-amber-100" />
+    </div>
+  );
+}
+
+export function Training() {
+  const [selectedAnimal, setSelectedAnimal] = useState(mockAnimals[0]);
+  const [selectedTraining, setSelectedTraining] = useState<string | null>(null);
+  const [showGame, setShowGame] = useState(false);
+  const [trainingCooldown, setTrainingCooldown] = useState(0);
+
+  const handleTrainingComplete = (score: number) => {
+    setShowGame(false);
+    setSelectedTraining(null);
+    setTrainingCooldown(120); // 2 minutes cooldown
+
+    // Start cooldown timer
+    const timer = setInterval(() => {
+      setTrainingCooldown((prev) => {
+        if (prev <= 1) {
+          clearInterval(timer);
+          return 0;
+        }
+        return prev - 1;
+      });
+    }, 1000);
+  };
+
+  const startTraining = (trainingType: string) => {
+    setSelectedTraining(trainingType);
+    setShowGame(true);
+  };
+
+  const canTrain = selectedAnimal.energy > 30 && trainingCooldown === 0;
+
+  return (
+    <div
+      className="min-h-screen p-6"
+      style={{
+        backgroundImage: `linear-gradient(rgba(139, 69, 19, 0.1), rgba(160, 82, 45, 0.1)), url('https://cdn.builder.io/api/v1/image/assets%2F587d1a381dc140a2b97537bd0994633f%2Fb964361c6e914269bf8363694e1fe4ca?format=webp&width=800')`,
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+        backgroundAttachment: "fixed",
+      }}
+    >
+      <div className="max-w-7xl mx-auto">
+        {/* Header */}
+        <div className="mb-8">
+          <div className="bg-amber-900/90 backdrop-blur-sm rounded-2xl border-2 border-amber-700/50 p-6 shadow-2xl">
+            <div className="flex items-center gap-4 mb-4">
+              <div className="w-12 h-12 bg-gradient-to-br from-amber-400 to-orange-500 rounded-xl flex items-center justify-center">
+                <Trophy className="w-7 h-7 text-white" />
+              </div>
               <div>
-                <label className="block text-sm font-medium text-[hsl(25,60%,35%)] mb-2">
+                <h1 className="font-display text-3xl font-bold text-amber-100">
+                  Training Center
+                </h1>
+                <p className="text-amber-200/80">
+                  Where champions are built through dedication and skill
+                </p>
+              </div>
+            </div>
+
+            {/* Trainer Level Progress */}
+            <div className="bg-amber-800/50 rounded-lg p-4 border border-amber-600/30">
+              <div className="flex items-center justify-between mb-2">
+                <span className="text-amber-200 font-medium">
+                  Trainer Level 8
+                </span>
+                <span className="text-amber-300 text-sm">2,340 / 3,000 XP</span>
+              </div>
+              <Progress value={78} className="h-2 bg-amber-700" />
+            </div>
+          </div>
+        </div>
+
+        <div className="grid lg:grid-cols-3 gap-8">
+          {/* Left Panel - Animal Selection */}
+          <div className="lg:col-span-1">
+            <Card className="bg-amber-900/90 backdrop-blur-sm border-2 border-amber-700/50 shadow-xl">
+              <CardHeader className="pb-4">
+                <CardTitle className="text-amber-100 flex items-center gap-2">
+                  <Heart className="w-5 h-5" />
                   Select Animal
-                </label>
-                <Select value={selectedAnimal} onValueChange={setSelectedAnimal}>
-                  <SelectTrigger className="border-[hsl(25,40%,60%)] focus:border-[hsl(25,60%,35%)]">
-                    <SelectValue placeholder="Choose animal to train" />
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <Select
+                  value={selectedAnimal.id.toString()}
+                  onValueChange={(value) => {
+                    const animal = mockAnimals.find(
+                      (a) => a.id === parseInt(value),
+                    );
+                    if (animal) setSelectedAnimal(animal);
+                  }}
+                >
+                  <SelectTrigger className="bg-amber-50/90 border-amber-600/50 text-amber-900">
+                    <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
-                    {availableAnimals.map((animal: any) => (
+                    {mockAnimals.map((animal) => (
                       <SelectItem key={animal.id} value={animal.id.toString()}>
-                        {animal.name} ({animal.breed}) - Health: {animal.health}%
+                        {animal.name} - {animal.breed}
                       </SelectItem>
                     ))}
                   </SelectContent>
                 </Select>
-                {availableAnimals.length === 0 && (
-                  <p className="text-sm text-[hsl(0,70%,50%)] mt-1">
-                    No animals available for training. Animals in training or with low health cannot train.
-                  </p>
-                )}
-              </div>
 
-              <div>
-                <label className="block text-sm font-medium text-[hsl(25,60%,35%)] mb-2">
-                  Training Program
-                </label>
-                <Select value={selectedProgram} onValueChange={setSelectedProgram}>
-                  <SelectTrigger className="border-[hsl(25,40%,60%)] focus:border-[hsl(25,60%,35%)]">
-                    <SelectValue placeholder="Choose training type" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {trainingPrograms.map((program) => (
-                      <SelectItem key={program.type} value={program.type}>
-                        {program.name} - {program.duration}h (${program.cost})
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
-
-              {selectedAnimalData && selectedProgramData && (
-                <div className="space-y-4 p-4 bg-[hsl(25,30%,85%)] rounded-lg">
-                  <div className="flex justify-between items-center">
-                    <span className="text-[hsl(25,60%,35%)]">Current {selectedProgram}</span>
-                    <span className="text-[hsl(25,50%,40%)] font-semibold">
-                      {selectedAnimalData[selectedProgram as keyof typeof selectedAnimalData] || 0}%
-                    </span>
-                  </div>
-                  
-                  <div className="flex justify-between items-center">
-                    <span className="text-[hsl(25,60%,35%)]">Expected Improvement</span>
-                    <span className="text-green-600 font-semibold">
-                      +{selectedProgramData.statImprovement}%
-                    </span>
+                {/* Animal Display */}
+                <div className="bg-amber-800/50 rounded-lg p-4 border border-amber-600/30">
+                  <img
+                    src={selectedAnimal.image}
+                    alt={selectedAnimal.name}
+                    className="w-full h-32 object-cover rounded-lg mb-3"
+                  />
+                  <h3 className="font-semibold text-amber-100 mb-2">
+                    {selectedAnimal.name}
+                  </h3>
+                  <div className="grid grid-cols-2 gap-2 text-sm">
+                    <div className="flex items-center gap-1">
+                      <Zap className="w-3 h-3 text-yellow-400" />
+                      <span className="text-amber-200">
+                        Level {selectedAnimal.level}
+                      </span>
+                    </div>
+                    <div className="flex items-center gap-1">
+                      <Activity className="w-3 h-3 text-green-400" />
+                      <span className="text-amber-200">
+                        Energy {selectedAnimal.energy}%
+                      </span>
+                    </div>
                   </div>
 
-                  <div className="flex justify-between items-center">
-                    <span className="text-[hsl(25,60%,35%)]">Duration</span>
-                    <span className="text-[hsl(25,50%,40%)] font-semibold">
-                      {selectedProgramData.duration} hours
-                    </span>
+                  {/* Status Bars */}
+                  <div className="mt-4 space-y-2">
+                    <StatBar
+                      label="Energy"
+                      value={selectedAnimal.energy}
+                      icon={Activity}
+                      color="text-green-500"
+                    />
+                    <StatBar
+                      label="Mood"
+                      value={selectedAnimal.mood}
+                      icon={Heart}
+                      color="text-pink-500"
+                    />
+                    <StatBar
+                      label="Bond"
+                      value={selectedAnimal.bond}
+                      icon={Users}
+                      color="text-blue-500"
+                    />
                   </div>
 
-                  <div className="flex justify-between items-center">
-                    <span className="text-[hsl(25,60%,35%)]">Cost</span>
-                    <span className="text-[hsl(25,50%,40%)] font-semibold">
-                      ${selectedProgramData.cost}
-                    </span>
+                  {/* Training Cooldown */}
+                  {trainingCooldown > 0 && (
+                    <div className="mt-4 p-3 bg-orange-900/50 rounded-lg border border-orange-600/30">
+                      <div className="flex items-center gap-2 text-orange-200">
+                        <Clock className="w-4 h-4" />
+                        <span className="text-sm">
+                          Cooldown: {Math.floor(trainingCooldown / 60)}:
+                          {(trainingCooldown % 60).toString().padStart(2, "0")}
+                        </span>
+                      </div>
+                    </div>
+                  )}
+                </div>
+
+                {/* Current Stats */}
+                <div className="bg-amber-800/50 rounded-lg p-4 border border-amber-600/30">
+                  <h4 className="font-medium text-amber-200 mb-3">
+                    Current Stats
+                  </h4>
+                  <div className="space-y-2">
+                    <StatBar
+                      label="Speed"
+                      value={selectedAnimal.stats.speed}
+                      icon={Zap}
+                      color="text-blue-500"
+                    />
+                    <StatBar
+                      label="Agility"
+                      value={selectedAnimal.stats.agility}
+                      icon={Target}
+                      color="text-green-500"
+                    />
+                    <StatBar
+                      label="Stamina"
+                      value={selectedAnimal.stats.stamina}
+                      icon={Activity}
+                      color="text-orange-500"
+                    />
+                    <StatBar
+                      label="Intelligence"
+                      value={selectedAnimal.stats.intelligence}
+                      icon={Brain}
+                      color="text-purple-500"
+                    />
+                    <StatBar
+                      label="Strength"
+                      value={selectedAnimal.stats.strength}
+                      icon={Dumbbell}
+                      color="text-red-500"
+                    />
+                    <StatBar
+                      label="Discipline"
+                      value={selectedAnimal.stats.discipline}
+                      icon={Shield}
+                      color="text-amber-500"
+                    />
                   </div>
                 </div>
-              )}
+              </CardContent>
+            </Card>
+          </div>
 
-              <Button 
-                onClick={handleStartTraining}
-                disabled={!selectedAnimal || !selectedProgram || trainingMutation.isPending}
-                className="w-full bg-gradient-to-r from-[hsl(25,60%,35%)] to-[hsl(25,50%,40%)] text-[hsl(45,50%,96%)] hover:from-[hsl(25,50%,40%)] hover:to-[hsl(25,60%,35%)]"
-              >
-                {trainingMutation.isPending ? "Starting Training..." : "Start Training"}
-              </Button>
-            </CardContent>
-          </Card>
-
-          {/* Training Programs */}
-          <Card className="bg-[hsl(45,50%,96%)] border-2 border-[hsl(25,30%,70%)] shadow-lg">
-            <CardHeader>
-              <CardTitle className="text-[hsl(25,60%,20%)] flex items-center">
-                <TrendingUp className="w-5 h-5 mr-2" />
-                Training Programs
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              {trainingPrograms.map((program) => {
-                const Icon = program.icon;
-                return (
-                  <div 
-                    key={program.type}
-                    className={`p-4 border-2 rounded-lg cursor-pointer transition-colors ${
-                      selectedProgram === program.type 
-                        ? 'border-[hsl(25,60%,35%)] bg-[hsl(25,30%,85%)]' 
-                        : 'border-[hsl(25,40%,60%)] hover:border-[hsl(25,50%,50%)]'
-                    }`}
-                    onClick={() => setSelectedProgram(program.type)}
-                  >
-                    <div className="flex items-start space-x-3">
-                      <Icon className="w-6 h-6 text-[hsl(25,60%,35%)] mt-1" />
-                      <div className="flex-1">
-                        <h4 className="font-bold text-[hsl(25,60%,20%)]">{program.name}</h4>
-                        <p className="text-sm text-[hsl(25,45%,35%)] mb-2">{program.description}</p>
-                        <div className="flex justify-between text-xs text-[hsl(25,60%,35%)]">
-                          <span>Duration: {program.duration} hours</span>
-                          <span>Cost: ${program.cost}</span>
-                          <span>Improvement: +{program.statImprovement}%</span>
-                        </div>
-                      </div>
+          {/* Right Panel - Training Modules */}
+          <div className="lg:col-span-2">
+            <Card className="bg-amber-900/90 backdrop-blur-sm border-2 border-amber-700/50 shadow-xl">
+              <CardHeader>
+                <CardTitle className="text-amber-100 flex items-center gap-2">
+                  <Target className="w-5 h-5" />
+                  Training Modules
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                {showGame && selectedTraining ? (
+                  <div className="space-y-4">
+                    <div className="flex items-center justify-between">
+                      <h3 className="text-lg font-semibold text-amber-200">
+                        {
+                          trainingTypes.find((t) => t.id === selectedTraining)
+                            ?.name
+                        }
+                      </h3>
+                      <Button
+                        variant="outline"
+                        onClick={() => setShowGame(false)}
+                        className="border-amber-600/50 text-amber-200"
+                      >
+                        Exit Training
+                      </Button>
                     </div>
+
+                    {selectedTraining === "speed" && (
+                      <BarrelDashGame onComplete={handleTrainingComplete} />
+                    )}
                   </div>
-                );
-              })}
-            </CardContent>
-          </Card>
-        </div>
+                ) : (
+                  <div className="grid md:grid-cols-2 gap-4">
+                    {trainingTypes.map((training) => (
+                      <Card
+                        key={training.id}
+                        className="bg-amber-800/50 border-amber-600/30 hover:bg-amber-700/50 transition-colors"
+                      >
+                        <CardContent className="p-4">
+                          <div className="flex items-center gap-3 mb-3">
+                            <div
+                              className={`w-10 h-10 rounded-lg bg-amber-700/50 flex items-center justify-center`}
+                            >
+                              <training.icon
+                                className={`w-5 h-5 ${training.color}`}
+                              />
+                            </div>
+                            <div>
+                              <h3 className="font-semibold text-amber-100">
+                                {training.name}
+                              </h3>
+                              <p className="text-xs text-amber-200/70">
+                                {training.description}
+                              </p>
+                            </div>
+                          </div>
 
-        {/* Active Training Sessions */}
-        <Card className="bg-[hsl(45,50%,96%)] border-2 border-[hsl(25,30%,70%)] shadow-lg">
-          <CardHeader>
-            <CardTitle className="text-[hsl(25,60%,20%)] flex items-center">
-              <Clock className="w-5 h-5 mr-2" />
-              Active Training Sessions
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            {activeSessions.length === 0 ? (
-              <div className="text-center py-8">
-                <Dumbbell className="w-16 h-16 text-[hsl(25,40%,60%)] mx-auto mb-4" />
-                <h3 className="text-xl font-bold text-[hsl(25,60%,20%)] mb-2">No active training</h3>
-                <p className="text-[hsl(25,45%,35%)]">Schedule training sessions to improve your animals' abilities</p>
-              </div>
-            ) : (
-              <div className="space-y-4">
-                {activeSessions.map((session: any) => {
-                  const endTime = new Date(session.endTime);
-                  const now = new Date();
-                  const totalDuration = session.duration * 60 * 1000; // Convert to milliseconds
-                  const elapsed = now.getTime() - new Date(session.startTime).getTime();
-                  const progress = Math.min(100, Math.max(0, (elapsed / totalDuration) * 100));
-                  const timeRemaining = Math.max(0, Math.ceil((endTime.getTime() - now.getTime()) / (1000 * 60)));
-                  
-                  return (
-                    <div key={session.id} className="p-4 border-2 border-[hsl(25,30%,70%)] rounded-lg">
-                      <div className="flex justify-between items-start mb-3">
-                        <div>
-                          <h4 className="font-bold text-[hsl(25,60%,20%)]">
-                            {session.animal?.name}
-                          </h4>
-                          <p className="text-sm text-[hsl(25,45%,35%)] capitalize">
-                            {session.trainingType} Training
-                          </p>
+                          <div className="mb-4">
+                            <div className="text-sm text-amber-200/80 mb-1">
+                              Current:{" "}
+                              {
+                                selectedAnimal.stats[
+                                  training.id as keyof typeof selectedAnimal.stats
+                                ]
+                              }
+                              /100
+                            </div>
+                            <Progress
+                              value={
+                                selectedAnimal.stats[
+                                  training.id as keyof typeof selectedAnimal.stats
+                                ]
+                              }
+                              className="h-2 bg-amber-700"
+                            />
+                          </div>
+
+                          <Button
+                            onClick={() => startTraining(training.id)}
+                            disabled={!canTrain}
+                            className="w-full bg-amber-600 hover:bg-amber-700 disabled:opacity-50"
+                          >
+                            {!canTrain ? (
+                              <>
+                                <Clock className="w-4 h-4 mr-2" />
+                                {selectedAnimal.energy <= 30
+                                  ? "Low Energy"
+                                  : "Cooldown"}
+                              </>
+                            ) : (
+                              <>
+                                <Play className="w-4 h-4 mr-2" />
+                                Start Training
+                              </>
+                            )}
+                          </Button>
+                        </CardContent>
+                      </Card>
+                    ))}
+                  </div>
+                )}
+              </CardContent>
+            </Card>
+
+            {/* Training History & Achievements */}
+            <Card className="mt-6 bg-amber-900/90 backdrop-blur-sm border-2 border-amber-700/50 shadow-xl">
+              <CardHeader>
+                <CardTitle className="text-amber-100 flex items-center gap-2">
+                  <Award className="w-5 h-5" />
+                  Recent Training Sessions
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-3">
+                  {[
+                    {
+                      training: "Speed Training",
+                      score: 95,
+                      stars: 3,
+                      time: "2 hours ago",
+                    },
+                    {
+                      training: "Agility Training",
+                      score: 78,
+                      stars: 2,
+                      time: "1 day ago",
+                    },
+                    {
+                      training: "Discipline Training",
+                      score: 82,
+                      stars: 2,
+                      time: "2 days ago",
+                    },
+                  ].map((session, index) => (
+                    <div
+                      key={index}
+                      className="flex items-center justify-between p-3 bg-amber-800/30 rounded-lg border border-amber-600/30"
+                    >
+                      <div>
+                        <div className="font-medium text-amber-200">
+                          {session.training}
                         </div>
-                        <Badge variant="secondary">
-                          {timeRemaining > 0 ? `${timeRemaining}m remaining` : "Complete!"}
-                        </Badge>
+                        <div className="text-sm text-amber-300/70">
+                          {session.time}
+                        </div>
                       </div>
-                      
-                      <div className="space-y-2">
-                        <div className="flex justify-between text-sm">
-                          <span className="text-[hsl(25,60%,35%)]">Progress</span>
-                          <span className="text-[hsl(25,50%,40%)] font-semibold">
-                            {progress.toFixed(0)}%
-                          </span>
+                      <div className="flex items-center gap-2">
+                        <div className="flex">
+                          {[...Array(3)].map((_, i) => (
+                            <Star
+                              key={i}
+                              className={`w-4 h-4 ${i < session.stars ? "text-amber-400 fill-current" : "text-amber-600"}`}
+                            />
+                          ))}
                         </div>
-                        <Progress 
-                          value={progress} 
-                          className="h-2"
-                        />
+                        <span className="text-amber-200 font-medium">
+                          {session.score}
+                        </span>
                       </div>
                     </div>
-                  );
-                })}
-              </div>
-            )}
-          </CardContent>
-        </Card>
+                  ))}
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+        </div>
       </div>
     </div>
   );
