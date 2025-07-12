@@ -419,3 +419,43 @@ export function breedHorses(sire: HorseTraits, dam: HorseTraits): HorseTraits {
     defects: inheritedDefects,
   });
 }
+
+// Generate horse using breed-specific data
+export function generateHorseFromBreed(
+  breedName?: string,
+  customTraits?: Partial<HorseTraits>,
+): HorseTraits {
+  const selectedBreedName =
+    breedName || HORSE_BREEDS[Math.floor(Math.random() * HORSE_BREEDS.length)];
+  const breedInfo = getBreedInfo(selectedBreedName);
+
+  if (!breedInfo) {
+    // Fallback to basic generation
+    return generateHorse(customTraits);
+  }
+
+  // Use breed-specific colors
+  const availableColors =
+    breedInfo.commonColors.length > 0 ? breedInfo.commonColors : BASE_COLORS;
+  const baseColor =
+    customTraits?.baseColor ||
+    availableColors[Math.floor(Math.random() * availableColors.length)];
+
+  // Height based on breed range
+  const height =
+    breedInfo.avgHeight.min +
+    Math.random() * (breedInfo.avgHeight.max - breedInfo.avgHeight.min);
+
+  // Age affects some breeds differently
+  const age =
+    customTraits?.age ??
+    1 + Math.floor(Math.random() * (breedInfo.lifespan.max - 5));
+
+  return generateHorse({
+    ...customTraits,
+    breed: selectedBreedName,
+    baseColor,
+    height,
+    age,
+  });
+}
