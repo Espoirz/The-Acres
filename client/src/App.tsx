@@ -14,6 +14,7 @@ import { Careers } from "./pages/careers";
 import { Shelter } from "./pages/shelter";
 import { Breeding } from "./pages/breeding";
 import { Minigames } from "./pages/minigames";
+import { WildCapture } from "./pages/wild-capture";
 import Landing from "./pages/landing";
 import LoginPreview from "./pages/login-preview";
 import NotFound from "./pages/not-found";
@@ -139,10 +140,10 @@ function Router() {
             <Route path="/breeding" component={Breeding} />
             <Route path="/careers" component={Careers} />
             <Route path="/shelter" component={Shelter} />
+            <Route path="/wild-capture" component={WildCapture} />
             <Route path="/minigames" component={Minigames} />
             <Route path="/competitions" component={Competitions} />
             <Route path="/marketplace" component={Marketplace} />
-            <Route path="/explore" component={Explore} />
             <Route path="/premium" component={Premium} />
             <Route path="/genetics" component={Genetics} />
             <Route path="/profile" component={Profile} />
