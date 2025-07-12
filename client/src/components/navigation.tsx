@@ -12,6 +12,12 @@ import {
   Menu,
   X,
   Sparkles,
+  Target,
+  Briefcase,
+  Shield,
+  Dna,
+  Gamepad2,
+  Stethoscope,
 } from "lucide-react";
 import { Button } from "./ui/button";
 import { cn } from "../lib/utils";
@@ -19,10 +25,14 @@ import { cn } from "../lib/utils";
 const navigationItems = [
   { name: "Home", href: "/", icon: Home },
   { name: "My Animals", href: "/animals", icon: Heart },
-  { name: "Breeding", href: "/breeding", icon: Users },
+  { name: "Training Center", href: "/training", icon: Target },
+  { name: "Breeding Lab", href: "/breeding", icon: Dna },
+  { name: "Career Center", href: "/careers", icon: Briefcase },
+  { name: "Shelter & Rescue", href: "/shelter", icon: Shield },
+  { name: "Mini-Games", href: "/minigames", icon: Gamepad2 },
   { name: "Competitions", href: "/competitions", icon: Trophy },
   { name: "Marketplace", href: "/marketplace", icon: ShoppingBag },
-  { name: "Explore", href: "/explore", icon: Map },
+  { name: "Explore Biomes", href: "/explore", icon: Map },
 ];
 
 const premiumItems = [
@@ -126,7 +136,7 @@ export function Navigation() {
           </div>
 
           {/* Main navigation */}
-          <div className="flex-1 px-4 py-6 space-y-1">
+          <div className="flex-1 px-4 py-6 space-y-1 overflow-y-auto">
             <div className="space-y-1">
               {navigationItems.map((item) => (
                 <NavLink key={item.href} href={item.href} icon={item.icon}>
