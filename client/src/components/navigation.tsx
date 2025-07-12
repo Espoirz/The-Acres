@@ -29,10 +29,10 @@ const navigationItems = [
   { name: "Breeding Lab", href: "/breeding", icon: Dna },
   { name: "Career Center", href: "/careers", icon: Briefcase },
   { name: "Shelter & Rescue", href: "/shelter", icon: Shield },
+  { name: "Wild Capture", href: "/wild-capture", icon: Map },
   { name: "Mini-Games", href: "/minigames", icon: Gamepad2 },
   { name: "Competitions", href: "/competitions", icon: Trophy },
   { name: "Marketplace", href: "/marketplace", icon: ShoppingBag },
-  { name: "Explore Biomes", href: "/explore", icon: Map },
 ];
 
 const premiumItems = [
