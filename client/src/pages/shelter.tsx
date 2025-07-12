@@ -6,6 +6,7 @@ import {
   Coins,
   Star,
   Award,
+  Trophy,
   Stethoscope,
   Bandage,
   Activity,
