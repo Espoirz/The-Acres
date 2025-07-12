@@ -8,33 +8,33 @@ import {
 } from "../components/ui/card";
 import { Badge } from "../components/ui/badge";
 import {
-  Sparkles,
+  Horse,
   Palette,
-  Camera,
-  Download,
   Save,
   Share,
   RotateCcw,
-  Wand2,
-  Dna,
+  Shuffle,
+  Heart,
+  AlertTriangle,
 } from "lucide-react";
-import { HorseGenerator } from "../components/horse-generator";
-import { HorseGenetics, HORSE_BREEDS } from "../lib/horse-genetics";
+import { SimpleHorseGenerator } from "../components/simple-horse-generator";
+import {
+  HorseTraits,
+  generateColorDescription,
+  generateMarkingsDescription,
+} from "../lib/simple-horse-generator";
 
 export function HorseGeneratorPage() {
   const [savedHorses, setSavedHorses] = useState<
     Array<{
-      horse: HorseGenetics;
-      images: string[];
+      horse: HorseTraits;
       savedAt: Date;
     }>
   >([]);
-  const [selectedBreed, setSelectedBreed] = useState<string>("");
 
-  const handleHorseGenerated = (horse: HorseGenetics, images: string[]) => {
+  const handleHorseGenerated = (horse: HorseTraits) => {
     const newEntry = {
       horse,
-      images,
       savedAt: new Date(),
     };
     setSavedHorses((prev) => [newEntry, ...prev.slice(0, 9)]); // Keep last 10
@@ -47,71 +47,37 @@ export function HorseGeneratorPage() {
         <div className="max-w-7xl mx-auto px-4">
           <div className="text-center mb-8">
             <div className="inline-flex items-center gap-2 bg-primary/10 text-primary px-4 py-2 rounded-full text-sm font-medium mb-4">
-              <Wand2 className="w-4 h-4" />
-              AI-Powered Generation
+              <Shuffle className="w-4 h-4" />
+              Realistic Horse Traits
             </div>
 
             <h1 className="font-display text-5xl lg:text-6xl font-bold mb-6">
-              <span className="text-gradient">AI Horse</span> Generator
+              <span className="text-gradient">Horse</span> Generator
             </h1>
 
             <p className="text-xl text-muted-foreground max-w-3xl mx-auto mb-8">
-              Create stunning, genetically accurate horses using advanced AI.
-              Each horse is generated with realistic genetics, detailed
-              markings, and multiple image variations.
+              Generate realistic horses with authentic traits, markings, colors,
+              and genetic conditions. Each horse is unique with detailed
+              characteristics based on real horse genetics.
             </p>
 
             <div className="flex flex-wrap justify-center gap-4 mb-8">
               <Badge variant="secondary" className="text-sm px-3 py-1">
-                <Dna className="w-3 h-3 mr-1" />
-                Real Genetics
-              </Badge>
-              <Badge variant="secondary" className="text-sm px-3 py-1">
                 <Palette className="w-3 h-3 mr-1" />
-                Color Accuracy
+                Realistic Colors
               </Badge>
               <Badge variant="secondary" className="text-sm px-3 py-1">
-                <Camera className="w-3 h-3 mr-1" />
-                Multiple Angles
+                <Heart className="w-3 h-3 mr-1" />
+                Authentic Markings
               </Badge>
               <Badge variant="secondary" className="text-sm px-3 py-1">
-                <Sparkles className="w-3 h-3 mr-1" />
-                AI Enhanced
+                <AlertTriangle className="w-3 h-3 mr-1" />
+                Health Conditions
               </Badge>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Breed Selection */}
-      <section className="py-8 bg-muted/30">
-        <div className="max-w-7xl mx-auto px-4">
-          <div className="flex flex-col lg:flex-row gap-4 items-center justify-between">
-            <div>
-              <h3 className="font-semibold text-lg mb-1">Choose a Breed</h3>
-              <p className="text-muted-foreground text-sm">
-                Select a specific breed or leave blank for random generation
-              </p>
-            </div>
-
-            <div className="flex gap-2">
-              <select
-                value={selectedBreed}
-                onChange={(e) => setSelectedBreed(e.target.value)}
-                className="bg-background border border-border rounded-lg px-4 py-2 min-w-48"
-              >
-                <option value="">Random Breed</option>
-                {HORSE_BREEDS.map((breed) => (
-                  <option key={breed} value={breed}>
-                    {breed}
-                  </option>
-                ))}
-              </select>
-
-              <Button variant="outline" onClick={() => setSelectedBreed("")}>
-                <RotateCcw className="w-4 h-4 mr-2" />
-                Clear
-              </Button>
+              <Badge variant="secondary" className="text-sm px-3 py-1">
+                <Horse className="w-3 h-3 mr-1" />
+                20+ Breeds
+              </Badge>
             </div>
           </div>
         </div>
@@ -120,10 +86,7 @@ export function HorseGeneratorPage() {
       {/* Main Generator */}
       <section className="py-12">
         <div className="max-w-7xl mx-auto px-4">
-          <HorseGenerator
-            onHorseGenerated={handleHorseGenerated}
-            initialBreed={selectedBreed || undefined}
-          />
+          <SimpleHorseGenerator onHorseGenerated={handleHorseGenerated} />
         </div>
       </section>
 
@@ -150,39 +113,64 @@ export function HorseGeneratorPage() {
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
               {savedHorses.map((entry, index) => (
                 <Card key={index} className="overflow-hidden">
-                  <div className="aspect-square bg-muted">
-                    {entry.images[0] ? (
-                      <img
-                        src={entry.images[0]}
-                        alt={entry.horse.description}
-                        className="w-full h-full object-cover"
-                        onError={(e) => {
-                          const target = e.target as HTMLImageElement;
-                          target.src = `https://via.placeholder.com/400x400/d4b996/8b4513?text=${encodeURIComponent(entry.horse.physical.breed)}`;
-                        }}
-                      />
-                    ) : (
-                      <div className="w-full h-full flex items-center justify-center">
-                        <Camera className="w-12 h-12 text-muted-foreground" />
+                  <CardHeader className="pb-3">
+                    <div className="flex items-center justify-between">
+                      <h3 className="font-semibold text-lg">
+                        {entry.horse.name}
+                      </h3>
+                      {entry.horse.defects.length > 0 && (
+                        <Badge variant="destructive" className="text-xs">
+                          <AlertTriangle className="w-3 h-3 mr-1" />
+                          {entry.horse.defects.length} condition
+                          {entry.horse.defects.length !== 1 ? "s" : ""}
+                        </Badge>
+                      )}
+                    </div>
+                    <div className="text-sm text-muted-foreground">
+                      {entry.horse.age < 1
+                        ? `${Math.round(entry.horse.age * 12)} months`
+                        : `${Math.floor(entry.horse.age)} years`}{" "}
+                      • {entry.horse.gender} • {entry.horse.breed}
+                    </div>
+                  </CardHeader>
+
+                  <CardContent className="space-y-3">
+                    <div className="text-sm">
+                      <div className="mb-2">
+                        <span className="font-medium">Color: </span>
+                        <span>{generateColorDescription(entry.horse)}</span>
                       </div>
-                    )}
-                  </div>
-
-                  <CardContent className="p-4">
-                    <h3 className="font-semibold mb-2 line-clamp-2">
-                      {entry.horse.description}
-                    </h3>
-
-                    <div className="flex items-center gap-2 mb-3">
-                      <Badge variant="outline" className="text-xs">
-                        {entry.horse.physical.breed}
-                      </Badge>
-                      <Badge variant="secondary" className="text-xs">
-                        {entry.horse.calculatedColor}
-                      </Badge>
+                      <div className="mb-2">
+                        <span className="font-medium">Markings: </span>
+                        <span className="text-muted-foreground">
+                          {generateMarkingsDescription(entry.horse)}
+                        </span>
+                      </div>
+                      <div className="mb-2">
+                        <span className="font-medium">Height: </span>
+                        <span>{entry.horse.height.toFixed(1)} hands</span>
+                      </div>
                     </div>
 
-                    <div className="flex gap-2">
+                    {/* Quick Stats */}
+                    <div className="grid grid-cols-2 gap-2 text-xs">
+                      <div>Health: {entry.horse.stats.health}%</div>
+                      <div>Energy: {entry.horse.stats.energy}%</div>
+                      <div>Mood: {entry.horse.stats.mood}%</div>
+                      <div>Level: {entry.horse.stats.level}</div>
+                    </div>
+
+                    {/* Defects Summary */}
+                    {entry.horse.defects.length > 0 && (
+                      <div className="text-xs">
+                        <span className="font-medium text-orange-600">
+                          Conditions:{" "}
+                        </span>
+                        {entry.horse.defects.map((d) => d.name).join(", ")}
+                      </div>
+                    )}
+
+                    <div className="flex gap-2 pt-2">
                       <Button size="sm" variant="outline" className="flex-1">
                         <Save className="w-3 h-3 mr-1" />
                         Save
@@ -190,9 +178,6 @@ export function HorseGeneratorPage() {
                       <Button size="sm" variant="outline" className="flex-1">
                         <Share className="w-3 h-3 mr-1" />
                         Share
-                      </Button>
-                      <Button size="sm" variant="outline">
-                        <Download className="w-3 h-3" />
                       </Button>
                     </div>
                   </CardContent>
@@ -208,51 +193,53 @@ export function HorseGeneratorPage() {
         <div className="max-w-7xl mx-auto px-4">
           <div className="text-center mb-12">
             <h2 className="font-display text-4xl font-bold mb-4">
-              Advanced <span className="text-gradient">AI Features</span>
+              Realistic <span className="text-gradient">Horse Traits</span>
             </h2>
             <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-              Our horse generator uses cutting-edge genetics simulation and AI
-              image generation
+              Generate horses with authentic characteristics based on real
+              equine genetics and biology
             </p>
           </div>
 
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
             <Card className="border-border hover:border-primary/50 transition-colors">
               <CardHeader>
-                <Dna className="w-8 h-8 text-primary mb-2" />
-                <CardTitle>Realistic Genetics</CardTitle>
+                <Palette className="w-8 h-8 text-primary mb-2" />
+                <CardTitle>Authentic Colors</CardTitle>
               </CardHeader>
               <CardContent>
                 <p className="text-muted-foreground">
-                  Based on real horse genetics including Extension, Agouti,
-                  Cream, Dun, and pattern genes. Each horse has accurate color
-                  predictions and inheritance patterns.
+                  Based on real horse genetics with base colors, dilutions, and
+                  patterns like bay, chestnut, palomino, dun, and appaloosa
+                  markings.
                 </p>
               </CardContent>
             </Card>
 
             <Card className="border-border hover:border-primary/50 transition-colors">
               <CardHeader>
-                <Camera className="w-8 h-8 text-emerald-500 mb-2" />
-                <CardTitle>Multiple Angles</CardTitle>
+                <Heart className="w-8 h-8 text-red-500 mb-2" />
+                <CardTitle>Detailed Markings</CardTitle>
               </CardHeader>
               <CardContent>
                 <p className="text-muted-foreground">
-                  Generate horses from different angles and poses including side
-                  profile, three-quarter view, portrait shots, and action poses.
+                  Realistic white markings including stars, blazes, socks,
+                  stockings, and complex patterns with proper inheritance
+                  probabilities.
                 </p>
               </CardContent>
             </Card>
 
             <Card className="border-border hover:border-primary/50 transition-colors">
               <CardHeader>
-                <Palette className="w-8 h-8 text-amber-500 mb-2" />
-                <CardTitle>Color Accuracy</CardTitle>
+                <AlertTriangle className="w-8 h-8 text-orange-500 mb-2" />
+                <CardTitle>Health Conditions</CardTitle>
               </CardHeader>
               <CardContent>
                 <p className="text-muted-foreground">
-                  Every dilution gene, white pattern, and marking is accurately
-                  represented in the generated images with scientific precision.
+                  Includes realistic genetic conditions and defects like
+                  clubfoot, parrot mouth, and roaring that affect care
+                  requirements and stats.
                 </p>
               </CardContent>
             </Card>
