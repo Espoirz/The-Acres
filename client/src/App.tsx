@@ -15,6 +15,7 @@ import { Shelter } from "./pages/shelter";
 import { Breeding } from "./pages/breeding";
 import { Minigames } from "./pages/minigames";
 import { WildCapture } from "./pages/wild-capture";
+import { HorseGeneratorPage } from "./pages/horse-generator";
 import Landing from "./pages/landing";
 import LoginPreview from "./pages/login-preview";
 import NotFound from "./pages/not-found";
@@ -136,6 +137,7 @@ function Router() {
           <Switch>
             <Route path="/" component={Home} />
             <Route path="/animals" component={Animals} />
+            <Route path="/horse-generator" component={HorseGeneratorPage} />
             <Route path="/training" component={Training} />
             <Route path="/breeding" component={Breeding} />
             <Route path="/careers" component={Careers} />
