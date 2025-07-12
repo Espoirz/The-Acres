@@ -5,8 +5,15 @@ import { Toaster } from "./components/ui/toaster";
 import { TooltipProvider } from "./components/ui/tooltip";
 import { useAuth } from "./hooks/useAuth";
 import { Navigation } from "./components/navigation";
+
+// Import all pages
 import { Home } from "./pages/home";
 import { Animals } from "./pages/animals";
+import { Training } from "./pages/training";
+import { Careers } from "./pages/careers";
+import { Shelter } from "./pages/shelter";
+import { Breeding } from "./pages/breeding";
+import { Minigames } from "./pages/minigames";
 import Landing from "./pages/landing";
 import LoginPreview from "./pages/login-preview";
 import NotFound from "./pages/not-found";
@@ -20,28 +27,34 @@ function PlaceholderPage({
   description: string;
 }) {
   return (
-    <div className="min-h-screen bg-background p-6">
+    <div
+      className="min-h-screen p-6"
+      style={{
+        backgroundImage: `linear-gradient(rgba(139, 69, 19, 0.1), rgba(160, 82, 45, 0.1)), url('https://cdn.builder.io/api/v1/image/assets%2F587d1a381dc140a2b97537bd0994633f%2Fb964361c6e914269bf8363694e1fe4ca?format=webp&width=800')`,
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+        backgroundAttachment: "fixed",
+      }}
+    >
       <div className="max-w-4xl mx-auto text-center py-20">
-        <h1 className="font-display text-4xl font-bold mb-4 text-gradient">
-          {title}
-        </h1>
-        <p className="text-xl text-muted-foreground mb-8">{description}</p>
-        <div className="text-sm text-muted-foreground">Coming soon...</div>
+        <div className="bg-amber-900/90 backdrop-blur-sm rounded-2xl border-2 border-amber-700/50 p-8 shadow-2xl">
+          <h1 className="font-display text-4xl font-bold mb-4 text-gradient">
+            {title}
+          </h1>
+          <p className="text-xl text-amber-200/80 mb-8">{description}</p>
+          <div className="text-sm text-amber-300/70">
+            This feature is coming soon! Use the navigation to explore other
+            areas of Victory Acres.
+          </div>
+        </div>
       </div>
     </div>
   );
 }
 
-const Breeding = () => (
-  <PlaceholderPage
-    title="Breeding Center"
-    description="Advanced breeding tools and genetic analysis for creating the perfect offspring."
-  />
-);
-
 const Competitions = () => (
   <PlaceholderPage
-    title="Competitions"
+    title="Competitions Arena"
     description="Compete in shows, races, and skill-based challenges to earn rewards and prestige."
   />
 );
@@ -96,10 +109,17 @@ function Router() {
   // Show loading state
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-background flex items-center justify-center">
-        <div className="text-center">
+      <div
+        className="min-h-screen bg-background flex items-center justify-center"
+        style={{
+          backgroundImage: `linear-gradient(rgba(139, 69, 19, 0.1), rgba(160, 82, 45, 0.1)), url('https://cdn.builder.io/api/v1/image/assets%2F587d1a381dc140a2b97537bd0994633f%2Fcb1338710a254c3db11369b05d3070f5?format=webp&width=800')`,
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+        }}
+      >
+        <div className="text-center bg-amber-900/90 backdrop-blur-sm rounded-2xl border-2 border-amber-700/50 p-8 shadow-2xl">
           <div className="w-16 h-16 bg-hero-gradient rounded-full animate-bounce mx-auto mb-4" />
-          <p className="text-muted-foreground">Loading Victory Acres...</p>
+          <p className="text-amber-200 text-lg">Loading Victory Acres...</p>
         </div>
       </div>
     );
@@ -115,7 +135,11 @@ function Router() {
           <Switch>
             <Route path="/" component={Home} />
             <Route path="/animals" component={Animals} />
+            <Route path="/training" component={Training} />
             <Route path="/breeding" component={Breeding} />
+            <Route path="/careers" component={Careers} />
+            <Route path="/shelter" component={Shelter} />
+            <Route path="/minigames" component={Minigames} />
             <Route path="/competitions" component={Competitions} />
             <Route path="/marketplace" component={Marketplace} />
             <Route path="/explore" component={Explore} />
