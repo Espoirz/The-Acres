@@ -8,7 +8,6 @@ import {
 } from "../components/ui/card";
 import { Badge } from "../components/ui/badge";
 import {
-  Horse,
   Palette,
   Save,
   Share,
