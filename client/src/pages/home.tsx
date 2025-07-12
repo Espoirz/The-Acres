@@ -3,7 +3,6 @@ import {
   Heart,
   Trophy,
   Users,
-  Sparkles,
   Crown,
   Map,
   Zap,
@@ -14,332 +13,692 @@ import {
   Award,
   Target,
   Palette,
+  TrendingUp,
+  Calendar,
+  MessageCircle,
+  Gem,
+  BarChart3,
+  Clock,
 } from "lucide-react";
 import { Button } from "../components/ui/button";
 import { Badge } from "../components/ui/badge";
+
+const quickStats = [
+  { label: "Total Horses", value: "24", icon: Heart, color: "text-red-500" },
+  {
+    label: "Competitions Won",
+    value: "12",
+    icon: Trophy,
+    color: "text-amber-500",
+  },
+  {
+    label: "Training Sessions",
+    value: "156",
+    icon: Target,
+    color: "text-green-500",
+  },
+  {
+    label: "Total Value",
+    value: "$45,250",
+    icon: Star,
+    color: "text-purple-500",
+  },
+];
+
+const recentActivity = [
+  {
+    time: "2 hours ago",
+    action: "Training completed",
+    horse: "Thunder Storm",
+    result: "+15 XP",
+    icon: Target,
+    color: "text-green-600",
+  },
+  {
+    time: "4 hours ago",
+    action: "Competition won",
+    horse: "Moonlight Dancer",
+    result: "1st Place",
+    icon: Trophy,
+    color: "text-amber-600",
+  },
+  {
+    time: "6 hours ago",
+    action: "New foal born",
+    horse: "Silver Belle",
+    result: "Healthy filly",
+    icon: Heart,
+    color: "text-pink-600",
+  },
+  {
+    time: "1 day ago",
+    action: "Horse purchased",
+    horse: "Storm Runner",
+    result: "$8,500",
+    icon: Star,
+    color: "text-blue-600",
+  },
+];
+
+const upcomingEvents = [
+  {
+    date: "Today 3:00 PM",
+    event: "Regional Dressage Championship",
+    horse: "Silver Belle",
+    status: "Registered",
+  },
+  {
+    date: "Tomorrow 10:00 AM",
+    event: "Endurance Training Session",
+    horse: "Moonlight Dancer",
+    status: "Scheduled",
+  },
+  {
+    date: "Wed 2:00 PM",
+    event: "Breeding Appointment",
+    horse: "Thunder Storm",
+    status: "Confirmed",
+  },
+];
 
 const features = [
   {
     icon: Heart,
     title: "Realistic Genetics",
     description:
-      "Breed horses and dogs with authentic color genetics including Ee Aa CrCr and LP/n patterns.",
+      "Experience authentic horse breeding with real genetic inheritance patterns and color variations.",
     gradient: "from-red-500 to-pink-500",
   },
   {
     icon: Star,
     title: "Premium Breeds",
     description:
-      "Discover and breed rare heritage breeds with unique characteristics and bloodlines.",
+      "Discover and breed rare heritage horses with unique characteristics and bloodlines.",
     gradient: "from-emerald-500 to-green-500",
   },
   {
     icon: Trophy,
     title: "Competitions & Shows",
     description:
-      "Compete in skill-based mini-games and prestigious shows to earn rewards and recognition.",
+      "Compete in prestigious horse shows and earn recognition for your breeding achievements.",
     gradient: "from-amber-500 to-yellow-500",
   },
   {
     icon: Map,
-    title: "Explore Wild Lands",
+    title: "Wild Capture",
     description:
-      "Journey through stunning landscapes to capture wild horses and discover rare breeds.",
+      "Explore stunning landscapes to capture wild horses and discover rare breeds.",
     gradient: "from-emerald-500 to-green-500",
   },
   {
     icon: Users,
-    title: "Social Gameplay",
+    title: "Community",
     description:
-      "Join clubs, participate in elections, and engage with a vibrant community of breeders.",
+      "Join a vibrant community of horse enthusiasts, share knowledge, and make friends.",
     gradient: "from-blue-500 to-cyan-500",
   },
   {
     icon: Palette,
-    title: "Beautiful AI Art",
+    title: "Horse Creator",
     description:
-      "Experience stunning AI-generated portraits of your horses and dogs with realistic detail.",
+      "Design your perfect horse with detailed customization options and breeding tools.",
     gradient: "from-indigo-500 to-purple-500",
   },
 ];
 
-const careers = [
-  {
-    name: "Trainer",
-    description:
-      "Master the art of animal training and unlock advanced coaching techniques.",
-    icon: Target,
-    color: "text-emerald-600",
-  },
-  {
-    name: "Veterinarian",
-    description:
-      "Heal and care for animals while researching genetic improvements.",
-    icon: Heart,
-    color: "text-red-600",
-  },
-  {
-    name: "Explorer",
-    description:
-      "Venture into wild biomes to discover rare breeds and hidden secrets.",
-    icon: Map,
-    color: "text-blue-600",
-  },
-];
-
-const stats = [
-  { label: "Active Players", value: "12,000+" },
-  { label: "Animals Bred", value: "500K+" },
-  { label: "Competitions Held", value: "2,500+" },
-  { label: "Breeds Available", value: "150+" },
-];
-
 export function Home() {
   return (
-    <div className="min-h-screen bg-background">
-      {/* Hero Section */}
-      <section className="relative overflow-hidden">
-        {/* Background image */}
-        <div
-          className="absolute inset-0 bg-cover bg-center bg-no-repeat opacity-80"
-          style={{
-            backgroundImage: `url('https://cdn.builder.io/api/v1/image/assets%2F587d1a381dc140a2b97537bd0994633f%2F622347a7fa194188bc4de713b8354a59?format=webp&width=800')`,
-          }}
-        />
-        <div className="absolute inset-0 bg-black/20" />
-
-        {/* Floating elements */}
-        <div className="absolute top-20 left-20 w-20 h-20 bg-amber/30 rounded-full blur-xl animate-float" />
-        <div
-          className="absolute top-40 right-32 w-16 h-16 bg-orange/30 rounded-full blur-xl animate-float"
-          style={{ animationDelay: "1s" }}
-        />
-        <div
-          className="absolute bottom-20 left-1/3 w-24 h-24 bg-yellow/30 rounded-full blur-xl animate-float"
-          style={{ animationDelay: "2s" }}
-        />
-
-        <div className="relative max-w-7xl mx-auto px-4 py-20 lg:py-32 z-10">
-          <div className="text-center max-w-4xl mx-auto">
-            {/* Badge */}
-            <Badge className="premium-badge mb-6">
-              <Crown className="w-3 h-3 mr-1" />
-              Now in Open Beta
+    <div
+      style={{ minHeight: "100vh", background: "var(--background-primary)" }}
+    >
+      {/* Hero Dashboard */}
+      <section
+        style={{
+          background:
+            "linear-gradient(135deg, var(--primary-green) 0%, var(--primary-green-light) 100%)",
+          color: "white",
+          padding: "2rem 0",
+        }}
+      >
+        <div className="horse-sim-container">
+          <div style={{ textAlign: "center", marginBottom: "2rem" }}>
+            <Badge
+              style={{
+                background: "rgba(255,255,255,0.2)",
+                color: "white",
+                padding: "0.5rem 1rem",
+                borderRadius: "20px",
+                marginBottom: "1rem",
+                display: "inline-flex",
+                alignItems: "center",
+                gap: "0.5rem",
+              }}
+            >
+              <Crown className="w-4 h-4" />
+              Welcome back, Alex!
             </Badge>
 
-            {/* Main headline */}
-            <h1 className="font-display text-5xl lg:text-7xl font-bold mb-6 text-white drop-shadow-2xl">
-              <span className="text-gradient bg-gradient-to-r from-amber-300 to-orange-400 bg-clip-text text-transparent">
-                Everlasting
-              </span>
-              <br />
-              <span className="text-white">Victory Acres</span>
+            <h1
+              style={{
+                fontSize: "3rem",
+                fontWeight: "700",
+                margin: "0 0 1rem 0",
+                fontFamily: "Crimson Text, serif",
+              }}
+            >
+              Victory Acres
             </h1>
 
-            {/* Subtitle */}
-            <p className="text-xl lg:text-2xl text-white/90 mb-8 leading-relaxed drop-shadow-lg">
-              The ultimate breeding simulation where{" "}
-              <strong className="text-amber-200">real genetics</strong> meet
-              <strong className="text-orange-300"> authentic breeds</strong>.
-              Breed, train, and compete with horses and dogs in an immersive
-              world of endless possibilities.
+            <p
+              style={{
+                fontSize: "1.25rem",
+                opacity: 0.9,
+                maxWidth: "600px",
+                margin: "0 auto 2rem auto",
+                lineHeight: 1.6,
+              }}
+            >
+              The ultimate horse breeding simulation where authentic genetics
+              meet passionate community. Build your legacy, one horse at a time.
             </p>
 
-            {/* CTA Buttons */}
-            <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-12">
-              <Button size="lg" className="btn-primary group text-lg px-8 py-4">
-                <Play className="w-5 h-5 mr-2" />
-                Start Your Journey
-                <ArrowRight className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" />
-              </Button>
+            <div
+              style={{
+                display: "flex",
+                gap: "1rem",
+                justifyContent: "center",
+                flexWrap: "wrap",
+              }}
+            >
+              <Link href="/animals">
+                <button
+                  className="horse-btn horse-btn-accent"
+                  style={{
+                    background: "white",
+                    color: "var(--primary-green)",
+                    border: "2px solid white",
+                  }}
+                >
+                  <Heart className="w-5 h-5" />
+                  <span>View My Horses</span>
+                  <ArrowRight className="w-4 h-4" />
+                </button>
+              </Link>
 
-              <Button variant="outline" size="lg" className="text-lg px-8 py-4">
-                Watch Trailer
-                <ChevronRight className="w-5 h-5 ml-2" />
-              </Button>
+              <Link href="/horse-generator">
+                <button
+                  className="horse-btn horse-btn-secondary"
+                  style={{
+                    background: "rgba(255,255,255,0.1)",
+                    color: "white",
+                    border: "2px solid rgba(255,255,255,0.3)",
+                  }}
+                >
+                  <Palette className="w-5 h-5" />
+                  <span>Create Horse</span>
+                </button>
+              </Link>
+            </div>
+          </div>
+
+          {/* Quick Stats */}
+          <div className="horse-grid horse-grid-4" style={{ gap: "1rem" }}>
+            {quickStats.map((stat, index) => (
+              <div
+                key={index}
+                style={{
+                  background: "rgba(255,255,255,0.1)",
+                  backdropFilter: "blur(10px)",
+                  borderRadius: "12px",
+                  padding: "1.5rem",
+                  textAlign: "center",
+                  border: "1px solid rgba(255,255,255,0.2)",
+                }}
+              >
+                <stat.icon
+                  className={`w-8 h-8 mx-auto mb-2 ${stat.color}`}
+                  style={{ color: "white" }}
+                />
+                <div
+                  style={{
+                    fontSize: "2rem",
+                    fontWeight: "700",
+                    marginBottom: "0.25rem",
+                  }}
+                >
+                  {stat.value}
+                </div>
+                <div style={{ fontSize: "0.875rem", opacity: 0.8 }}>
+                  {stat.label}
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Main Dashboard */}
+      <section style={{ padding: "2rem 0" }}>
+        <div className="horse-sim-container">
+          <div
+            className="horse-grid horse-grid-3"
+            style={{ gap: "2rem", alignItems: "start" }}
+          >
+            {/* Recent Activity */}
+            <div className="horse-card">
+              <div className="horse-card-header">
+                <h3
+                  className="horse-card-title"
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "0.5rem",
+                  }}
+                >
+                  <Clock className="w-5 h-5" />
+                  Recent Activity
+                </h3>
+              </div>
+              <div className="horse-card-content">
+                <div style={{ display: "grid", gap: "1rem" }}>
+                  {recentActivity.map((activity, index) => (
+                    <div
+                      key={index}
+                      style={{
+                        display: "flex",
+                        alignItems: "center",
+                        gap: "0.75rem",
+                        padding: "0.75rem",
+                        background: "var(--background-accent)",
+                        borderRadius: "8px",
+                        border: "1px solid var(--card-border)",
+                      }}
+                    >
+                      <activity.icon className={`w-5 h-5 ${activity.color}`} />
+                      <div style={{ flex: 1 }}>
+                        <div
+                          style={{
+                            fontWeight: "500",
+                            fontSize: "0.875rem",
+                            marginBottom: "0.25rem",
+                          }}
+                        >
+                          {activity.action}
+                        </div>
+                        <div
+                          style={{
+                            fontSize: "0.75rem",
+                            color: "var(--text-muted)",
+                          }}
+                        >
+                          {activity.horse} • {activity.time}
+                        </div>
+                      </div>
+                      <Badge
+                        className="horse-badge-common"
+                        style={{ fontSize: "0.625rem" }}
+                      >
+                        {activity.result}
+                      </Badge>
+                    </div>
+                  ))}
+                </div>
+
+                <Link href="/animals">
+                  <button
+                    className="horse-btn horse-btn-secondary"
+                    style={{ width: "100%", marginTop: "1rem" }}
+                  >
+                    <BarChart3 className="w-4 h-4" />
+                    <span>View All Activity</span>
+                  </button>
+                </Link>
+              </div>
             </div>
 
-            {/* Stats */}
-            <div className="grid grid-cols-2 lg:grid-cols-4 gap-8 mt-16">
-              {stats.map((stat, index) => (
-                <div
-                  key={index}
-                  className="text-center bg-white/10 backdrop-blur-sm rounded-xl p-4"
+            {/* Upcoming Events */}
+            <div className="horse-card">
+              <div className="horse-card-header">
+                <h3
+                  className="horse-card-title"
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "0.5rem",
+                  }}
                 >
-                  <div className="text-3xl lg:text-4xl font-bold text-amber-300 mb-2">
-                    {stat.value}
-                  </div>
-                  <div className="text-white/80 text-sm">{stat.label}</div>
+                  <Calendar className="w-5 h-5" />
+                  Upcoming Events
+                </h3>
+              </div>
+              <div className="horse-card-content">
+                <div style={{ display: "grid", gap: "1rem" }}>
+                  {upcomingEvents.map((event, index) => (
+                    <div
+                      key={index}
+                      style={{
+                        padding: "1rem",
+                        background: "var(--background-accent)",
+                        borderRadius: "8px",
+                        border: "1px solid var(--card-border)",
+                      }}
+                    >
+                      <div
+                        style={{
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "space-between",
+                          marginBottom: "0.5rem",
+                        }}
+                      >
+                        <div
+                          style={{
+                            fontSize: "0.75rem",
+                            color: "var(--text-muted)",
+                          }}
+                        >
+                          {event.date}
+                        </div>
+                        <Badge
+                          className="horse-badge-uncommon"
+                          style={{ fontSize: "0.625rem" }}
+                        >
+                          {event.status}
+                        </Badge>
+                      </div>
+                      <div
+                        style={{
+                          fontWeight: "500",
+                          fontSize: "0.875rem",
+                          marginBottom: "0.25rem",
+                        }}
+                      >
+                        {event.event}
+                      </div>
+                      <div
+                        style={{
+                          fontSize: "0.75rem",
+                          color: "var(--text-secondary)",
+                        }}
+                      >
+                        {event.horse}
+                      </div>
+                    </div>
+                  ))}
                 </div>
-              ))}
+
+                <Link href="/competitions">
+                  <button
+                    className="horse-btn horse-btn-secondary"
+                    style={{ width: "100%", marginTop: "1rem" }}
+                  >
+                    <Trophy className="w-4 h-4" />
+                    <span>View All Events</span>
+                  </button>
+                </Link>
+              </div>
+            </div>
+
+            {/* Quick Actions */}
+            <div className="horse-card">
+              <div className="horse-card-header">
+                <h3
+                  className="horse-card-title"
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "0.5rem",
+                  }}
+                >
+                  <Zap className="w-5 h-5" />
+                  Quick Actions
+                </h3>
+              </div>
+              <div className="horse-card-content">
+                <div style={{ display: "grid", gap: "1rem" }}>
+                  <Link href="/training">
+                    <button
+                      className="horse-btn horse-btn-primary"
+                      style={{ width: "100%" }}
+                    >
+                      <Target className="w-5 h-5" />
+                      <span>Train All Horses</span>
+                    </button>
+                  </Link>
+
+                  <button
+                    className="horse-btn horse-btn-secondary"
+                    style={{ width: "100%" }}
+                  >
+                    <Heart className="w-5 h-5" />
+                    <span>Feed & Care</span>
+                  </button>
+
+                  <Link href="/breeding">
+                    <button
+                      className="horse-btn horse-btn-accent"
+                      style={{ width: "100%" }}
+                    >
+                      <Users className="w-5 h-5" />
+                      <span>Breeding Center</span>
+                    </button>
+                  </Link>
+
+                  <Link href="/marketplace">
+                    <button
+                      className="horse-btn horse-btn-secondary"
+                      style={{ width: "100%" }}
+                    >
+                      <Star className="w-5 h-5" />
+                      <span>Browse Market</span>
+                    </button>
+                  </Link>
+
+                  <Link href="/wild-capture">
+                    <button
+                      className="horse-btn horse-btn-accent"
+                      style={{ width: "100%" }}
+                    >
+                      <Map className="w-5 h-5" />
+                      <span>Wild Capture</span>
+                    </button>
+                  </Link>
+                </div>
+              </div>
             </div>
           </div>
         </div>
       </section>
 
       {/* Features Section */}
-      <section className="py-20 lg:py-32 bg-muted/30">
-        <div className="max-w-7xl mx-auto px-4">
-          <div className="text-center mb-16">
-            <h2 className="font-display text-4xl lg:text-5xl font-bold mb-6">
-              A World of{" "}
-              <span className="text-gradient">Endless Discovery</span>
+      <section
+        style={{
+          background: "var(--background-secondary)",
+          padding: "3rem 0",
+        }}
+      >
+        <div className="horse-sim-container">
+          <div style={{ textAlign: "center", marginBottom: "3rem" }}>
+            <h2
+              style={{
+                fontSize: "2.5rem",
+                fontWeight: "700",
+                marginBottom: "1rem",
+                fontFamily: "Crimson Text, serif",
+                color: "var(--text-primary)",
+              }}
+            >
+              Why Choose{" "}
+              <span style={{ color: "var(--primary-green)" }}>
+                Victory Acres
+              </span>
+              ?
             </h2>
-            <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-              Experience the most advanced breeding simulation ever created,
-              where every decision shapes your legacy.
+            <p
+              style={{
+                fontSize: "1.125rem",
+                color: "var(--text-secondary)",
+                maxWidth: "600px",
+                margin: "0 auto",
+              }}
+            >
+              Experience the most realistic and engaging horse breeding
+              simulation with authentic genetics and passionate community.
             </p>
           </div>
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div className="horse-grid horse-grid-3" style={{ gap: "2rem" }}>
             {features.map((feature, index) => (
               <div
                 key={index}
-                className="group relative bg-card rounded-2xl p-8 border border-border hover:border-primary/50 transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl hover:shadow-primary/10"
+                className="horse-card horse-shine"
+                style={{ height: "fit-content" }}
               >
-                <div
-                  className={`w-14 h-14 rounded-xl bg-gradient-to-r ${feature.gradient} flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300`}
-                >
-                  <feature.icon className="w-7 h-7 text-white" />
-                </div>
-
-                <h3 className="font-display text-xl font-semibold mb-3 text-foreground">
-                  {feature.title}
-                </h3>
-
-                <p className="text-muted-foreground leading-relaxed">
-                  {feature.description}
-                </p>
-
-                {/* Hover effect */}
-                <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-primary/5 to-emerald/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300 -z-10" />
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Career Paths Section */}
-      <section className="py-20 lg:py-32">
-        <div className="max-w-7xl mx-auto px-4">
-          <div className="text-center mb-16">
-            <h2 className="font-display text-4xl lg:text-5xl font-bold mb-6">
-              Choose Your <span className="text-gradient">Career Path</span>
-            </h2>
-            <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-              Shape your destiny with specialized skill trees and unique
-              gameplay experiences.
-            </p>
-          </div>
-
-          <div className="grid lg:grid-cols-3 gap-8">
-            {careers.map((career, index) => (
-              <div
-                key={index}
-                className="relative group bg-card rounded-2xl p-8 border border-border hover:border-primary/50 transition-all duration-300 hover:shadow-xl overflow-hidden"
-              >
-                <div className="relative z-10">
+                <div className="horse-card-content">
                   <div
-                    className={`w-16 h-16 rounded-xl bg-muted flex items-center justify-center mb-6 ${career.color}`}
+                    style={{
+                      width: "3.5rem",
+                      height: "3.5rem",
+                      borderRadius: "12px",
+                      background: `linear-gradient(135deg, var(--primary-green), var(--primary-green-light))`,
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      marginBottom: "1.5rem",
+                    }}
                   >
-                    <career.icon className="w-8 h-8" />
+                    <feature.icon className="w-7 h-7 text-white" />
                   </div>
 
-                  <h3 className="font-display text-2xl font-semibold mb-4 text-foreground">
-                    {career.name}
+                  <h3
+                    style={{
+                      fontSize: "1.25rem",
+                      fontWeight: "600",
+                      marginBottom: "1rem",
+                      color: "var(--text-primary)",
+                      fontFamily: "Crimson Text, serif",
+                    }}
+                  >
+                    {feature.title}
                   </h3>
 
-                  <p className="text-muted-foreground leading-relaxed mb-6">
-                    {career.description}
+                  <p
+                    style={{
+                      color: "var(--text-secondary)",
+                      lineHeight: 1.6,
+                      marginBottom: "1.5rem",
+                    }}
+                  >
+                    {feature.description}
                   </p>
 
-                  <Button variant="outline" className="group">
-                    Learn More
-                    <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
-                  </Button>
+                  <button className="horse-btn horse-btn-secondary">
+                    <span>Learn More</span>
+                    <ArrowRight className="w-4 h-4" />
+                  </button>
                 </div>
-
-                {/* Background effect */}
-                <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* Premium Features Teaser */}
-      <section className="py-20 lg:py-32 bg-gradient-to-r from-amber/10 via-yellow/10 to-amber/10">
-        <div className="max-w-7xl mx-auto px-4">
-          <div className="text-center">
-            <Badge className="premium-badge mb-6 text-lg px-4 py-2">
-              <Crown className="w-4 h-4 mr-2" />
+      {/* Premium CTA */}
+      <section
+        style={{
+          background:
+            "linear-gradient(135deg, var(--accent-gold) 0%, var(--accent-copper) 100%)",
+          color: "white",
+          padding: "3rem 0",
+        }}
+      >
+        <div className="horse-sim-container">
+          <div style={{ textAlign: "center" }}>
+            <Badge
+              style={{
+                background: "rgba(255,255,255,0.2)",
+                color: "white",
+                padding: "0.5rem 1rem",
+                borderRadius: "20px",
+                marginBottom: "1rem",
+                display: "inline-flex",
+                alignItems: "center",
+                gap: "0.5rem",
+              }}
+            >
+              <Crown className="w-4 h-4" />
               Premium Features
             </Badge>
 
-            <h2 className="font-display text-4xl lg:text-5xl font-bold mb-6">
-              Unlock the <span className="text-gradient">Full Experience</span>
+            <h2
+              style={{
+                fontSize: "2.5rem",
+                fontWeight: "700",
+                marginBottom: "1rem",
+                fontFamily: "Crimson Text, serif",
+              }}
+            >
+              Unlock the Full Experience
             </h2>
 
-            <p className="text-xl text-muted-foreground max-w-3xl mx-auto mb-8">
-              Access advanced breeding tools, AI portrait generators, exclusive
-              events, and much more.
+            <p
+              style={{
+                fontSize: "1.125rem",
+                opacity: 0.9,
+                maxWidth: "600px",
+                margin: "0 auto 2rem auto",
+              }}
+            >
+              Get access to advanced breeding tools, extra stalls, automation
+              features, and exclusive content for just $5/month.
             </p>
 
-            <div className="flex flex-wrap justify-center gap-4 mb-8">
+            <div
+              style={{
+                display: "flex",
+                flexWrap: "wrap",
+                justifyContent: "center",
+                gap: "1rem",
+                marginBottom: "2rem",
+              }}
+            >
               {[
-                "Gene Viewer",
-                "Embryo Transfer",
-                "AI Portraits",
-                "Custom Barns",
-                "Exclusive Events",
+                "20 Extra Stalls",
+                "Auto Care & Training",
+                "Dog Breeding",
+                "Premium Shows",
+                "Advanced Genetics",
               ].map((feature) => (
                 <Badge
                   key={feature}
-                  variant="secondary"
-                  className="text-sm px-3 py-1"
+                  style={{
+                    background: "rgba(255,255,255,0.2)",
+                    color: "white",
+                    padding: "0.25rem 0.75rem",
+                    fontSize: "0.875rem",
+                  }}
                 >
-                  <Star className="w-3 h-3 mr-1 text-amber" />
+                  <Star className="w-3 h-3 mr-1" />
                   {feature}
                 </Badge>
               ))}
             </div>
 
-            <Button
-              size="lg"
-              className="bg-gradient-to-r from-amber to-yellow-500 hover:from-amber/90 hover:to-yellow-500/90 text-white shadow-lg shadow-amber/20"
-            >
-              <Crown className="w-5 h-5 mr-2" />
-              Upgrade to Premium
-            </Button>
-          </div>
-        </div>
-      </section>
-
-      {/* Call to Action */}
-      <section className="py-20 lg:py-32">
-        <div className="max-w-4xl mx-auto px-4 text-center">
-          <h2 className="font-display text-4xl lg:text-5xl font-bold mb-6">
-            Ready to Start Your <span className="text-gradient">Legacy</span>?
-          </h2>
-
-          <p className="text-xl text-muted-foreground mb-8">
-            Join thousands of players already building their dream stables in
-            Everlasting Victory Acres.
-          </p>
-
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Link href="/animals">
-              <Button size="lg" className="btn-primary text-lg px-8 py-4">
-                <Heart className="w-5 h-5 mr-2" />
-                View My Animals
-              </Button>
-            </Link>
-
-            <Link href="/breeding">
-              <Button variant="outline" size="lg" className="text-lg px-8 py-4">
-                <Users className="w-5 h-5 mr-2" />
-                Start Breeding
-              </Button>
+            <Link href="/premium">
+              <button
+                className="horse-btn horse-btn-premium"
+                style={{
+                  background: "white",
+                  color: "var(--accent-gold)",
+                  border: "2px solid white",
+                  fontSize: "1.125rem",
+                  padding: "0.75rem 2rem",
+                }}
+              >
+                <Crown className="w-5 h-5" />
+                <span>Upgrade to Premium</span>
+                <Gem className="w-4 h-4" />
+              </button>
             </Link>
           </div>
         </div>
