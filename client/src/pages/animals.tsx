@@ -3,7 +3,6 @@ import {
   Heart,
   Droplets,
   Sparkles,
-  User,
   Brush,
   Play,
   Eye,
@@ -14,6 +13,12 @@ import {
   Trophy,
   Zap,
   Filter,
+  Search,
+  Plus,
+  BarChart3,
+  Calendar,
+  Settings,
+  Crown,
   ChevronDown,
 } from "lucide-react";
 import { Button } from "../components/ui/button";
@@ -39,12 +44,13 @@ const horses = [
     color: "Palomino",
     markings: "White star, sock on left front",
     image:
-      "https://images.unsplash.com/photo-1551782450-17144efb9c50?w=400&h=400&fit=crop",
+      "https://images.unsplash.com/photo-1551782450-17144efb9c50?w=400&h=300&fit=crop",
     stats: {
       health: 95,
       energy: 82,
       mood: 88,
       cleanliness: 76,
+      training: 65,
       level: 15,
     },
     capacity: 4,
@@ -53,6 +59,11 @@ const horses = [
     location: "Pasture A",
     genetics: "ee/Aa/CrCr/LP/n",
     build: "refined",
+    owner: "You",
+    value: 2500,
+    specialty: "Endurance",
+    achievements: ["First Place - Desert Cup", "Champion Bloodlines"],
+    nextActivity: "Training in 2h",
   },
   {
     id: 2,
@@ -64,12 +75,13 @@ const horses = [
     color: "Bay",
     markings: "Blaze, stockings on hind legs",
     image:
-      "https://images.unsplash.com/photo-1449824913935-59a10b8d2000?w=400&h=400&fit=crop",
+      "https://images.unsplash.com/photo-1449824913935-59a10b8d2000?w=400&h=300&fit=crop",
     stats: {
       health: 100,
       energy: 95,
       mood: 92,
       cleanliness: 85,
+      training: 88,
       level: 22,
     },
     capacity: 5,
@@ -78,6 +90,11 @@ const horses = [
     location: "Training Arena",
     genetics: "Ee/AA/nn/lp/lp",
     build: "athletic",
+    owner: "You",
+    value: 8750,
+    specialty: "Racing",
+    achievements: ["Triple Crown Winner", "Speed Record Holder"],
+    nextActivity: "Race in 4h",
   },
   {
     id: 3,
@@ -89,12 +106,13 @@ const horses = [
     color: "Chestnut Tobiano",
     markings: "Large white patches, bald face",
     image:
-      "https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=400&h=400&fit=crop",
+      "https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=400&h=300&fit=crop",
     stats: {
       health: 92,
       energy: 78,
       mood: 85,
       cleanliness: 68,
+      training: 25,
       level: 3,
     },
     capacity: 2,
@@ -103,6 +121,11 @@ const horses = [
     location: "Foal Paddock",
     genetics: "ee/Aa/nn/TO/n",
     build: "foal",
+    owner: "You",
+    value: 1200,
+    specialty: "Learning",
+    achievements: ["Healthy Foal", "Good Bloodlines"],
+    nextActivity: "Play time in 1h",
   },
   {
     id: 4,
@@ -114,12 +137,13 @@ const horses = [
     color: "Black",
     markings: "No white markings",
     image:
-      "https://images.unsplash.com/photo-1553284965-d1c0a5eed0ca?w=400&h=400&fit=crop",
+      "https://images.unsplash.com/photo-1553284965-d1c0a5eed0ca?w=400&h=300&fit=crop",
     stats: {
       health: 88,
       energy: 65,
       mood: 90,
       cleanliness: 94,
+      training: 92,
       level: 28,
     },
     capacity: 5,
@@ -128,52 +152,69 @@ const horses = [
     location: "Maternity Stall",
     genetics: "Ee/aa/nn/nn",
     build: "heavy",
+    owner: "You",
+    value: 12500,
+    specialty: "Dressage",
+    achievements: ["Grand Prix Champion", "Breeding Excellence"],
+    nextActivity: "Vet check in 6h",
   },
 ];
 
 // Daily log activities
 const dailyLog = [
   {
-    time: "11:45 AM",
-    action: "Voted by",
-    user: "Luna550",
-    icon: Star,
-    color: "text-amber-600",
-  },
-  {
-    time: "11:30 AM",
-    action: "Whispered to by",
-    user: "william123m",
-    icon: MessageCircle,
-    color: "text-blue-600",
-  },
-  {
-    time: "11:15 AM",
-    action: "Groomed",
-    user: "You",
-    icon: Brush,
-    color: "text-green-600",
-  },
-  {
-    time: "10:50 AM",
-    action: "Fed by",
-    user: "stable_helper",
-    icon: Heart,
-    color: "text-red-600",
-  },
-  {
-    time: "10:30 AM",
+    time: "14:45",
     action: "Training completed",
+    horse: "Thunder Storm",
     user: "You",
     icon: Trophy,
-    color: "text-purple-600",
+    color: "text-green-600",
+    points: "+15 XP",
   },
   {
-    time: "10:00 AM",
-    action: "Moved to",
-    user: "Pasture B",
+    time: "14:30",
+    action: "Fed and groomed",
+    horse: "Moonlight Dancer",
+    user: "Stable Hand",
+    icon: Heart,
+    color: "text-red-500",
+    points: "+5 Care",
+  },
+  {
+    time: "14:15",
+    action: "Visited by player",
+    horse: "Silver Belle",
+    user: "Luna550",
+    icon: MessageCircle,
+    color: "text-blue-500",
+    points: "+2 Social",
+  },
+  {
+    time: "13:50",
+    action: "Moved to pasture",
+    horse: "Whisper Wind",
+    user: "You",
     icon: MapPin,
     color: "text-green-700",
+    points: "+3 Mood",
+  },
+  {
+    time: "13:30",
+    action: "Vet checkup",
+    horse: "All Horses",
+    user: "Dr. Martinez",
+    icon: Heart,
+    color: "text-purple-600",
+    points: "+10 Health",
+  },
+  {
+    time: "13:00",
+    action: "Competition entry",
+    horse: "Thunder Storm",
+    user: "You",
+    icon: Trophy,
+    color: "text-amber-600",
+    points: "Registered",
   },
 ];
 
@@ -188,218 +229,266 @@ const StatBar = ({
   color: string;
   icon: any;
 }) => {
-  const getBarColor = (value: number) => {
-    if (value >= 80) return "bg-green-500";
-    if (value >= 60) return "bg-yellow-500";
-    if (value >= 40) return "bg-orange-500";
-    return "bg-red-500";
+  const getStatLevel = (value: number) => {
+    if (value >= 80) return "high";
+    if (value >= 60) return "medium";
+    return "low";
   };
 
   return (
-    <div className="flex items-center gap-3">
-      <Icon className={`w-4 h-4 ${color}`} />
-      <div className="flex-1">
-        <div className="flex justify-between items-center mb-1">
-          <span className="text-xs font-medium text-amber-900">{label}</span>
-          <span className="text-xs font-bold text-amber-800">{value}%</span>
+    <div className="stat-container">
+      <div
+        className="stat-label"
+        style={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+        }}
+      >
+        <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
+          <Icon className={`w-4 h-4 ${color}`} />
+          <span className="stat-name">{label}</span>
         </div>
-        <div className="h-2 bg-amber-100 rounded-full overflow-hidden">
-          <div
-            className={`h-full ${getBarColor(value)} transition-all duration-500`}
-            style={{ width: `${value}%` }}
-          />
-        </div>
+        <span className="stat-value">{value}%</span>
+      </div>
+      <div className="stat-bar">
+        <div
+          className={`stat-fill ${getStatLevel(value)}`}
+          style={{ width: `${value}%` }}
+        />
       </div>
     </div>
   );
 };
 
 const HorseCard = ({ horse }: { horse: (typeof horses)[0] }) => {
-  const getAgeSize = (age: string, build: string) => {
-    if (build === "foal" || age.includes("months")) return "w-32 h-24";
-    if (build === "heavy") return "w-40 h-32";
-    return "w-36 h-28";
+  const getAgeCategory = (age: string) => {
+    if (age.includes("months")) return "foal";
+    const years = parseInt(age);
+    if (years < 4) return "young";
+    if (years > 15) return "senior";
+    return "adult";
   };
 
-  const getBreedCharacteristics = (breed: string) => {
-    const characteristics: Record<string, string> = {
-      Arabian: "Refined head, arched neck, high tail carriage",
-      Thoroughbred: "Athletic build, long legs, lean frame",
-      "Paint Horse": "Stock horse build, colorful markings",
-      Friesian: "Powerful build, feathered legs, flowing mane",
-    };
-    return characteristics[breed] || "";
-  };
+  const ageCategory = getAgeCategory(horse.age);
 
   return (
-    <div className="bg-gradient-to-br from-amber-50 to-orange-50 rounded-xl border-2 border-amber-200 shadow-lg overflow-hidden mb-6">
-      {/* Horse Image and Basic Info Section */}
-      <div className="relative">
-        {/* Stable background */}
-        <div className="absolute inset-0 bg-gradient-to-b from-amber-100/50 to-amber-200/50" />
+    <div className="horse-card horse-shine">
+      {/* Horse Image Header */}
+      <div
+        style={{
+          position: "relative",
+          height: "180px",
+          background: `linear-gradient(rgba(0,0,0,0.1), rgba(0,0,0,0.3)), url(${horse.image})`,
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+          borderRadius: "12px 12px 0 0",
+        }}
+      >
+        {/* Overlay Info */}
         <div
-          className="h-40 bg-cover bg-center relative"
           style={{
-            backgroundImage: `linear-gradient(rgba(139, 116, 85, 0.1), rgba(160, 137, 95, 0.2)), url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><rect width="100" height="100" fill="%23d4b996"/><rect x="0" y="0" width="20" height="100" fill="%23c4a986"/><rect x="40" y="0" width="20" height="100" fill="%23c4a986"/><rect x="80" y="0" width="20" height="100" fill="%23c4a986"/></svg>')`,
+            position: "absolute",
+            top: "1rem",
+            left: "1rem",
+            right: "1rem",
+            color: "white",
           }}
         >
-          {/* Horse illustration */}
-          <div className="absolute bottom-2 left-4">
-            <div className={`${getAgeSize(horse.age, horse.build)} relative`}>
-              <img
-                src={horse.image}
-                alt={horse.name}
-                className="w-full h-full object-cover rounded-lg border-2 border-amber-300 shadow-md"
-                style={{
-                  filter: "sepia(10%) saturate(110%) brightness(105%)",
-                }}
-              />
-              {/* Breed-specific visual cues */}
-              {horse.breed === "Arabian" && (
-                <div className="absolute -top-1 left-1/2 transform -translate-x-1/2 w-2 h-2 bg-amber-400 rounded-full shadow-sm" />
-              )}
-            </div>
+          <h3
+            className="horse-card-title"
+            style={{
+              color: "white",
+              textShadow: "2px 2px 4px rgba(0,0,0,0.8)",
+              fontSize: "1.125rem",
+              marginBottom: "0.25rem",
+            }}
+          >
+            {horse.name}
+          </h3>
+          <div
+            style={{
+              fontSize: "0.875rem",
+              textShadow: "1px 1px 2px rgba(0,0,0,0.8)",
+            }}
+          >
+            {horse.age} • {horse.gender} • {horse.breed}
           </div>
+        </div>
 
-          {/* Horse name and basic info */}
-          <div className="absolute top-4 left-4 right-4">
-            <div className="bg-white/90 backdrop-blur-sm rounded-lg p-3 border border-amber-200">
-              <h3 className="font-bold text-lg text-amber-900 mb-1">
-                {horse.name}
-              </h3>
-              <div className="flex items-center gap-4 text-sm text-amber-700">
-                <span>
-                  {horse.age} • {horse.gender}
-                </span>
-                <span className="font-medium">{horse.breed}</span>
-                <span>{horse.height}</span>
-              </div>
-              <div className="mt-1 text-xs text-amber-600">
-                {horse.color} • {horse.markings}
-              </div>
-            </div>
-          </div>
-
-          {/* Status badges */}
-          <div className="absolute top-4 right-4 flex flex-col gap-1">
-            {horse.isPregnant && (
-              <Badge className="bg-pink-100 text-pink-700 border-pink-200">
-                <Heart className="w-3 h-3 mr-1" />
-                Pregnant
-              </Badge>
-            )}
-            <Badge className="bg-amber-100 text-amber-700 border-amber-200">
-              Level {horse.stats.level}
+        {/* Status Badges */}
+        <div
+          style={{
+            position: "absolute",
+            top: "1rem",
+            right: "1rem",
+            display: "flex",
+            flexDirection: "column",
+            gap: "0.5rem",
+          }}
+        >
+          <Badge
+            className={`horse-badge ${ageCategory === "foal" ? "horse-badge-uncommon" : "horse-badge-common"}`}
+          >
+            Level {horse.stats.level}
+          </Badge>
+          {horse.isPregnant && (
+            <Badge className="horse-badge-rare">
+              <Heart className="w-3 h-3 mr-1" />
+              Pregnant
             </Badge>
-          </div>
+          )}
+          <Badge className="horse-badge-legendary">
+            ${horse.value.toLocaleString()}
+          </Badge>
+        </div>
+
+        {/* Location */}
+        <div
+          style={{
+            position: "absolute",
+            bottom: "1rem",
+            left: "1rem",
+            display: "flex",
+            alignItems: "center",
+            gap: "0.5rem",
+            background: "rgba(255,255,255,0.9)",
+            padding: "0.25rem 0.75rem",
+            borderRadius: "12px",
+            fontSize: "0.75rem",
+          }}
+        >
+          <MapPin className="w-3 h-3 text-green-600" />
+          <span>{horse.location}</span>
         </div>
       </div>
 
-      {/* Stats Section */}
-      <div className="p-4 bg-gradient-to-r from-orange-50 to-amber-50">
-        <div className="grid grid-cols-2 gap-3 mb-4">
-          <StatBar
-            label="Health"
-            value={horse.stats.health}
-            color="text-red-600"
-            icon={Heart}
-          />
-          <StatBar
-            label="Energy"
-            value={horse.stats.energy}
-            color="text-blue-600"
-            icon={Zap}
-          />
-          <StatBar
-            label="Mood"
-            value={horse.stats.mood}
-            color="text-green-600"
-            icon={Sparkles}
-          />
-          <StatBar
-            label="Cleanliness"
-            value={horse.stats.cleanliness}
-            color="text-purple-600"
-            icon={Droplets}
-          />
-        </div>
-
-        {/* Capacity/Level display */}
-        <div className="flex items-center justify-between mb-4">
-          <div className="flex items-center gap-2">
-            <span className="text-sm font-medium text-amber-900">
-              Capacity:
-            </span>
-            <div className="flex items-center gap-1">
-              {[...Array(5)].map((_, i) => (
-                <Star
-                  key={i}
-                  className={`w-4 h-4 ${
-                    i < horse.capacity
-                      ? "text-amber-500 fill-amber-500"
-                      : "text-amber-200"
-                  }`}
-                />
-              ))}
-            </div>
+      {/* Horse Details */}
+      <div className="horse-card-content">
+        {/* Color and Markings */}
+        <div style={{ marginBottom: "1rem" }}>
+          <div
+            style={{
+              fontSize: "0.875rem",
+              color: "var(--text-secondary)",
+              marginBottom: "0.25rem",
+            }}
+          >
+            <strong>{horse.color}</strong> • {horse.height}
           </div>
-          <div className="text-xs text-amber-600">
-            <MapPin className="w-3 h-3 inline mr-1" />
-            {horse.location}
+          <div
+            style={{
+              fontSize: "0.75rem",
+              color: "var(--text-muted)",
+            }}
+          >
+            {horse.markings}
           </div>
         </div>
 
-        {/* Interactive buttons */}
-        <div className="grid grid-cols-5 gap-2">
-          <Button
-            size="sm"
-            className="bg-amber-600 hover:bg-amber-700 text-white text-xs py-1 px-2 h-8"
-          >
-            <Eye className="w-3 h-3 mr-1" />
-            See
-          </Button>
-          <Button
-            size="sm"
-            variant="outline"
-            className="border-amber-300 text-amber-700 hover:bg-amber-100 text-xs py-1 px-2 h-8"
-          >
-            <Play className="w-3 h-3 mr-1" />
-            Activities
-          </Button>
-          <Button
-            size="sm"
-            variant="outline"
-            className="border-amber-300 text-amber-700 hover:bg-amber-100 text-xs py-1 px-2 h-8"
-          >
-            <MapPin className="w-3 h-3 mr-1" />
-            Center
-          </Button>
-          <Button
-            size="sm"
-            variant="outline"
-            className="border-amber-300 text-amber-700 hover:bg-amber-100 text-xs py-1 px-2 h-8"
-          >
-            <Brush className="w-3 h-3 mr-1" />
-            Groom
-          </Button>
-          <Button
-            size="sm"
-            variant="outline"
-            className="border-amber-300 text-amber-700 hover:bg-amber-100 text-xs py-1 px-2 h-8"
-          >
-            <Sparkles className="w-3 h-3 mr-1" />
-            Exclusive
-          </Button>
+        {/* Stats */}
+        <div style={{ marginBottom: "1rem" }}>
+          <div className="horse-grid-2" style={{ gap: "0.75rem" }}>
+            <StatBar
+              label="Health"
+              value={horse.stats.health}
+              color="text-red-500"
+              icon={Heart}
+            />
+            <StatBar
+              label="Energy"
+              value={horse.stats.energy}
+              color="text-blue-500"
+              icon={Zap}
+            />
+            <StatBar
+              label="Mood"
+              value={horse.stats.mood}
+              color="text-green-500"
+              icon={Sparkles}
+            />
+            <StatBar
+              label="Clean"
+              value={horse.stats.cleanliness}
+              color="text-cyan-500"
+              icon={Droplets}
+            />
+          </div>
         </div>
 
-        {/* Additional info */}
-        <div className="mt-3 pt-3 border-t border-amber-200">
-          <div className="flex items-center justify-between text-xs text-amber-600">
-            <span>Last fed: {horse.lastFed}</span>
-            <span className="font-mono bg-amber-100 px-2 py-1 rounded">
-              {horse.genetics}
+        {/* Specialty and Achievements */}
+        <div style={{ marginBottom: "1rem" }}>
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: "0.5rem",
+              marginBottom: "0.5rem",
+            }}
+          >
+            <Star className="w-4 h-4 text-amber-500" />
+            <span style={{ fontSize: "0.875rem", fontWeight: "500" }}>
+              {horse.specialty}
             </span>
           </div>
+          <div
+            style={{
+              display: "flex",
+              flexWrap: "wrap",
+              gap: "0.25rem",
+            }}
+          >
+            {horse.achievements.slice(0, 2).map((achievement, index) => (
+              <Badge
+                key={index}
+                className="horse-badge-common"
+                style={{ fontSize: "0.625rem" }}
+              >
+                {achievement}
+              </Badge>
+            ))}
+          </div>
+        </div>
+
+        {/* Action Buttons */}
+        <div
+          className="horse-grid-2"
+          style={{ gap: "0.5rem", marginBottom: "1rem" }}
+        >
+          <button className="horse-btn horse-btn-primary">
+            <Eye className="w-4 h-4" />
+            <span>View</span>
+          </button>
+          <button className="horse-btn horse-btn-secondary">
+            <Play className="w-4 h-4" />
+            <span>Activity</span>
+          </button>
+          <button className="horse-btn horse-btn-secondary">
+            <Brush className="w-4 h-4" />
+            <span>Groom</span>
+          </button>
+          <button className="horse-btn horse-btn-accent">
+            <BarChart3 className="w-4 h-4" />
+            <span>Train</span>
+          </button>
+        </div>
+
+        {/* Next Activity */}
+        <div
+          style={{
+            padding: "0.75rem",
+            background: "var(--background-accent)",
+            borderRadius: "6px",
+            border: "1px solid var(--card-border)",
+            fontSize: "0.75rem",
+            color: "var(--text-secondary)",
+          }}
+        >
+          <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
+            <Clock className="w-3 h-3" />
+            <span>Next: {horse.nextActivity}</span>
+          </div>
+          <div style={{ marginTop: "0.25rem" }}>Last fed: {horse.lastFed}</div>
         </div>
       </div>
     </div>
@@ -409,6 +498,7 @@ const HorseCard = ({ horse }: { horse: (typeof horses)[0] }) => {
 export function Animals() {
   const [sortBy, setSortBy] = useState("name");
   const [filterBreed, setFilterBreed] = useState("all");
+  const [searchTerm, setSearchTerm] = useState("");
 
   const sortedHorses = [...horses].sort((a, b) => {
     switch (sortBy) {
@@ -418,151 +508,360 @@ export function Animals() {
         return parseInt(a.age) - parseInt(b.age);
       case "level":
         return b.stats.level - a.stats.level;
+      case "value":
+        return b.value - a.value;
       default:
         return 0;
     }
   });
 
-  const filteredHorses = sortedHorses.filter(
-    (horse) => filterBreed === "all" || horse.breed === filterBreed,
-  );
+  const filteredHorses = sortedHorses.filter((horse) => {
+    const matchesSearch =
+      horse.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      horse.breed.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesBreed = filterBreed === "all" || horse.breed === filterBreed;
+    return matchesSearch && matchesBreed;
+  });
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-amber-25 to-orange-25">
-      {/* Background texture */}
-      <div
-        className="fixed inset-0 opacity-5"
-        style={{
-          backgroundImage: `url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><rect width="100" height="100" fill="%23d4b996"/><path d="M0 0h20v100H0zM40 0h20v100H40zM80 0h20v100H80z" fill="%23c4a986"/></svg>')`,
-        }}
-      />
+    <div
+      style={{
+        minHeight: "100vh",
+        background: "var(--background-primary)",
+      }}
+    >
+      {/* Header */}
+      <div className="horse-sim-header">
+        <div className="horse-sim-container">
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "space-between",
+            }}
+          >
+            <div>
+              <h1
+                style={{
+                  fontSize: "2rem",
+                  fontWeight: "700",
+                  margin: "0 0 0.5rem 0",
+                  fontFamily: "Crimson Text, serif",
+                }}
+              >
+                My Stable
+              </h1>
+              <p
+                style={{
+                  margin: 0,
+                  opacity: 0.9,
+                  fontSize: "1rem",
+                }}
+              >
+                You currently have <strong>{horses.length} horses</strong> of{" "}
+                <strong>
+                  {new Set(horses.map((h) => h.breed)).size} different breeds
+                </strong>
+              </p>
+            </div>
 
-      <div className="relative z-10 max-w-7xl mx-auto p-6">
-        {/* Header */}
-        <div className="mb-8">
-          <div className="bg-white/80 backdrop-blur-sm rounded-xl border-2 border-amber-200 shadow-lg p-6">
-            <div className="flex items-center justify-between mb-4">
-              <div>
-                <h1 className="font-bold text-3xl text-amber-900 mb-2">
-                  My Horses
-                </h1>
-                <p className="text-amber-700">
-                  You currently have{" "}
-                  <span className="font-bold">{horses.length} horses</span> of{" "}
-                  <span className="font-bold">
-                    {new Set(horses.map((h) => h.breed)).size} different breeds
-                  </span>
-                  .
-                </p>
-              </div>
-
-              <div className="flex items-center gap-4">
-                <Button className="bg-green-600 hover:bg-green-700 text-white">
-                  <Filter className="w-4 h-4 mr-2" />
-                  Filter
-                </Button>
-
-                <div className="flex items-center gap-2">
-                  <span className="text-sm font-medium text-amber-900">
-                    Sort by:
-                  </span>
-                  <Select value={sortBy} onValueChange={setSortBy}>
-                    <SelectTrigger className="w-32 h-8 border-amber-300">
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="name">Name</SelectItem>
-                      <SelectItem value="age">Age</SelectItem>
-                      <SelectItem value="level">Level</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-              </div>
+            <div style={{ display: "flex", gap: "1rem" }}>
+              <button className="horse-btn horse-btn-premium">
+                <Crown className="w-4 h-4" />
+                <span>Upgrade Stable</span>
+              </button>
+              <button className="horse-btn horse-btn-accent">
+                <Plus className="w-4 h-4" />
+                <span>Add Horse</span>
+              </button>
             </div>
           </div>
         </div>
+      </div>
 
-        <div className="grid lg:grid-cols-4 gap-6">
+      {/* Navigation */}
+      <div className="horse-sim-nav">
+        <div className="horse-sim-container">
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "space-between",
+            }}
+          >
+            <div style={{ display: "flex", gap: "2rem" }}>
+              <a href="#" className="active">
+                All Horses
+              </a>
+              <a href="#">Mares</a>
+              <a href="#">Stallions</a>
+              <a href="#">Foals</a>
+              <a href="#">In Training</a>
+            </div>
+
+            <div style={{ display: "flex", gap: "1rem", alignItems: "center" }}>
+              <div style={{ position: "relative" }}>
+                <Search
+                  className="w-4 h-4"
+                  style={{
+                    position: "absolute",
+                    left: "0.75rem",
+                    top: "50%",
+                    transform: "translateY(-50%)",
+                    color: "var(--text-muted)",
+                  }}
+                />
+                <input
+                  type="text"
+                  placeholder="Search horses..."
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  className="horse-input"
+                  style={{
+                    paddingLeft: "2.5rem",
+                    width: "200px",
+                  }}
+                />
+              </div>
+
+              <Select value={sortBy} onValueChange={setSortBy}>
+                <SelectTrigger
+                  className="horse-input horse-select"
+                  style={{ width: "140px" }}
+                >
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="name">Name</SelectItem>
+                  <SelectItem value="age">Age</SelectItem>
+                  <SelectItem value="level">Level</SelectItem>
+                  <SelectItem value="value">Value</SelectItem>
+                </SelectContent>
+              </Select>
+
+              <button className="horse-btn horse-btn-secondary">
+                <Filter className="w-4 h-4" />
+                <span>Filter</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Main Content */}
+      <div
+        className="horse-sim-container"
+        style={{ paddingTop: "2rem", paddingBottom: "2rem" }}
+      >
+        <div className="horse-layout">
           {/* Main horses section */}
-          <div className="lg:col-span-3">
-            <div className="space-y-0">
+          <div style={{ gridColumn: "1 / -1" }}>
+            <div className="horse-grid horse-grid-3" style={{ gap: "1.5rem" }}>
               {filteredHorses.map((horse) => (
                 <HorseCard key={horse.id} horse={horse} />
               ))}
             </div>
           </div>
 
-          {/* Daily log sidebar */}
-          <div className="lg:col-span-1">
-            <Card className="bg-white/90 backdrop-blur-sm border-2 border-amber-200 shadow-lg sticky top-6">
-              <CardContent className="p-4">
-                <h3 className="font-bold text-lg text-amber-900 mb-4 flex items-center gap-2">
+          {/* Daily log sidebar - positioned absolute for demo */}
+          <div
+            style={{
+              position: "fixed",
+              top: "50%",
+              right: "1rem",
+              transform: "translateY(-50%)",
+              width: "300px",
+              zIndex: 1000,
+            }}
+          >
+            <div className="horse-card">
+              <div className="horse-card-header">
+                <h3
+                  className="horse-card-title"
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "0.5rem",
+                  }}
+                >
                   <Clock className="w-5 h-5" />
-                  Daily Log
+                  Daily Activity Log
                 </h3>
-
-                <div className="space-y-3 max-h-96 overflow-y-auto">
+              </div>
+              <div className="horse-card-content">
+                <div
+                  style={{
+                    maxHeight: "400px",
+                    overflowY: "auto",
+                    marginBottom: "1rem",
+                  }}
+                >
                   {dailyLog.map((entry, index) => (
                     <div
                       key={index}
-                      className="flex items-start gap-3 p-2 rounded-lg bg-amber-50 border border-amber-100"
+                      style={{
+                        display: "flex",
+                        alignItems: "start",
+                        gap: "0.75rem",
+                        padding: "0.75rem",
+                        marginBottom: "0.5rem",
+                        background: "var(--background-accent)",
+                        borderRadius: "6px",
+                        border: "1px solid var(--card-border)",
+                      }}
                     >
                       <entry.icon className={`w-4 h-4 mt-0.5 ${entry.color}`} />
-                      <div className="flex-1 min-w-0">
-                        <div className="text-xs text-amber-600 font-medium mb-1">
+                      <div style={{ flex: 1, minWidth: 0 }}>
+                        <div
+                          style={{
+                            fontSize: "0.75rem",
+                            color: "var(--text-muted)",
+                            marginBottom: "0.25rem",
+                          }}
+                        >
                           {entry.time}
                         </div>
-                        <div className="text-sm text-amber-800">
-                          <span className="font-medium">{entry.action}</span>{" "}
-                          <span className="text-amber-600">{entry.user}</span>
+                        <div
+                          style={{
+                            fontSize: "0.875rem",
+                            marginBottom: "0.25rem",
+                          }}
+                        >
+                          <strong>{entry.action}</strong>
                         </div>
+                        <div
+                          style={{
+                            fontSize: "0.75rem",
+                            color: "var(--text-secondary)",
+                          }}
+                        >
+                          {entry.horse} • {entry.user}
+                        </div>
+                        {entry.points && (
+                          <div
+                            style={{
+                              fontSize: "0.75rem",
+                              color: "var(--success-green)",
+                              fontWeight: "500",
+                              marginTop: "0.25rem",
+                            }}
+                          >
+                            {entry.points}
+                          </div>
+                        )}
                       </div>
                     </div>
                   ))}
                 </div>
 
                 {/* Quick stats */}
-                <div className="mt-6 pt-4 border-t border-amber-200">
-                  <h4 className="font-semibold text-amber-900 mb-3">
+                <div
+                  style={{
+                    padding: "1rem",
+                    background: "var(--background-secondary)",
+                    borderRadius: "6px",
+                    border: "1px solid var(--card-border)",
+                  }}
+                >
+                  <h4
+                    style={{
+                      fontSize: "0.875rem",
+                      fontWeight: "600",
+                      marginBottom: "0.75rem",
+                      color: "var(--text-primary)",
+                    }}
+                  >
                     Quick Stats
                   </h4>
-                  <div className="space-y-2 text-sm">
-                    <div className="flex justify-between">
-                      <span className="text-amber-700">Total Horses:</span>
-                      <span className="font-bold text-amber-900">
+                  <div
+                    style={{
+                      display: "grid",
+                      gap: "0.5rem",
+                      fontSize: "0.75rem",
+                    }}
+                  >
+                    <div
+                      style={{
+                        display: "flex",
+                        justifyContent: "space-between",
+                      }}
+                    >
+                      <span style={{ color: "var(--text-secondary)" }}>
+                        Total Horses:
+                      </span>
+                      <span
+                        style={{
+                          fontWeight: "600",
+                          color: "var(--text-primary)",
+                        }}
+                      >
                         {horses.length}
                       </span>
                     </div>
-                    <div className="flex justify-between">
-                      <span className="text-amber-700">Pregnant:</span>
-                      <span className="font-bold text-amber-900">
+                    <div
+                      style={{
+                        display: "flex",
+                        justifyContent: "space-between",
+                      }}
+                    >
+                      <span style={{ color: "var(--text-secondary)" }}>
+                        Pregnant:
+                      </span>
+                      <span
+                        style={{
+                          fontWeight: "600",
+                          color: "var(--text-primary)",
+                        }}
+                      >
                         {horses.filter((h) => h.isPregnant).length}
                       </span>
                     </div>
-                    <div className="flex justify-between">
-                      <span className="text-amber-700">Avg Level:</span>
-                      <span className="font-bold text-amber-900">
+                    <div
+                      style={{
+                        display: "flex",
+                        justifyContent: "space-between",
+                      }}
+                    >
+                      <span style={{ color: "var(--text-secondary)" }}>
+                        Avg Level:
+                      </span>
+                      <span
+                        style={{
+                          fontWeight: "600",
+                          color: "var(--text-primary)",
+                        }}
+                      >
                         {Math.round(
                           horses.reduce((sum, h) => sum + h.stats.level, 0) /
                             horses.length,
                         )}
                       </span>
                     </div>
-                    <div className="flex justify-between">
-                      <span className="text-amber-700">Needs Care:</span>
-                      <span className="font-bold text-red-600">
-                        {
-                          horses.filter(
-                            (h) =>
-                              h.stats.cleanliness < 80 || h.stats.energy < 60,
-                          ).length
-                        }
+                    <div
+                      style={{
+                        display: "flex",
+                        justifyContent: "space-between",
+                      }}
+                    >
+                      <span style={{ color: "var(--text-secondary)" }}>
+                        Total Value:
+                      </span>
+                      <span
+                        style={{
+                          fontWeight: "600",
+                          color: "var(--success-green)",
+                        }}
+                      >
+                        $
+                        {horses
+                          .reduce((sum, h) => sum + h.value, 0)
+                          .toLocaleString()}
                       </span>
                     </div>
                   </div>
                 </div>
-              </CardContent>
-            </Card>
+              </div>
+            </div>
           </div>
         </div>
       </div>
