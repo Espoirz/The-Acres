@@ -47,8 +47,8 @@
   --emerald-foreground: 255 255 255;
   --amber: 245 158 11; /* Amber for achievements */
   --amber-foreground: 255 255 255;
-  --violet: 139 92 246; /* Violet for mythical breeds */
-  --violet-foreground: 255 255 255;
+  --orange: 251 146 60; /* Orange for heritage breeds */
+  --orange-foreground: 255 255 255;
 
   /* Utility colors */
   --destructive: 239 68 68; /* Red for danger */
