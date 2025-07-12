@@ -74,7 +74,7 @@ export function HorseGeneratorPage() {
                 Health Conditions
               </Badge>
               <Badge variant="secondary" className="text-sm px-3 py-1">
-                <Horse className="w-3 h-3 mr-1" />
+                <Heart className="w-3 h-3 mr-1" />
                 20+ Breeds
               </Badge>
             </div>
