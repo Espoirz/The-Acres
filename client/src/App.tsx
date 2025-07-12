@@ -75,12 +75,7 @@ const Explore = () => (
   />
 );
 
-const Premium = () => (
-  <PlaceholderPage
-    title="Premium Features"
-    description="Unlock advanced tools, exclusive content, and enhanced gameplay experiences."
-  />
-);
+import { Premium } from "./pages/premium";
 
 const Genetics = () => (
   <PlaceholderPage
