@@ -1,27 +1,24 @@
 import { useState } from "react";
 import {
   Heart,
-  Plus,
-  Filter,
-  Search,
-  Star,
-  Crown,
-  Zap,
-  Award,
-  Calendar,
-  Activity,
-  TrendingUp,
-  Eye,
-  MoreVertical,
-  Trophy,
-  Palette,
-  Camera,
+  Droplets,
   Sparkles,
-  Dna,
+  User,
+  Brush,
+  Play,
+  Eye,
+  MapPin,
+  Clock,
+  MessageCircle,
+  Star,
+  Trophy,
+  Zap,
+  Filter,
+  ChevronDown,
 } from "lucide-react";
 import { Button } from "../components/ui/button";
 import { Badge } from "../components/ui/badge";
-import { Input } from "../components/ui/input";
+import { Card, CardContent } from "../components/ui/card";
 import {
   Select,
   SelectContent,
@@ -29,503 +26,545 @@ import {
   SelectTrigger,
   SelectValue,
 } from "../components/ui/select";
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from "../components/ui/card";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "../components/ui/dialog";
-import { HorseGenerator } from "../components/horse-generator";
-import { generateCompleteHorse, HorseGenetics } from "../lib/horse-genetics";
 
-// Mock data for animals
-const animals = [
+// Extended mock data with simulation stats
+const horses = [
   {
     id: 1,
     name: "Moonlight Dancer",
-    type: "Horse",
-    breed: "Arabian",
     age: "3 years",
     gender: "Mare",
-    rarity: "Mythical",
-    genetics: "ee/Aa/CrCr/LP/n",
-    stats: {
-      speed: 95,
-      stamina: 88,
-      agility: 92,
-      intelligence: 90,
-      health: 100,
-    },
-    traits: ["Spirited", "Graceful", "Magical"],
-    lastActivity: "2 hours ago",
+    breed: "Arabian",
+    height: "15.2 hands",
+    color: "Palomino",
+    markings: "White star, sock on left front",
     image:
-      "https://images.unsplash.com/photo-1551782450-17144efb9c50?w=400&h=300&fit=crop",
-    level: 15,
-    experience: 2340,
-    nextLevelXp: 2500,
+      "https://images.unsplash.com/photo-1551782450-17144efb9c50?w=400&h=400&fit=crop",
+    stats: {
+      health: 95,
+      energy: 82,
+      mood: 88,
+      cleanliness: 76,
+      level: 15,
+    },
+    capacity: 4,
     isPregnant: false,
-    competitions: 12,
-    wins: 8,
+    lastFed: "2 hours ago",
+    location: "Pasture A",
+    genetics: "ee/Aa/CrCr/LP/n",
+    build: "refined",
   },
   {
     id: 2,
     name: "Thunder Storm",
-    type: "Horse",
-    breed: "Thoroughbred",
     age: "5 years",
     gender: "Stallion",
-    rarity: "Legendary",
-    genetics: "Ee/AA/CrCr/lp/lp",
-    stats: {
-      speed: 98,
-      stamina: 95,
-      agility: 85,
-      intelligence: 87,
-      health: 96,
-    },
-    traits: ["Powerful", "Competitive", "Noble"],
-    lastActivity: "1 day ago",
+    breed: "Thoroughbred",
+    height: "16.3 hands",
+    color: "Bay",
+    markings: "Blaze, stockings on hind legs",
     image:
-      "https://images.unsplash.com/photo-1449824913935-59a10b8d2000?w=400&h=300&fit=crop",
-    level: 22,
-    experience: 4890,
-    nextLevelXp: 5000,
+      "https://images.unsplash.com/photo-1449824913935-59a10b8d2000?w=400&h=400&fit=crop",
+    stats: {
+      health: 100,
+      energy: 95,
+      mood: 92,
+      cleanliness: 85,
+      level: 22,
+    },
+    capacity: 5,
     isPregnant: false,
-    competitions: 25,
-    wins: 19,
+    lastFed: "1 hour ago",
+    location: "Training Arena",
+    genetics: "Ee/AA/nn/lp/lp",
+    build: "athletic",
   },
   {
     id: 3,
-    name: "Golden Retriever Max",
-    type: "Dog",
-    breed: "Golden Retriever",
-    age: "2 years",
-    gender: "Male",
-    rarity: "Rare",
-    genetics: "ee/Aa/BB/dd",
-    stats: {
-      speed: 75,
-      stamina: 82,
-      agility: 90,
-      intelligence: 95,
-      health: 98,
-    },
-    traits: ["Loyal", "Intelligent", "Friendly"],
-    lastActivity: "30 minutes ago",
+    name: "Whisper Wind",
+    age: "8 months",
+    gender: "Filly",
+    breed: "Paint Horse",
+    height: "12.1 hands",
+    color: "Chestnut Tobiano",
+    markings: "Large white patches, bald face",
     image:
-      "https://images.unsplash.com/photo-1552053831-71594a27632d?w=400&h=300&fit=crop",
-    level: 8,
-    experience: 890,
-    nextLevelXp: 1000,
+      "https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=400&h=400&fit=crop",
+    stats: {
+      health: 92,
+      energy: 78,
+      mood: 85,
+      cleanliness: 68,
+      level: 3,
+    },
+    capacity: 2,
     isPregnant: false,
-    competitions: 5,
-    wins: 3,
+    lastFed: "3 hours ago",
+    location: "Foal Paddock",
+    genetics: "ee/Aa/nn/TO/n",
+    build: "foal",
   },
   {
     id: 4,
-    name: "Starlight Unicorn",
-    type: "Horse",
-    breed: "Unicorn",
-    age: "7 years",
+    name: "Silver Belle",
+    age: "12 years",
     gender: "Mare",
-    rarity: "Mythical",
-    genetics: "EE/AA/CrCr/LP/LP",
-    stats: {
-      speed: 85,
-      stamina: 90,
-      agility: 88,
-      intelligence: 99,
-      health: 100,
-    },
-    traits: ["Magical", "Wise", "Ethereal", "Healing"],
-    lastActivity: "3 hours ago",
+    breed: "Friesian",
+    height: "15.8 hands",
+    color: "Black",
+    markings: "No white markings",
     image:
-      "https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=400&h=300&fit=crop",
-    level: 30,
-    experience: 7500,
-    nextLevelXp: 8000,
+      "https://images.unsplash.com/photo-1553284965-d1c0a5eed0ca?w=400&h=400&fit=crop",
+    stats: {
+      health: 88,
+      energy: 65,
+      mood: 90,
+      cleanliness: 94,
+      level: 28,
+    },
+    capacity: 5,
     isPregnant: true,
-    competitions: 15,
-    wins: 15,
+    lastFed: "30 minutes ago",
+    location: "Maternity Stall",
+    genetics: "Ee/aa/nn/nn",
+    build: "heavy",
   },
 ];
 
-const rarityColors = {
-  Common: "bg-gray-100 text-gray-700",
-  Rare: "bg-blue-100 text-blue-700",
-  Epic: "bg-purple-100 text-purple-700",
-  Legendary: "bg-amber-100 text-amber-700",
-  Mythical: "bg-gradient-to-r from-violet-100 to-pink-100 text-violet-700",
-};
+// Daily log activities
+const dailyLog = [
+  {
+    time: "11:45 AM",
+    action: "Voted by",
+    user: "Luna550",
+    icon: Star,
+    color: "text-amber-600",
+  },
+  {
+    time: "11:30 AM",
+    action: "Whispered to by",
+    user: "william123m",
+    icon: MessageCircle,
+    color: "text-blue-600",
+  },
+  {
+    time: "11:15 AM",
+    action: "Groomed",
+    user: "You",
+    icon: Brush,
+    color: "text-green-600",
+  },
+  {
+    time: "10:50 AM",
+    action: "Fed by",
+    user: "stable_helper",
+    icon: Heart,
+    color: "text-red-600",
+  },
+  {
+    time: "10:30 AM",
+    action: "Training completed",
+    user: "You",
+    icon: Trophy,
+    color: "text-purple-600",
+  },
+  {
+    time: "10:00 AM",
+    action: "Moved to",
+    user: "Pasture B",
+    icon: MapPin,
+    color: "text-green-700",
+  },
+];
 
 const StatBar = ({
   label,
   value,
-  max = 100,
+  color,
+  icon: Icon,
 }: {
   label: string;
   value: number;
-  max?: number;
+  color: string;
+  icon: any;
 }) => {
-  const percentage = (value / max) * 100;
+  const getBarColor = (value: number) => {
+    if (value >= 80) return "bg-green-500";
+    if (value >= 60) return "bg-yellow-500";
+    if (value >= 40) return "bg-orange-500";
+    return "bg-red-500";
+  };
 
   return (
-    <div className="space-y-1">
-      <div className="flex justify-between text-xs">
-        <span className="text-muted-foreground">{label}</span>
-        <span className="font-medium">
-          {value}/{max}
-        </span>
-      </div>
-      <div className="h-2 bg-muted rounded-full overflow-hidden">
-        <div
-          className="h-full bg-gradient-to-r from-primary to-emerald rounded-full transition-all duration-500"
-          style={{ width: `${percentage}%` }}
-        />
+    <div className="flex items-center gap-3">
+      <Icon className={`w-4 h-4 ${color}`} />
+      <div className="flex-1">
+        <div className="flex justify-between items-center mb-1">
+          <span className="text-xs font-medium text-amber-900">{label}</span>
+          <span className="text-xs font-bold text-amber-800">{value}%</span>
+        </div>
+        <div className="h-2 bg-amber-100 rounded-full overflow-hidden">
+          <div
+            className={`h-full ${getBarColor(value)} transition-all duration-500`}
+            style={{ width: `${value}%` }}
+          />
+        </div>
       </div>
     </div>
   );
 };
 
-const AnimalCard = ({ animal }: { animal: (typeof animals)[0] }) => {
-  const rarityColorClass =
-    rarityColors[animal.rarity as keyof typeof rarityColors];
-  const experiencePercentage = (animal.experience / animal.nextLevelXp) * 100;
+const HorseCard = ({ horse }: { horse: (typeof horses)[0] }) => {
+  const getAgeSize = (age: string, build: string) => {
+    if (build === "foal" || age.includes("months")) return "w-32 h-24";
+    if (build === "heavy") return "w-40 h-32";
+    return "w-36 h-28";
+  };
+
+  const getBreedCharacteristics = (breed: string) => {
+    const characteristics: Record<string, string> = {
+      Arabian: "Refined head, arched neck, high tail carriage",
+      Thoroughbred: "Athletic build, long legs, lean frame",
+      "Paint Horse": "Stock horse build, colorful markings",
+      Friesian: "Powerful build, feathered legs, flowing mane",
+    };
+    return characteristics[breed] || "";
+  };
 
   return (
-    <Card className="animal-card group relative overflow-hidden">
-      <div className="absolute top-4 right-4 z-10">
-        <Button
-          variant="ghost"
-          size="sm"
-          className="opacity-0 group-hover:opacity-100 transition-opacity"
+    <div className="bg-gradient-to-br from-amber-50 to-orange-50 rounded-xl border-2 border-amber-200 shadow-lg overflow-hidden mb-6">
+      {/* Horse Image and Basic Info Section */}
+      <div className="relative">
+        {/* Stable background */}
+        <div className="absolute inset-0 bg-gradient-to-b from-amber-100/50 to-amber-200/50" />
+        <div
+          className="h-40 bg-cover bg-center relative"
+          style={{
+            backgroundImage: `linear-gradient(rgba(139, 116, 85, 0.1), rgba(160, 137, 95, 0.2)), url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><rect width="100" height="100" fill="%23d4b996"/><rect x="0" y="0" width="20" height="100" fill="%23c4a986"/><rect x="40" y="0" width="20" height="100" fill="%23c4a986"/><rect x="80" y="0" width="20" height="100" fill="%23c4a986"/></svg>')`,
+          }}
         >
-          <MoreVertical className="w-4 h-4" />
-        </Button>
-      </div>
+          {/* Horse illustration */}
+          <div className="absolute bottom-2 left-4">
+            <div className={`${getAgeSize(horse.age, horse.build)} relative`}>
+              <img
+                src={horse.image}
+                alt={horse.name}
+                className="w-full h-full object-cover rounded-lg border-2 border-amber-300 shadow-md"
+                style={{
+                  filter: "sepia(10%) saturate(110%) brightness(105%)",
+                }}
+              />
+              {/* Breed-specific visual cues */}
+              {horse.breed === "Arabian" && (
+                <div className="absolute -top-1 left-1/2 transform -translate-x-1/2 w-2 h-2 bg-amber-400 rounded-full shadow-sm" />
+              )}
+            </div>
+          </div>
 
-      {/* Animal Image */}
-      <div className="relative h-48 overflow-hidden rounded-t-lg">
-        <img
-          src={animal.image}
-          alt={animal.name}
-          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-        />
+          {/* Horse name and basic info */}
+          <div className="absolute top-4 left-4 right-4">
+            <div className="bg-white/90 backdrop-blur-sm rounded-lg p-3 border border-amber-200">
+              <h3 className="font-bold text-lg text-amber-900 mb-1">
+                {horse.name}
+              </h3>
+              <div className="flex items-center gap-4 text-sm text-amber-700">
+                <span>
+                  {horse.age} • {horse.gender}
+                </span>
+                <span className="font-medium">{horse.breed}</span>
+                <span>{horse.height}</span>
+              </div>
+              <div className="mt-1 text-xs text-amber-600">
+                {horse.color} • {horse.markings}
+              </div>
+            </div>
+          </div>
 
-        {/* Overlay badges */}
-        <div className="absolute top-2 left-2 flex gap-2">
-          <Badge className={rarityColorClass}>
-            {animal.rarity === "Mythical" && <Crown className="w-3 h-3 mr-1" />}
-            {animal.rarity}
-          </Badge>
-          {animal.isPregnant && (
-            <Badge className="bg-pink-100 text-pink-700">
-              <Heart className="w-3 h-3 mr-1" />
-              Pregnant
+          {/* Status badges */}
+          <div className="absolute top-4 right-4 flex flex-col gap-1">
+            {horse.isPregnant && (
+              <Badge className="bg-pink-100 text-pink-700 border-pink-200">
+                <Heart className="w-3 h-3 mr-1" />
+                Pregnant
+              </Badge>
+            )}
+            <Badge className="bg-amber-100 text-amber-700 border-amber-200">
+              Level {horse.stats.level}
             </Badge>
-          )}
-        </div>
-
-        {/* Level badge */}
-        <div className="absolute bottom-2 left-2">
-          <Badge
-            variant="secondary"
-            className="bg-black/50 text-white border-0"
-          >
-            Level {animal.level}
-          </Badge>
+          </div>
         </div>
       </div>
 
-      <CardContent className="p-4 space-y-4">
-        {/* Name and basic info */}
-        <div>
-          <h3 className="font-display text-lg font-semibold mb-1">
-            {animal.name}
-          </h3>
-          <p className="text-sm text-muted-foreground">
-            {animal.age} • {animal.gender} • {animal.breed}
-          </p>
+      {/* Stats Section */}
+      <div className="p-4 bg-gradient-to-r from-orange-50 to-amber-50">
+        <div className="grid grid-cols-2 gap-3 mb-4">
+          <StatBar
+            label="Health"
+            value={horse.stats.health}
+            color="text-red-600"
+            icon={Heart}
+          />
+          <StatBar
+            label="Energy"
+            value={horse.stats.energy}
+            color="text-blue-600"
+            icon={Zap}
+          />
+          <StatBar
+            label="Mood"
+            value={horse.stats.mood}
+            color="text-green-600"
+            icon={Sparkles}
+          />
+          <StatBar
+            label="Cleanliness"
+            value={horse.stats.cleanliness}
+            color="text-purple-600"
+            icon={Droplets}
+          />
         </div>
 
-        {/* Experience bar */}
-        <div className="space-y-1">
-          <div className="flex justify-between text-xs">
-            <span className="text-muted-foreground">Experience</span>
-            <span className="font-medium">
-              {animal.experience}/{animal.nextLevelXp} XP
+        {/* Capacity/Level display */}
+        <div className="flex items-center justify-between mb-4">
+          <div className="flex items-center gap-2">
+            <span className="text-sm font-medium text-amber-900">
+              Capacity:
+            </span>
+            <div className="flex items-center gap-1">
+              {[...Array(5)].map((_, i) => (
+                <Star
+                  key={i}
+                  className={`w-4 h-4 ${
+                    i < horse.capacity
+                      ? "text-amber-500 fill-amber-500"
+                      : "text-amber-200"
+                  }`}
+                />
+              ))}
+            </div>
+          </div>
+          <div className="text-xs text-amber-600">
+            <MapPin className="w-3 h-3 inline mr-1" />
+            {horse.location}
+          </div>
+        </div>
+
+        {/* Interactive buttons */}
+        <div className="grid grid-cols-5 gap-2">
+          <Button
+            size="sm"
+            className="bg-amber-600 hover:bg-amber-700 text-white text-xs py-1 px-2 h-8"
+          >
+            <Eye className="w-3 h-3 mr-1" />
+            See
+          </Button>
+          <Button
+            size="sm"
+            variant="outline"
+            className="border-amber-300 text-amber-700 hover:bg-amber-100 text-xs py-1 px-2 h-8"
+          >
+            <Play className="w-3 h-3 mr-1" />
+            Activities
+          </Button>
+          <Button
+            size="sm"
+            variant="outline"
+            className="border-amber-300 text-amber-700 hover:bg-amber-100 text-xs py-1 px-2 h-8"
+          >
+            <MapPin className="w-3 h-3 mr-1" />
+            Center
+          </Button>
+          <Button
+            size="sm"
+            variant="outline"
+            className="border-amber-300 text-amber-700 hover:bg-amber-100 text-xs py-1 px-2 h-8"
+          >
+            <Brush className="w-3 h-3 mr-1" />
+            Groom
+          </Button>
+          <Button
+            size="sm"
+            variant="outline"
+            className="border-amber-300 text-amber-700 hover:bg-amber-100 text-xs py-1 px-2 h-8"
+          >
+            <Sparkles className="w-3 h-3 mr-1" />
+            Exclusive
+          </Button>
+        </div>
+
+        {/* Additional info */}
+        <div className="mt-3 pt-3 border-t border-amber-200">
+          <div className="flex items-center justify-between text-xs text-amber-600">
+            <span>Last fed: {horse.lastFed}</span>
+            <span className="font-mono bg-amber-100 px-2 py-1 rounded">
+              {horse.genetics}
             </span>
           </div>
-          <div className="h-1.5 bg-muted rounded-full overflow-hidden">
-            <div
-              className="h-full bg-gradient-to-r from-amber to-yellow-400 rounded-full transition-all duration-500"
-              style={{ width: `${experiencePercentage}%` }}
-            />
-          </div>
         </div>
-
-        {/* Genetics */}
-        <div className="flex items-center justify-between">
-          <div>
-            <span className="text-xs text-muted-foreground">Genetics: </span>
-            <span className="genetics-display">{animal.genetics}</span>
-          </div>
-          {animal.type === "Horse" && (
-            <Button variant="ghost" size="sm" className="h-6 px-2">
-              <Dna className="w-3 h-3" />
-            </Button>
-          )}
-        </div>
-
-        {/* Stats preview */}
-        <div className="space-y-2">
-          <StatBar label="Speed" value={animal.stats.speed} />
-          <StatBar label="Health" value={animal.stats.health} />
-        </div>
-
-        {/* Traits */}
-        <div className="flex flex-wrap gap-1">
-          {animal.traits.slice(0, 3).map((trait, index) => (
-            <Badge key={index} variant="outline" className="text-xs">
-              {trait}
-            </Badge>
-          ))}
-          {animal.traits.length > 3 && (
-            <Badge variant="outline" className="text-xs">
-              +{animal.traits.length - 3}
-            </Badge>
-          )}
-        </div>
-
-        {/* Competition stats */}
-        <div className="flex justify-between text-xs text-muted-foreground">
-          <span className="flex items-center gap-1">
-            <Trophy className="w-3 h-3" />
-            {animal.competitions} races
-          </span>
-          <span className="flex items-center gap-1">
-            <Award className="w-3 h-3" />
-            {animal.wins} wins
-          </span>
-        </div>
-
-        {/* Action buttons */}
-        <div className="flex gap-2 pt-2">
-          <Button size="sm" className="flex-1">
-            <Eye className="w-4 h-4 mr-1" />
-            View
-          </Button>
-          <Button variant="outline" size="sm" className="flex-1">
-            <Activity className="w-4 h-4 mr-1" />
-            Train
-          </Button>
-          {animal.type === "Horse" && (
-            <Dialog>
-              <DialogTrigger asChild>
-                <Button variant="outline" size="sm">
-                  <Camera className="w-4 h-4" />
-                </Button>
-              </DialogTrigger>
-              <DialogContent className="max-w-4xl">
-                <DialogHeader>
-                  <DialogTitle>
-                    Generate New Images for {animal.name}
-                  </DialogTitle>
-                </DialogHeader>
-                <div className="text-center py-8">
-                  <p className="text-muted-foreground mb-4">
-                    AI image generation for existing animals coming soon!
-                  </p>
-                  <Badge variant="secondary">Genetics: {animal.genetics}</Badge>
-                </div>
-              </DialogContent>
-            </Dialog>
-          )}
-        </div>
-      </CardContent>
-    </Card>
+      </div>
+    </div>
   );
 };
 
 export function Animals() {
-  const [searchTerm, setSearchTerm] = useState("");
-  const [filterType, setFilterType] = useState("all");
-  const [filterRarity, setFilterRarity] = useState("all");
+  const [sortBy, setSortBy] = useState("name");
+  const [filterBreed, setFilterBreed] = useState("all");
 
-  const filteredAnimals = animals.filter((animal) => {
-    const matchesSearch = animal.name
-      .toLowerCase()
-      .includes(searchTerm.toLowerCase());
-    const matchesType =
-      filterType === "all" || animal.type.toLowerCase() === filterType;
-    const matchesRarity =
-      filterRarity === "all" || animal.rarity.toLowerCase() === filterRarity;
-
-    return matchesSearch && matchesType && matchesRarity;
+  const sortedHorses = [...horses].sort((a, b) => {
+    switch (sortBy) {
+      case "name":
+        return a.name.localeCompare(b.name);
+      case "age":
+        return parseInt(a.age) - parseInt(b.age);
+      case "level":
+        return b.stats.level - a.stats.level;
+      default:
+        return 0;
+    }
   });
 
-  const totalAnimals = animals.length;
-  const averageLevel = Math.round(
-    animals.reduce((sum, animal) => sum + animal.level, 0) / animals.length,
+  const filteredHorses = sortedHorses.filter(
+    (horse) => filterBreed === "all" || horse.breed === filterBreed,
   );
-  const totalWins = animals.reduce((sum, animal) => sum + animal.wins, 0);
 
   return (
-    <div className="min-h-screen bg-background p-6">
-      <div className="max-w-7xl mx-auto">
+    <div className="min-h-screen bg-gradient-to-br from-amber-25 to-orange-25">
+      {/* Background texture */}
+      <div
+        className="fixed inset-0 opacity-5"
+        style={{
+          backgroundImage: `url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><rect width="100" height="100" fill="%23d4b996"/><path d="M0 0h20v100H0zM40 0h20v100H40zM80 0h20v100H80z" fill="%23c4a986"/></svg>')`,
+        }}
+      />
+
+      <div className="relative z-10 max-w-7xl mx-auto p-6">
         {/* Header */}
         <div className="mb-8">
-          <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4 mb-6">
-            <div>
-              <h1 className="font-display text-4xl font-bold mb-2">
-                My Animals
-              </h1>
-              <p className="text-muted-foreground">
-                Manage your stable of champions and rising stars
-              </p>
+          <div className="bg-white/80 backdrop-blur-sm rounded-xl border-2 border-amber-200 shadow-lg p-6">
+            <div className="flex items-center justify-between mb-4">
+              <div>
+                <h1 className="font-bold text-3xl text-amber-900 mb-2">
+                  My Horses
+                </h1>
+                <p className="text-amber-700">
+                  You currently have{" "}
+                  <span className="font-bold">{horses.length} horses</span> of{" "}
+                  <span className="font-bold">
+                    {new Set(horses.map((h) => h.breed)).size} different breeds
+                  </span>
+                  .
+                </p>
+              </div>
+
+              <div className="flex items-center gap-4">
+                <Button className="bg-green-600 hover:bg-green-700 text-white">
+                  <Filter className="w-4 h-4 mr-2" />
+                  Filter
+                </Button>
+
+                <div className="flex items-center gap-2">
+                  <span className="text-sm font-medium text-amber-900">
+                    Sort by:
+                  </span>
+                  <Select value={sortBy} onValueChange={setSortBy}>
+                    <SelectTrigger className="w-32 h-8 border-amber-300">
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="name">Name</SelectItem>
+                      <SelectItem value="age">Age</SelectItem>
+                      <SelectItem value="level">Level</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+              </div>
             </div>
+          </div>
+        </div>
 
-            <div className="flex gap-2">
-              <Dialog>
-                <DialogTrigger asChild>
-                  <Button className="btn-primary">
-                    <Sparkles className="w-4 h-4 mr-2" />
-                    Generate Horse
-                  </Button>
-                </DialogTrigger>
-                <DialogContent className="max-w-6xl max-h-[90vh] overflow-y-auto">
-                  <DialogHeader>
-                    <DialogTitle>AI Horse Generator</DialogTitle>
-                  </DialogHeader>
-                  <HorseGenerator
-                    onHorseGenerated={(horse, images) => {
-                      console.log("Generated horse:", horse);
-                      console.log("Generated images:", images);
-                      // Here you would typically save the horse to your animals collection
-                    }}
-                  />
-                </DialogContent>
-              </Dialog>
-
-              <Button variant="outline">
-                <Plus className="w-4 h-4 mr-2" />
-                Add Manual
-              </Button>
+        <div className="grid lg:grid-cols-4 gap-6">
+          {/* Main horses section */}
+          <div className="lg:col-span-3">
+            <div className="space-y-0">
+              {filteredHorses.map((horse) => (
+                <HorseCard key={horse.id} horse={horse} />
+              ))}
             </div>
           </div>
 
-          {/* Stats overview */}
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
-            <Card>
-              <CardContent className="p-4 text-center">
-                <div className="text-2xl font-bold text-primary">
-                  {totalAnimals}
-                </div>
-                <div className="text-sm text-muted-foreground">
-                  Total Animals
-                </div>
-              </CardContent>
-            </Card>
+          {/* Daily log sidebar */}
+          <div className="lg:col-span-1">
+            <Card className="bg-white/90 backdrop-blur-sm border-2 border-amber-200 shadow-lg sticky top-6">
+              <CardContent className="p-4">
+                <h3 className="font-bold text-lg text-amber-900 mb-4 flex items-center gap-2">
+                  <Clock className="w-5 h-5" />
+                  Daily Log
+                </h3>
 
-            <Card>
-              <CardContent className="p-4 text-center">
-                <div className="text-2xl font-bold text-emerald">
-                  {averageLevel}
+                <div className="space-y-3 max-h-96 overflow-y-auto">
+                  {dailyLog.map((entry, index) => (
+                    <div
+                      key={index}
+                      className="flex items-start gap-3 p-2 rounded-lg bg-amber-50 border border-amber-100"
+                    >
+                      <entry.icon className={`w-4 h-4 mt-0.5 ${entry.color}`} />
+                      <div className="flex-1 min-w-0">
+                        <div className="text-xs text-amber-600 font-medium mb-1">
+                          {entry.time}
+                        </div>
+                        <div className="text-sm text-amber-800">
+                          <span className="font-medium">{entry.action}</span>{" "}
+                          <span className="text-amber-600">{entry.user}</span>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
                 </div>
-                <div className="text-sm text-muted-foreground">Avg Level</div>
-              </CardContent>
-            </Card>
 
-            <Card>
-              <CardContent className="p-4 text-center">
-                <div className="text-2xl font-bold text-amber">{totalWins}</div>
-                <div className="text-sm text-muted-foreground">Total Wins</div>
-              </CardContent>
-            </Card>
-
-            <Card>
-              <CardContent className="p-4 text-center">
-                <div className="text-2xl font-bold text-violet">2</div>
-                <div className="text-sm text-muted-foreground">Mythical</div>
+                {/* Quick stats */}
+                <div className="mt-6 pt-4 border-t border-amber-200">
+                  <h4 className="font-semibold text-amber-900 mb-3">
+                    Quick Stats
+                  </h4>
+                  <div className="space-y-2 text-sm">
+                    <div className="flex justify-between">
+                      <span className="text-amber-700">Total Horses:</span>
+                      <span className="font-bold text-amber-900">
+                        {horses.length}
+                      </span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-amber-700">Pregnant:</span>
+                      <span className="font-bold text-amber-900">
+                        {horses.filter((h) => h.isPregnant).length}
+                      </span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-amber-700">Avg Level:</span>
+                      <span className="font-bold text-amber-900">
+                        {Math.round(
+                          horses.reduce((sum, h) => sum + h.stats.level, 0) /
+                            horses.length,
+                        )}
+                      </span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-amber-700">Needs Care:</span>
+                      <span className="font-bold text-red-600">
+                        {
+                          horses.filter(
+                            (h) =>
+                              h.stats.cleanliness < 80 || h.stats.energy < 60,
+                          ).length
+                        }
+                      </span>
+                    </div>
+                  </div>
+                </div>
               </CardContent>
             </Card>
           </div>
         </div>
-
-        {/* Filters */}
-        <div className="flex flex-col lg:flex-row gap-4 mb-8">
-          <div className="relative flex-1">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground w-4 h-4" />
-            <Input
-              placeholder="Search animals..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              className="pl-10"
-            />
-          </div>
-
-          <Select value={filterType} onValueChange={setFilterType}>
-            <SelectTrigger className="w-full lg:w-40">
-              <SelectValue placeholder="Type" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="all">All Types</SelectItem>
-              <SelectItem value="horse">Horses</SelectItem>
-              <SelectItem value="dog">Dogs</SelectItem>
-            </SelectContent>
-          </Select>
-
-          <Select value={filterRarity} onValueChange={setFilterRarity}>
-            <SelectTrigger className="w-full lg:w-40">
-              <SelectValue placeholder="Rarity" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="all">All Rarities</SelectItem>
-              <SelectItem value="common">Common</SelectItem>
-              <SelectItem value="rare">Rare</SelectItem>
-              <SelectItem value="epic">Epic</SelectItem>
-              <SelectItem value="legendary">Legendary</SelectItem>
-              <SelectItem value="mythical">Mythical</SelectItem>
-            </SelectContent>
-          </Select>
-
-          <Button variant="outline">
-            <Filter className="w-4 h-4 mr-2" />
-            More Filters
-          </Button>
-        </div>
-
-        {/* Animals Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-6">
-          {filteredAnimals.map((animal) => (
-            <AnimalCard key={animal.id} animal={animal} />
-          ))}
-        </div>
-
-        {/* Empty state */}
-        {filteredAnimals.length === 0 && (
-          <div className="text-center py-16">
-            <Heart className="w-16 h-16 text-muted-foreground mx-auto mb-4" />
-            <h3 className="font-display text-xl font-semibold mb-2">
-              No animals found
-            </h3>
-            <p className="text-muted-foreground mb-6">
-              Try adjusting your search or filters, or add your first animal to
-              get started.
-            </p>
-            <Button className="btn-primary">
-              <Plus className="w-4 h-4 mr-2" />
-              Add Your First Animal
-            </Button>
-          </div>
-        )}
       </div>
     </div>
   );
