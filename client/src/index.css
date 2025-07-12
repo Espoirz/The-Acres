@@ -191,14 +191,14 @@
     @apply relative;
   }
 
-  .mythical-glow::before {
+  .heritage-glow::before {
     content: "";
     @apply absolute inset-0 rounded-xl;
     background: linear-gradient(
       45deg,
-      hsl(var(--violet)) 0%,
+      hsl(var(--orange)) 0%,
       hsl(var(--amber)) 50%,
-      hsl(var(--violet)) 100%
+      hsl(var(--orange)) 100%
     );
     @apply opacity-20 blur-sm -z-10;
   }
