@@ -87,6 +87,39 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.get("/api/animals", isAuthenticated, async (req: any, res) => {
     try {
       const userId = req.user.claims.sub;
+
+      // Development mode - return mock animal data
+      if (process.env.NODE_ENV === "development") {
+        res.json([
+          {
+            id: 1,
+            name: "Thunder Storm",
+            type: "Horse",
+            breed: "Thoroughbred",
+            ownerId: userId,
+            level: 18,
+            experience: 4890,
+            health: 96,
+            mood: 85,
+            energy: 88,
+          },
+          {
+            id: 2,
+            name: "Golden Max",
+            type: "Dog",
+            breed: "Golden Retriever",
+            ownerId: userId,
+            level: 12,
+            experience: 2340,
+            health: 98,
+            mood: 95,
+            energy: 92,
+          },
+        ]);
+        return;
+      }
+
+      // Production mode - fetch from database
       const animals = await storage.getAnimalsByOwner(userId);
       res.json(animals);
     } catch (error) {
