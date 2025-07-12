@@ -26,7 +26,7 @@ import { cn } from "../lib/utils";
 const navigationItems = [
   { name: "Home", href: "/", icon: Home },
   { name: "My Animals", href: "/animals", icon: Heart },
-  { name: "AI Horse Generator", href: "/horse-generator", icon: Palette },
+  { name: "Horse Generator", href: "/horse-generator", icon: Palette },
   { name: "Training Center", href: "/training", icon: Target },
   { name: "Breeding Lab", href: "/breeding", icon: Dna },
   { name: "Career Center", href: "/careers", icon: Briefcase },
