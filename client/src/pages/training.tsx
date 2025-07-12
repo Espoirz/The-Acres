@@ -110,7 +110,7 @@ const trainingTypes = [
   {
     id: "strength",
     name: "Strength Training",
-    icon: Muscle,
+    icon: Dumbbell,
     color: "text-red-600",
     description: "Resistance training",
   },
