@@ -515,7 +515,7 @@ export function Training() {
                     <StatBar
                       label="Strength"
                       value={selectedAnimal.stats.strength}
-                      icon={Muscle}
+                      icon={Dumbbell}
                       color="text-red-500"
                     />
                     <StatBar
